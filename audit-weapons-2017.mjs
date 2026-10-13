@@ -12,7 +12,7 @@
 //   clips     guns (slot 1/2): the model's weapon clips (weapons/anim/index.json models[<model id>])
 //   sfx2017   2017 sounds (weapons/sfx/pb2017.json weapons[<itemId>])
 //   icon      a shop/inventory icon (ui/icons or ui/icons-kaybo index): the shop never draws a placeholder card
-// Weapons missing any part are hidden by the web client (src/lobby/state/weaponSupport.ts: shop, inventory, ?play=all);
+// Weapons missing any part are hidden by the web app;
 // the DB and the server keep them. Re-enable one by exporting what it lacks and re-running this tool.
 import { assetPath } from './lib/paths.mjs';
 import fs from 'node:fs';

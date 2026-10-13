@@ -97,7 +97,7 @@ pbx export batch weapons --only "^aug_a3" --skins   # also the texture skins (<s
 ```
 
 - Each weapon is a static mesh: no skin, no animation. Import `out/weapons/models/<id>.glb` and attach it to the hand bone yourself. Its textures are PNGs in `out/weapons/models/tex/<id>/`.
-- `pbx export weapon-anim` (Cross only) writes the weapon's own animation (magazine, slide, hammer) as JSON in `weapons/anim/` for the web client. There is no GLB clip to load in Blender.
+- `pbx export weapon-anim` (Cross only) writes the weapon's own animation (magazine, slide, hammer) as JSON in `weapons/anim/` for the web app. There is no GLB clip to load in Blender.
 
 **4. Animation libraries (Cross only)**
 
@@ -116,7 +116,7 @@ pbx export anim1pv                               # -> out/chars/swat_male/anim1p
 | `anim1pv/index.json` | same layout for the first-person arm clips |
 | `anim1pv/<Weapon>_<Sub>.glb` | one GLB per weapon AI, for example `Brass_Knuckle_Common.glb` |
 
-Each clip GLB has no mesh and no skin. Its nodes are named after the bones of `model.glb`, so the clips bind by bone name. Blender imports them as plain nodes, not as an armature, so you bind them to the rig yourself (copy the keys onto the matching bone names). The web client does this at run time; there is no one-click Blender import for these libraries.
+Each clip GLB has no mesh and no skin. Its nodes are named after the bones of `model.glb`, so the clips bind by bone name. Blender imports them as plain nodes, not as an armature, so you bind them to the rig yourself (copy the keys onto the matching bone names). The web app does this at run time; there is no one-click Blender import for these libraries.
 
 Both steps need `out/cross/weapons/weapons.json`, written by `pbx export weapons` (needs the 3.123 client and `--server`). `export all` runs `anim3pv` before `weapons`, so on a fresh `out/` run `weapons` first.
 
@@ -137,7 +137,7 @@ Each row is one command. "Needs" lists the clients it reads and whether it needs
 | `pbx export weapon-anim` | weapon's own animation (magazine, slide, hammer): `weapons/anim/index.json` | Cross | `pbx export weapon-anim` |
 | `pbx export weaponfx` | weapon effects: `weapons/fx/weaponfx.json` | Cross | `pbx export weaponfx` |
 | `pbx export fxmesh` | mesh effect layers (shell casings) to GLB | Cross | `pbx export fxmesh` |
-| `pbx export weapons` | weapon data and sounds for the web client | 3.123, `--server` | `pbx --server D:\game-server export weapons` |
+| `pbx export weapons` | weapon data and sounds for the web app | 3.123, `--server` | `pbx --server D:\game-server export weapons` |
 | `pbx export weapon-sfx` | weapon sounds only: `weapons/sfx/index.json` (guessed roles) | Cross, 3.123 | `pbx export weapon-sfx` |
 | `pbx export sfx` | weapon sounds by name: `weapons/sfx/pb2017.json` | Cross | `pbx export sfx` |
 | `pbx export charsfx` | character, object and UI sounds: `sfx/char` | Cross | `pbx export charsfx` |
@@ -189,7 +189,7 @@ Each row is one command. "Needs" lists the clients it reads and whether it needs
 | `pbx verify audit-weapons` | which weapons are playable with the exported 2017 assets | none | `pbx verify audit-weapons` |
 | `pbx verify audit-charas` | which characters and equipment parts are complete | `--web` | `pbx --web D:\web-app verify audit-charas` |
 | `pbx verify audit-items` | which shop items are complete | 2017, `--web` | `pbx --web D:\web-app verify audit-items` |
-| `pbx verify audit-weapon-anim` | weapon animation states against the web client (`--all`) | none | `pbx verify audit-weapon-anim --all` |
+| `pbx verify audit-weapon-anim` | weapon animation states against the web app (`--all`) | none | `pbx verify audit-weapon-anim --all` |
 | `pbx re pef-config` | 2017 `Script.i3Pack` to `extracted/pef2017/` (weapon and config tables) | 2017 | `pbx re pef-config` |
 | `pbx re cross-pef` | Cross `Script.i3Pack` to `extracted/pef-cross/br` (Cross weapon table, before weapons and bombsites) | Cross; also reads `re pef-config` output and `out/config/character.json` (3.123 table; no pbx step writes it yet) | `pbx re cross-pef` |
 | `pbx re fpscam` | bake the first-person camera pivot | 2017 | `pbx re fpscam` |
@@ -208,7 +208,7 @@ pbx --clients "D:\Clients" --out "D:\pb-assets" export sfx
 |---|---|---|---|---|
 | `--clients <dir>` | `PB_CLIENTS` | `clients` | none (required) | folder that holds the client folders |
 | `--client <key>=<dir>` (in `init`) | `PB_CLIENT_<KEY>` | `overrides.<key>` | derived | one client folder, when not all sit under one root |
-| `--out <dir>` | `PB_ASSETS` | `assets` | `./out` | assets output (what the web client loads) |
+| `--out <dir>` | `PB_ASSETS` | `assets` | `./out` | assets output (what the web app loads) |
 | `--web <dir>` | `PB_WEB` | `web` | none | folder of the web project that consumes the assets (has `src/`). Enables steps that read or write it |
 | `--server <dir>` | `PB_SERVER` | `server` | none | server root with `server/` and `old/` (game server data). Enables steps that read it |
 | `--extracted <dir>` | `PB_EXTRACTED` | `extracted` | `./extracted` | parsed JSON that other steps read |
@@ -223,7 +223,7 @@ Client keys: `kaybo` (2017), `br3123` (3.123), `cross`, `ru`, `portable`, `hyper
 | Key | Folder under the clients root | Version | What the tools read from it |
 |---|---|---|---|
 | `kaybo` | `PBKaybo\GameData\Apps\PB` | Point Blank 2017 (Kaybo) | the reference for most exporters: sounds, maps, HUD, UI scenes, the 2017 weapon and config tables (`pef-config`) |
-| `br3123` | `PointBlank 3.123` | Point Blank 3.123 (BR) | weapon data for the web client (`export weapons`), `unpack` default, UI strings and icons, HUD and loading art |
+| `br3123` | `PointBlank 3.123` | Point Blank 3.123 (BR) | weapon data for the web app (`export weapons`), `unpack` default, UI strings and icons, HUD and loading art |
 | `cross` | `PBCross` | Point Blank Cross | characters and weapon models (`batch`), 3PV and 1PV animations, weapon FX and animation, Cross UI, icons, lobby music, showroom, clan marks, bomb sites, maps |
 | `ru` | `PB RUSSIA` | Point Blank Russia | not read by any step yet |
 | `portable` | `Point-Blank-Portable\3-PointBlank` | Point Blank Portable 3.1 | round countdown HUD, HUD textures (`ui hud-2017`) |

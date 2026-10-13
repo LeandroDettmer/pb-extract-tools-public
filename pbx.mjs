@@ -52,7 +52,7 @@ const CMDS = {
     'weapon-anim': { file: 'export-weapon-anim.mjs', desc: 'weapon own anim (mag, slide, hammer): weapons/anim/index.json. --list <ids> (Cross only)', needs: ['cross'] },
     weaponfx: { file: 'export-weaponfx.mjs', desc: 'weapon FX: weapons/fx/weaponfx.json (fx set in script `want`; Cross only)', needs: ['cross'] },
     fxmesh: { file: 'export-fxmesh.mjs', desc: 'mesh FX layers (shell casings) -> GLB (Cross only)', needs: ['cross'] },
-    weapons: { file: 'export-weapons.mjs', desc: 'weapon data + SFX for the web client (pef + 3.123 packs; server ItemStatistics)', needs: ['br3123'], server: true },
+    weapons: { file: 'export-weapons.mjs', desc: 'weapon data + SFX for the web app (pef + 3.123 packs; server ItemStatistics)', needs: ['br3123'], server: true },
     'weapon-sfx': { file: 'export-weapons.mjs', desc: 'weapon sounds only, Cross packs: weapons/sfx/index.json (guessed roles)', needs: ['cross', 'br3123'], defaultArgs: ['--sfx-only'] },
     sfx: { file: 'export-sfx2017.mjs', desc: 'weapon sounds by name: weapons/sfx/pb2017.json (rewrites ai)', needs: ['cross'] },
     charsfx: { file: 'export-charsfx2017.mjs', desc: 'character / object / UI sounds: sfx/char', needs: ['cross'] },

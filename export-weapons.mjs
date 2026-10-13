@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Weapon data + SFX exporter for the web client.
+// Weapon data + SFX exporter for the web app.
 //
 //   node export-weapons.mjs [--all-sfx] [--no-sfx]
 //   node export-weapons.mjs --anim-only   (only re-attach changeTime to the existing weapons.json)

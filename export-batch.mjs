@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Batch export of every playable character and every plain weapon model (+ texture skins) of one client
-// to the web client, reusing export-model.mjs / export-anim.mjs. Pure Node ESM, builtins only.
+// to the web app, reusing export-model.mjs / export-anim.mjs. Pure Node ESM, builtins only.
 // Client: PBCross (Cross) or PBKaybo (2017). `--client <key>` / PB_BASE_CLIENT picks one; without it, the configured one (lib/paths.mjs baseClient).
 //
 //   node export-batch.mjs [chars] [weapons] [--skins] [--only <regex>] [--max-tex 1024] [--embed-clips] [--dry]

@@ -41,7 +41,7 @@ const ASSETS = assetPath();
  * arms. src/game/charAnimLib.ts dualTables merges the pairs (same as the 1PV side, tools/export-anim1pv.mjs).
  */
 const DUAL_STATES = ['LeftIdle', 'RightIdle', 'LeftMove', 'RightMove', 'LeftAttack', 'RightAttack'];
-/** states exported per upper stance (the rest - Extension*, Grenade/Knife/ShotGun/AttackIdle_Left/CrossIdle* stances - are not driven by the web client; *Master is exported only, [INFERIDO] 0x613710) */
+/** states exported per upper stance (the rest - Extension*, Grenade/Knife/ShotGun/AttackIdle_Left/CrossIdle* stances - are not driven by the web app; *Master is exported only, [INFERIDO] 0x613710) */
 const JUMP_DAMAGE = ['JumpStart', 'JumpEnd', 'DamageFrontLeftA', 'DamageFrontLeftB', 'DamageFrontRightA', 'DamageFrontRightB', 'DamageBackA', 'DamageBackB'];
 const UPPER_STATES = {
   AttackIdle: ['Idle', 'Move', 'Attack', 'AttackReady', 'AttackBurst', 'SecondaryAttack', 'LoadMagazine', 'LoadBullet', 'LoadMagazineReady', 'Change',
@@ -87,7 +87,7 @@ export function resolve3pv(name = 'SWAT_Male') {
     if (!byAiName.has(n)) byAiName.set(n, []);
     if (!byAiName.get(n).includes(k)) byAiName.get(n).push(k);
   }
-  // a dual tree (RightIdle / LeftIdle, no Idle) only for the dual-wield guns the web client mounts twice (weapons.json
+  // a dual tree (RightIdle / LeftIdle, no Idle) only for the dual-wield guns the web app mounts twice (weapons.json
   // className DualHandGun / DualSMG / DualShotgun, WeaponSystem dualFire); others (202025 HK45 Dual, a HandGun) keep
   // the single-weapon AI of the same name or the class fallback
   const DUAL_CLASSES = ['DualHandGun', 'DualSMG', 'DualShotgun'];

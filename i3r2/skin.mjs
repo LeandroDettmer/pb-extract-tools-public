@@ -168,6 +168,28 @@ export function readVertexArrayEx(buf, obj) {
   return { id: obj.id, count, stride, format, nIdx, nW, pos, nrm, uv, joints, weights };
 }
 
+// i3SkinGeometryAttr bone palettes: after the 21 leading bytes, 'SGA1', u32 blockCount, u32 paletteBufferId, 16 bytes 0.
+// The buffer (i3MemoryBuffer) holds blockCount x [u32 firstIndex, u32 triCount, u32 n, u8 palette[n]]: each block is a
+// run of triangles (index array offset firstIndex, a multiple of 3) whose vertex blend indices are palette slots, not
+// skeleton bones (Cross REBEL / D-Fox / Hide / Leopard bodies: palette max 19..53 over a 63-bone skeleton).
+export function sgaPalettes(buf, file, obj) {
+  if (obj.cls !== 'i3SkinGeometryAttr') return null;
+  const o = obj.off, count = buf.readUInt32LE(o + 25);
+  const mb = file.byId.get(buf.readUInt32LE(o + 29));
+  if (mb?.cls !== 'i3MemoryBuffer') throw new Error(`i3SkinGeometryAttr#${obj.id}: palette buffer missing`);
+  // the buffer tail is padding (0xCD fill): blocks are contiguous from triangle 0 and cover every triangle of the geometry
+  const out = [];
+  let p = mb.off + 4, next = 0;
+  for (let i = 0; i < count; i++) {
+    const first = buf.readUInt32LE(p), tris = buf.readUInt32LE(p + 4), n = buf.readUInt32LE(p + 8);
+    if (first !== next * 3) throw new Error(`i3SkinGeometryAttr#${obj.id}: palette block ${i} starts at index ${first}, expected ${next * 3}`);
+    out.push({ first, tris, pal: Array.from(buf.subarray(p + 12, p + 12 + n)) });
+    p += 12 + ((n + 3) & ~3); next += tris; // palette padded to u32
+  }
+  if (next !== buf.readUInt32LE(o + 1) || p > mb.off + mb.size) throw new Error(`i3SkinGeometryAttr#${obj.id}: palette blocks cover ${next} of ${buf.readUInt32LE(o + 1)} triangles`);
+  return out;
+}
+
 // Walk an LOD root: collect geometries with the bone they hang from (i3BoneRef) and the local matrix below it.
 export function collectBodyMeshes(buf, file, rootId) {
   const meshes = [], dummies = [];
@@ -202,7 +224,7 @@ export function collectBodyMeshes(buf, file, rootId) {
         if (go?.cls !== 'i3GeometryAttr' && go?.cls !== 'i3SkinGeometryAttr') continue;
         const geo = readGeometryAttr(buf, go);
         if (geo.primType !== 4) continue;
-        meshes.push({ name: p.join('/') || `geo${go.id}`, bone: b, local: m, state: st, geo, va: readVertexArrayEx(buf, file.byId.get(geo.va)), ia: geo.ia ? readIndexArrayRaw(buf, file.byId.get(geo.ia)) : null });
+        meshes.push({ name: p.join('/') || `geo${go.id}`, bone: b, local: m, state: st, geo, palettes: sgaPalettes(buf, file, go), va: readVertexArrayEx(buf, file.byId.get(geo.va)), ia: geo.ia ? readIndexArrayRaw(buf, file.byId.get(geo.ia)) : null });
       }
     }
     for (const c of n.children) walk(c, b, m, st, p);

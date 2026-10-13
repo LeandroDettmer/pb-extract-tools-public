@@ -15,7 +15,7 @@
 //   Parts (class 7-14, 27): no export pipeline exists yet (no chars/<x>/parts/* and no attachment support in
 //     src/game/charModel.ts) -> always incomplete today. Re-enable a class once export-batch.mjs grows a
 //     `parts`/`equip` mode and charModel.ts gains an attachment point for it.
-// Items missing any part are hidden by the web client (src/lobby/state/charaSupport.ts: shop, inventory);
+// Items missing any part are hidden by the web app;
 // the DB and the server keep them. Re-enable one by exporting what it lacks and re-running this tool.
 import { assetPath, webPath } from './lib/paths.mjs';
 import fs from 'node:fs';

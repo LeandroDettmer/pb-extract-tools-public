@@ -356,27 +356,36 @@ function exportCharaGLB(P, name, lod, { outDir, glbName, texUri, clips, hitboxes
     let idx;
     try { idx = plainIndices(m); } catch { stats.keyed++; continue; }
     const va = m.va;
-    let joints, matrix = AXIS;
-    if (va.joints && m.bone < 0) {
-      // blend indices are already indices into this LOD's skeleton (= the skin joints). The LOD bone map goes the other
-      // way (LOD bone -> bone of the full frame skeleton), so applying it only worked while both orders matched.
-      joints = (s) => {
-        const j = [0, 0, 0, 0], w = [0, 0, 0, 0];
-        for (let k = 0; k < 4; k++) { const wk = va.weights[s * 4 + k]; if (wk <= 0) continue; j[k] = va.joints[s * 4 + k]; w[k] = wk; }
-        const sum = w[0] + w[1] + w[2] + w[3] || 1;
-        return { j, w: w.map((v) => v / sum) };
-      };
-    } else { // rigid geometry under a bone ref (or unskinned): bake the bind pose, weight 1 to that bone
+    // i3SkinGeometryAttr: one part per palette block (its triangles only), blend indices go through that block's palette
+    const parts = m.palettes ? m.palettes.map((b) => ({ idx: idx.subarray(b.first, b.first + b.tris * 3), pal: b.pal })) : [{ idx, pal: null }];
+    let matrix = AXIS;
+    const skinJoints = (pal) => (s) => {
+      const j = [0, 0, 0, 0], w = [0, 0, 0, 0];
+      for (let k = 0; k < 4; k++) {
+        const wk = va.weights[s * 4 + k]; if (wk <= 0) continue;
+        const slot = va.joints[s * 4 + k];
+        j[k] = pal ? pal[slot] : slot; if (j[k] === undefined) throw new Error(`${name}: blend slot ${slot} outside its palette`);
+        w[k] = wk;
+      }
+      const sum = w[0] + w[1] + w[2] + w[3] || 1;
+      return { j, w: w.map((v) => v / sum) };
+    };
+    // blend indices are skeleton bones of this LOD (= the skin joints) unless the geometry carries a palette
+    const useSkin = va.joints && m.bone < 0;
+    let rigidJoints = null;
+    if (!useSkin) { // rigid geometry under a bone ref (or unskinned): bake the bind pose, weight 1 to that bone
       const b = Math.max(0, m.bone);
       matrix = mul(m.local, worldThree[b]);
-      joints = () => ({ j: [b, 0, 0, 0], w: [1, 0, 0, 0] });
+      rigidJoints = () => ({ j: [b, 0, 0, 0], w: [1, 0, 0, 0] });
       stats.rigid++;
     }
-    const prim = buildPrimitive(G, m, idx, { matrix, joints });
-    prim.material = mats.get(m.state);
-    stats.tris += prim.tris; stats.verts += prim.verts;
-    delete prim.tris; delete prim.verts;
-    prims.push({ name: m.name.split('/').pop(), prim });
+    for (const part of parts) {
+      const prim = buildPrimitive(G, m, part.idx, { matrix, joints: useSkin ? skinJoints(part.pal) : rigidJoints });
+      prim.material = mats.get(m.state);
+      stats.tris += prim.tris; stats.verts += prim.verts;
+      delete prim.tris; delete prim.verts;
+      prims.push({ name: m.name.split('/').pop(), prim });
+    }
   }
   J.meshes.push({ name, primitives: prims.map((p) => p.prim), extras: { parts: prims.map((p) => p.name) } });
   J.scenes[0].nodes.push(G.node({ name: name + '_mesh', mesh: 0, skin: 0 }));
