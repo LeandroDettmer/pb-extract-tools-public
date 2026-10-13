@@ -1,0 +1,22 @@
+{
+  "name": "pb-extract-tools",
+  "version": "0.1.0",
+  "description": "Point Blank asset extraction: unpack the game's packs and export GLB, JSON, OGG and PNG. Private study tools.",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "bin": {
+    "pbx": "pbx.mjs"
+  },
+  "scripts": {
+    "pbx": "node pbx.mjs",
+    "doctor": "node pbx.mjs doctor"
+  },
+  "engines": {
+    "node": ">=22.7"
+  },
+  "dependencies": {
+    "ffmpeg-static": "5.3.0",
+    "three": "0.169.0"
+  }
+}

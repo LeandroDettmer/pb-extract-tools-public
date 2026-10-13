@@ -1,0 +1,366 @@
+{
+ "_doc": "Effect ids of DesignationSet _PlusEffect/_MinusEffect/_AddEffect (DESIGNATION_ID, 0..220) decoded from PointBlank.exe 2017: families = CDesignationValueSet value init 0x4d1a20 (id = base + level-1, value = DesignationValue.pef key <family>_<level>); strings = effect-text init 0x4d29d0 (id -> STR_HEADER_<key>, _setUserTitleEffectText 0x4d01f0); authority = ids for which UITabProfileDesignation::__UpdateDetailInfoBox 0x950eb0 takes the weapon path (0x4d4c20)",
+ "families": [
+  [
+   1,
+   "Move_Ability_Plus"
+  ],
+  [
+   6,
+   "Fire_Speed_Plus"
+  ],
+  [
+   11,
+   "Move_Speed_Plus"
+  ],
+  [
+   16,
+   "Jump_Ability_Plus"
+  ],
+  [
+   21,
+   "AddSpeed_Ability_Plus"
+  ],
+  [
+   26,
+   "FallDown_Damage_Reduce"
+  ],
+  [
+   31,
+   "Reload_Time_Reduce"
+  ],
+  [
+   36,
+   "Fire_Range_Plus"
+  ],
+  [
+   41,
+   "Horizontal_Reaction_Reduce"
+  ],
+  [
+   46,
+   "Vertical_Reaction_Reduce"
+  ],
+  [
+   51,
+   "Target_Declnation_Reduce"
+  ],
+  [
+   56,
+   "Throw_Speed_Plus"
+  ],
+  [
+   61,
+   "Bomb_Time_Reduce"
+  ],
+  [
+   66,
+   "Bomb_Range_Plus"
+  ],
+  [
+   71,
+   "Weapon_Reaction_Control_Plus"
+  ],
+  [
+   76,
+   "DPD_Rate_Plus"
+  ],
+  [
+   81,
+   "First_Shot_Rate_Plus"
+  ],
+  [
+   86,
+   "Move_Ability_Minus"
+  ],
+  [
+   91,
+   "FallDown_Damage_Increase"
+  ],
+  [
+   96,
+   "AddSpeed_Ability_Minus"
+  ],
+  [
+   101,
+   "Jump_Ability_Minus"
+  ],
+  [
+   106,
+   "Move_Speed_Minus"
+  ],
+  [
+   111,
+   "Vertical_Reaction_Increase"
+  ],
+  [
+   116,
+   "Horizontal_Reaction_Increase"
+  ],
+  [
+   121,
+   "Target_Declination_Increase"
+  ],
+  [
+   126,
+   "Reload_Time_Increase"
+  ],
+  [
+   131,
+   "Fire_Range_Minus"
+  ],
+  [
+   136,
+   "Throw_Speed_Minus"
+  ],
+  [
+   141,
+   "Fire_Speed_Minus"
+  ],
+  [
+   146,
+   "Bomb_Time_Increase"
+  ],
+  [
+   151,
+   "Bomb_Range_Minus"
+  ],
+  [
+   156,
+   "Weapon_Reaction_Control_Minus"
+  ],
+  [
+   161,
+   "DPD_Rate_Minus"
+  ],
+  [
+   166,
+   "First_Shot_Rate_Minus"
+  ]
+ ],
+ "strings": {
+  "1": "SPEED_PLUS_1",
+  "2": "SPEED_PLUS_2",
+  "3": "SPEED_PLUS_3",
+  "4": "SPEED_PLUS_4",
+  "5": "SPEED_PLUS_5",
+  "6": "FIRE_SPEED_PLUS_1",
+  "7": "FIRE_SPEED_PLUS_2",
+  "8": "FIRE_SPEED_PLUS_3",
+  "9": "FIRE_SPEED_PLUS_4",
+  "10": "FIRE_SPEED_PLUS_5",
+  "11": "SPEED_PLUS_1",
+  "12": "SPEED_PLUS_2",
+  "13": "SPEED_PLUS_3",
+  "14": "SPEED_PLUS_4",
+  "15": "SPEED_PLUS_5",
+  "16": "JUMP_PLUS_1",
+  "17": "JUMP_PLUS_2",
+  "18": "JUMP_PLUS_3",
+  "19": "JUMP_PLUS_4",
+  "20": "JUMP_PLUS_5",
+  "21": "AGILITY_PLUS_1",
+  "22": "AGILITY_PLUS_2",
+  "23": "AGILITY_PLUS_3",
+  "24": "AGILITY_PLUS_4",
+  "25": "AGILITY_PLUS_5",
+  "26": "FALLDOWN_DAMAGE_REDUCE_1",
+  "27": "FALLDOWN_DAMAGE_REDUCE_2",
+  "28": "FALLDOWN_DAMAGE_REDUCE_3",
+  "29": "FALLDOWN_DAMAGE_REDUCE_4",
+  "30": "FALLDOWN_DAMAGE_REDUCE_5",
+  "31": "RELOAD_PLUS_1",
+  "32": "RELOAD_PLUS_2",
+  "33": "RELOAD_PLUS_3",
+  "34": "RELOAD_PLUS_4",
+  "35": "RELOAD_PLUS_5",
+  "36": "RANGE_PLUS_1",
+  "37": "RANGE_PLUS_2",
+  "38": "RANGE_PLUS_3",
+  "39": "RANGE_PLUS_4",
+  "40": "RANGE_PLUS_5",
+  "41": "HORZ_REACTION_REDUCE_1",
+  "42": "HORZ_REACTION_REDUCE_2",
+  "43": "HORZ_REACTION_REDUCE_3",
+  "44": "HORZ_REACTION_REDUCE_4",
+  "45": "HORZ_REACTION_REDUCE_5",
+  "46": "VERTICAL_REACTION_REDUCE_1",
+  "47": "VERTICAL_REACTION_REDUCE_2",
+  "48": "VERTICAL_REACTION_REDUCE_3",
+  "49": "VERTICAL_REACTION_REDUCE_4",
+  "50": "VERTICAL_REACTION_REDUCE_5",
+  "51": "HIT_RATE_PLUS_1",
+  "52": "HIT_RATE_PLUS_2",
+  "53": "HIT_RATE_PLUS_3",
+  "54": "HIT_RATE_PLUS_4",
+  "55": "HIT_RATE_PLUS_5",
+  "56": "THROWING_PLAS_1",
+  "57": "THROWING_PLAS_2",
+  "58": "THROWING_PLAS_3",
+  "59": "THROWING_PLAS_4",
+  "60": "THROWING_PLAS_5",
+  "61": "EXPLOSION_TIME_MINUS_1",
+  "62": "EXPLOSION_TIME_MINUS_2",
+  "63": "EXPLOSION_TIME_MINUS_3",
+  "64": "EXPLOSION_TIME_MINUS_4",
+  "65": "EXPLOSION_TIME_MINUS_5",
+  "66": "EXPLOSION_RANGE_PLUS_1",
+  "67": "EXPLOSION_RANGE_PLUS_2",
+  "68": "EXPLOSION_RANGE_PLUS_3",
+  "69": "EXPLOSION_RANGE_PLUS_4",
+  "70": "EXPLOSION_RANGE_PLUS_5",
+  "71": "WEAPON_REACTION_CONTROL_PLUS_1",
+  "72": "WEAPON_REACTION_CONTROL_PLUS_2",
+  "73": "WEAPON_REACTION_CONTROL_PLUS_3",
+  "74": "WEAPON_REACTION_CONTROL_PLUS_4",
+  "75": "WEAPON_REACTION_CONTROL_PLUS_5",
+  "76": "DPD_RATE_PLUS_1",
+  "77": "DPD_RATE_PLUS_2",
+  "78": "DPD_RATE_PLUS_3",
+  "79": "DPD_RATE_PLUS_4",
+  "80": "DPD_RATE_PLUS_5",
+  "81": "FIRST_SHOT_PLUS_1",
+  "82": "FIRST_SHOT_PLUS_2",
+  "83": "FIRST_SHOT_PLUS_3",
+  "84": "FIRST_SHOT_PLUS_4",
+  "85": "FIRST_SHOT_PLUS_5",
+  "86": "SPEED_MINUS_1",
+  "87": "SPEED_MINUS_2",
+  "88": "SPEED_MINUS_3",
+  "89": "SPEED_MINUS_4",
+  "90": "SPEED_MINUS_5",
+  "91": "FALLDOWN_DAMAGE_INCREASE_1",
+  "92": "FALLDOWN_DAMAGE_INCREASE_2",
+  "93": "FALLDOWN_DAMAGE_INCREASE_3",
+  "94": "FALLDOWN_DAMAGE_INCREASE_4",
+  "95": "FALLDOWN_DAMAGE_INCREASE_5",
+  "96": "AGILITY_MINUS_1",
+  "97": "AGILITY_MINUS_2",
+  "98": "AGILITY_MINUS_3",
+  "99": "AGILITY_MINUS_4",
+  "100": "AGILITY_MINUS_5",
+  "101": "JUMP_MINUS_1",
+  "102": "JUMP_MINUS_2",
+  "103": "JUMP_MINUS_3",
+  "104": "JUMP_MINUS_4",
+  "105": "JUMP_MINUS_5",
+  "106": "SPEED_MINUS_1",
+  "107": "SPEED_MINUS_2",
+  "108": "SPEED_MINUS_3",
+  "109": "SPEED_MINUS_4",
+  "110": "SPEED_MINUS_5",
+  "111": "VERTICAL_REACTION_INCREASE_1",
+  "112": "VERTICAL_REACTION_INCREASE_2",
+  "113": "VERTICAL_REACTION_INCREASE_3",
+  "114": "VERTICAL_REACTION_INCREASE_4",
+  "115": "VERTICAL_REACTION_INCREASE_5",
+  "116": "HORZ_REACTION_INCREASE_1",
+  "117": "HORZ_REACTION_INCREASE_2",
+  "118": "HORZ_REACTION_INCREASE_3",
+  "119": "HORZ_REACTION_INCREASE_4",
+  "120": "HORZ_REACTION_INCREASE_5",
+  "121": "HIT_RATE_MINUS_1",
+  "122": "HIT_RATE_MINUS_2",
+  "123": "HIT_RATE_MINUS_3",
+  "124": "HIT_RATE_MINUS_4",
+  "125": "HIT_RATE_MINUS_5",
+  "126": "RELOAD_MINUS_1",
+  "127": "RELOAD_MINUS_2",
+  "128": "RELOAD_MINUS_3",
+  "129": "RELOAD_MINUS_4",
+  "130": "RELOAD_MINUS_5",
+  "131": "RANGE_MINUS_1",
+  "132": "RANGE_MINUS_2",
+  "133": "RANGE_MINUS_3",
+  "134": "RANGE_MINUS_4",
+  "135": "RANGE_MINUS_5",
+  "136": "THROWING_MINUS_1",
+  "137": "THROWING_MINUS_2",
+  "138": "THROWING_MINUS_3",
+  "139": "THROWING_MINUS_4",
+  "140": "THROWING_MINUS_5",
+  "141": "FIRE_SPEED_MINUS_1",
+  "142": "FIRE_SPEED_MINUS_2",
+  "143": "FIRE_SPEED_MINUS_3",
+  "144": "FIRE_SPEED_MINUS_4",
+  "145": "FIRE_SPEED_MINUS_5",
+  "146": "EXPLOSION_TIME_PLUS_1",
+  "147": "EXPLOSION_TIME_PLUS_2",
+  "148": "EXPLOSION_TIME_PLUS_3",
+  "149": "EXPLOSION_TIME_PLUS_4",
+  "150": "EXPLOSION_TIME_PLUS_5",
+  "151": "EXPLOSION_RANGE_MINUS_1",
+  "152": "EXPLOSION_RANGE_MINUS_2",
+  "153": "EXPLOSION_RANGE_MINUS_3",
+  "154": "EXPLOSION_RANGE_MINUS_4",
+  "155": "EXPLOSION_RANGE_MINUS_5",
+  "156": "WEAPON_REACTION_CONTROL_MINUS_1",
+  "157": "WEAPON_REACTION_CONTROL_MINUS_2",
+  "158": "WEAPON_REACTION_CONTROL_MINUS_3",
+  "159": "WEAPON_REACTION_CONTROL_MINUS_4",
+  "160": "WEAPON_REACTION_CONTROL_MINUS_5",
+  "161": "DPD_RATE_MINUS_1",
+  "162": "DPD_RATE_MINUS_2",
+  "163": "DPD_RATE_MINUS_3",
+  "164": "DPD_RATE_MINUS_4",
+  "165": "DPD_RATE_MINUS_5",
+  "166": "FIRST_SHOT_MINUS_1",
+  "167": "FIRST_SHOT_MINUS_2",
+  "168": "FIRST_SHOT_MINUS_3",
+  "169": "FIRST_SHOT_MINUS_4",
+  "170": "FIRST_SHOT_MINUS_5",
+  "171": "DESIGNATION_GET_SLOT2",
+  "172": "DESIGNATION_GET_SLOT3",
+  "173": "GET_BERET",
+  "174": "AUTHORITY_DUAL_KNIFE",
+  "175": "AUTHORITY_DUAL_HANDGUN",
+  "176": "AUTHORITY_870MCS_W",
+  "177": "AUTHORITY_SG550_S",
+  "178": "AUTHORITY_DRAGUNOV_G",
+  "179": "AUTHORITY_SPECTRE_W",
+  "180": "AUTHORITY_C5",
+  "181": "AUTHORITY_G36C_EXT",
+  "182": "AUTHORITY_L115A1",
+  "183": "AUTHORITY_P99",
+  "184": "AUTHORITY_P90_EXT",
+  "185": "AUTHORITY_SPAS15",
+  "186": "AUTHORITY_PSG1_S",
+  "187": "AUTHORITY_MP5K_G",
+  "188": "AUTHORITY_KUKRII",
+  "189": "AUTHORITY_WP_SMOKE",
+  "190": "AUTHORITY_KRISS_SUPER_V",
+  "191": "AUTHORITY_DUAL_D_EAGLE",
+  "192": "AUTHORITY_AK_SOPMOD",
+  "193": "AUTHORITY_MINI_AXE",
+  "194": "GET_SOMETHING",
+  "216": "AUTHORITY_AUGA3",
+  "217": "AUTHORITY_M1887W",
+  "218": "AUTHORITY_AKS74U"
+ },
+ "authority": [
+  174,
+  175,
+  176,
+  177,
+  178,
+  179,
+  180,
+  181,
+  182,
+  183,
+  184,
+  185,
+  186,
+  187,
+  188,
+  189,
+  190,
+  191,
+  192,
+  193,
+  216,
+  217,
+  218,
+  220
+ ]
+}

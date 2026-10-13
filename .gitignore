@@ -1,0 +1,6 @@
+out/
+node_modules/
+pbx.config.json
+extracted/
+snapshots/
+*.log
