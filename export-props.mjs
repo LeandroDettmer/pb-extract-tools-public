@@ -156,16 +156,20 @@ function buildIndex(packDir) {
 // Cross Object/break Construction_*: the state of Construction_Wall00.i3Obj names Construction_Pilar_06.i3s (every
 // Construction_* state is one object down). The self-named block Construction_Wall00.i3s is the 2017 model: 18/18 match
 // the OLD export (vertex count + bounds). So when the state's file is not the object's own name, the own block goes first.
+// A state with no i3Geometry scene (effect, path, animation-only break) is not a model: the error carries noModel, not a failure.
+const noModel = (msg) => Object.assign(new Error(msg), { noModel: true });
+// Break states: the state file's own 2017 block (self-named) before the Cross file of the same path. Object_break SLOT_SHORT1_BREAK.I3S
+// (Cross: intact scene only, 896 v) and Object_moving Stormtube_Subway.i3s (Cross: NPort container, 4068 v) hold the wrong geometry.
 function exportModelAny(id, modelPath, IX, texFor, log, ownPath) {
   if (!modelPath) throw new Error('i3Obj has no model state');
   const ownKey = ownPath && baseName(ownPath).replace(/\.i3obj$/, '.i3s');
   const own = ownKey && baseName(modelPath) !== ownKey ? IX.geomByName.get(ownKey) : undefined;
-  const cands = [own, IX.byPath.get(normPath(modelPath).toUpperCase()), IX.geomByName.get(baseName(modelPath))].filter(Boolean);
-  let err = `model ${modelPath} not found`;
+  const cands = [own, IX.geomByName.get(baseName(modelPath)), IX.byPath.get(normPath(modelPath).toUpperCase())].filter(Boolean);
+  let err = `model ${modelPath} not found`, models = 0;
   for (const ent of cands) {
-    try { return exportModel(id, ent, texFor, { log }); } catch (e) { err = e.message; }
+    try { return exportModel(id, ent, texFor, { log }); } catch (e) { err = e.message; if (!e.noModel) models++; }
   }
-  throw new Error(err);
+  throw cands.length && !models ? noModel(err) : new Error(err);
 }
 
 const packCache = new Map();
@@ -475,7 +479,7 @@ const vm3 = (v, m) => [v[0] * m[0] + v[1] * m[3] + v[2] * m[6], v[0] * m[1] + v[
 function exportModel(id, ent, texFor, { log }) {
   const d = readEntry(ent);
   const scenes = scanI3R2(d).filter((b) => b.objects.some((o) => o.cls === 'i3Geometry'));
-  if (!scenes.length) throw new Error(`${ent.path}: no i3Geometry scene`);
+  if (!scenes.length) throw noModel(`${ent.path}: no i3Geometry scene`);
   // a break file (vending, tank) holds the intact scene first, named after the intact file, then its own scene named after
   // itself: the state's model is the self-named one, else the first [INFERIDO: exe not checked]
   const own = baseName(ent.path);
@@ -656,6 +660,7 @@ function exportMapProps(pack, dir, mapId, IX, texFor, defs, serverMaps, log) {
   if (!fs.existsSync(scene)) return { dir, error: 'no _Scene pack' };
   const { ver, records } = readGINS(fs.readFileSync(scene));
   const props = [], unresolved = [], volumes = [];
+  let errors = 0; // def / broken-state failures (not no-model states) created by this map
   for (const r of records) {
     if (r.cls === CLS.box) { volumes.push({ name: r.name, pos: r.pos.map(r4), quat: r.quat.map(r4), size: r.scale.map(r4) }); continue; }
     if (r.cls !== CLS.object && !OBJECTIVE_CLS.has(r.cls)) continue;
@@ -670,17 +675,21 @@ function exportMapProps(pack, dir, mapId, IX, texFor, defs, serverMaps, log) {
       const info = readI3Obj(readEntry(ent));
       // Helispot_UH60_RED.i3Obj has no i3SceneGraphInfo ref (its model is an i3Animation 'Model_UH60'): the model is the sibling .i3s
       if (!info.states.length && team) info.states = [ent.path.replace(/\.i3obj$/i, '.i3s')];
+      // Cross Object_cgame millicloth.i3Obj: no model state (i3TransformSequence + i3Animation only); its model is the sibling
+      // MilliCloth_Ani.i3s, the 2017 state [INFERIDO: from the name, the Cross i3Obj does not name it]
+      if (!info.states.length) { const ani = ent.path.replace(/\.i3obj$/i, '_Ani.i3s'); if (IX.byPath.has(ani.toUpperCase())) info.states = [ani]; }
       const def = { id, i3Obj: `${ent.pack}:${ent.path}`, life: info.life, stateCount: info.stateCount, breakable: info.breakable && info.stateCount > 1, states: info.states, breakEffects: info.breakEffects, breakSounds: info.breakSounds, stateSounds: info.stateSounds, explosion: info.explosion };
-      try { Object.assign(def, exportModelAny(id, info.states[0], IX, texFor, log, ent.path)); } catch (e) { def.error = e.message; }
+      try { Object.assign(def, exportModelAny(id, info.states[0], IX, texFor, log, ent.path)); } catch (e) { if (e.noModel) def.noModel = e.message; else { def.error = e.message; errors++; } }
       // states 1.. = broken models (same GLB space): <id>_s1.glb. Objects with a single model just vanish when broken.
       if (def.breakable && !def.error) {
         def.brokenStates = [];
         for (let k = 1; k < info.states.length; k++) {
-          try { const r = exportModelAny(`${id}_s${k}`, info.states[k], IX, texFor, log); def.brokenStates.push({ state: k, ...r }); } catch (e) { log(`  ${id}: state ${k} ERROR ${e.message}`); }
+          try { const r = exportModelAny(`${id}_s${k}`, info.states[k], IX, texFor, log); def.brokenStates.push({ state: k, ...r }); }
+          catch (e) { if (e.noModel) log(`  ${id}: state ${k} no model (${e.message})`); else { errors++; log(`  ${id}: state ${k} ERROR ${e.message}`); } }
         }
       }
       defs.set(id, def);
-      log(`  object ${id}: ${def.error ? 'ERROR ' + def.error : `tris=${def.tris} col=${def.collision.kind}${def.collision.boxes ? 'x' + def.collision.boxes.length : ''} life=${def.life} breakable=${def.breakable}${def.missingTextures?.length ? ' missingTex=' + def.missingTextures.join(',') : ''}`}`);
+      log(`  object ${id}: ${def.error ? 'ERROR ' + def.error : def.noModel ? 'no model ' + def.noModel : `tris=${def.tris} col=${def.collision.kind}${def.collision.boxes ? 'x' + def.collision.boxes.length : ''} life=${def.life} breakable=${def.breakable}${def.missingTextures?.length ? ' missingTex=' + def.missingTextures.join(',') : ''}`}`);
     }
     const prop = { name: r.name, object: id, pos: r.pos.map(r4), quat: r.quat.map(r4), scale: r.scale.map(r4), ...(team ? { objective: team } : {}) };
     // Helispot helicopters: GINS pos 0,0,0 identity. Their start pose is the animation's key 0 (Model_UH60 idle, Root 0), and that
@@ -720,7 +729,7 @@ function exportMapProps(pack, dir, mapId, IX, texFor, defs, serverMaps, log) {
       : { mapId, note: 'no MapStructure entry' },
   };
   fs.writeFileSync(path.join(MAPS, dir, 'props.json'), JSON.stringify(out, null, 1));
-  return { dir, ver, props: props.length, netProps: netProps.length, objects: used.length, unresolved: unresolved.length, volumes: volumes.length, server: server?.length ?? null, netMatch };
+  return { dir, ver, props: props.length, netProps: netProps.length, objects: used.length, unresolved: unresolved.length, volumes: volumes.length, server: server?.length ?? null, netMatch, errors };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -768,8 +777,9 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   for (const [id, d] of defs) prev.objects[id] = d;
   prev.generator = 'tools/export-props.mjs';
   fs.writeFileSync(idxFile, JSON.stringify(prev, null, 1));
-  const bad = report.filter((r) => r.error).length;
-  console.log(`done: ${report.length} maps, ${defs.size} objects, ${bad} errors, ${report.reduce((a, r) => a + (r.unresolved || 0), 0)} unresolved instances (${Date.now() - t0} ms)`);
+  const bad = report.filter((r) => r.error).length + report.reduce((a, r) => a + (r.errors || 0), 0);
+  const noModel = [...defs.values()].filter((d) => d.noModel).length;
+  console.log(`done: ${report.length} maps, ${defs.size} objects, ${bad} errors, ${noModel} objects with no model (effect/path/animation), ${report.reduce((a, r) => a + (r.unresolved || 0), 0)} unresolved instances (${Date.now() - t0} ms)`);
   process.exitCode = bad ? 1 : 0;
 }
 export { buildIndex, readI3Obj, readEntry, readCollision };
