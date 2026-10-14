@@ -67,12 +67,13 @@ function decodeBGRATile(src, out = Buffer.alloc(T * T * 4)) {
 
 // ---- virtual texture ------------------------------------------------------------------------------
 const opened = {};
-/** Open one VTV2 set ('UIRe' | 'UI_Temp'). */
-export function openVTex(root = 'UIRe') {
-  if (opened[root]) return opened[root];
-  const base = path.join(APPS, ROOTS[root]);
+/** Open one VTV2 set ('UIRe' | 'UI_Temp') of a client folder (default the Kaybo one; Cross has UI_Temp only). */
+export function openVTex(root = 'UIRe', apps = APPS) {
+  const ck = `${apps}|${root}`;
+  if (opened[ck]) return opened[ck];
+  const base = path.join(apps, ROOTS[root]);
   const vfile = base + '.i3VTex';
-  if (!fs.existsSync(vfile)) return (opened[root] = null);
+  if (!fs.existsSync(vfile)) return (opened[ck] = null);
   const fd = fs.openSync(vfile, 'r'), h = readAt(fd, 0, 0x40);
   if (h.toString('latin1', 0, 4) !== 'VTV2') throw new Error(`${vfile}: not VTV2`);
   const fmtCode = h.readUInt32LE(4), fmt = FMT[fmtCode];
@@ -85,7 +86,7 @@ export function openVTex(root = 'UIRe') {
   if (fs.existsSync(sf)) {
     const s = fs.readFileSync(sf), nSub = s.readUInt32LE(4), nFile = s.readUInt32LE(8), fb = 0x1c + nSub * 540;
     for (let i = 0; i < nFile; i++) {
-      const f = path.join(APPS, cstr(s, fb + i * 296, 256));
+      const f = path.join(apps, cstr(s, fb + i * 296, 256));
       subs.push({ file: f, fd: fs.existsSync(f) ? fs.openSync(f, 'r') : null });
     }
   }
@@ -130,17 +131,17 @@ export function openVTex(root = 'UIRe') {
     return byStem.get(stem(key))?.[0] || null;
   }
   function readImage(im) { return { ...readRect(im.x, im.y, im.w, im.h), image: im }; }
-  return (opened[root] = { root, file: vfile, format: fmt.name, W, H, images, subs, find, readImage, readRect });
+  return (opened[ck] = { root, file: vfile, format: fmt.name, W, H, images, subs, find, readImage, readRect });
 }
 
 /** Root a Kaybo template shape path belongs to ('UI_Temp/...' -> UI_Temp, everything else -> UIRe). */
 export const rootOf = shapePath => (/^ui_temp[\\/]/i.test(shapePath || '') ? 'UI_Temp' : 'UIRe');
 
-/** Hook for ui-atlas.mjs: image `key` of a Kaybo template shape -> { w, h, rgba, src, root } | null. */
-export function loadKayboImage(key, shapePath) {
+/** Hook for ui-atlas.mjs: image `key` of a Kaybo (or, with `apps`, Cross) template shape -> { w, h, rgba, src, root } | null. */
+export function loadKayboImage(key, shapePath, apps = APPS) {
   // own set first; then the other set by name (a few UIRe templates point at images only UI_Temp holds)
-  let vt = openVTex(rootOf(shapePath)), im = vt?.find(key, shapePath);
-  if (!im) { vt = openVTex(rootOf(shapePath) === 'UIRe' ? 'UI_Temp' : 'UIRe'); im = vt?.find(key); }
+  let vt = openVTex(rootOf(shapePath), apps), im = vt?.find(key, shapePath);
+  if (!im) { vt = openVTex(rootOf(shapePath) === 'UIRe' ? 'UI_Temp' : 'UIRe', apps); im = vt?.find(key); }
   if (!im) return null;
   const root = vt.root;
   const r = vt.readImage(im);

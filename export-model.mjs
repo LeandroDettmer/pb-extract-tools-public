@@ -31,8 +31,8 @@ import { parsePack, decodeContent } from './i3pack/unpack.mjs';
 import { charaClips, addClips } from './export-anim.mjs';
 import { ddsOf, hasAlphaFast } from './export-visual.mjs';
 
-// 3.123 folder, read only when a caller leaves packDir / animDir out (export-batch passes its own client folders)
-const gameDir = () => clientPath(baseClient(['br3123']));
+const GAME = clientPath(baseClient('br3123'));
+const PACKS = path.join(GAME, 'Pack');
 const OUT = process.env.PB_OUT_ROOT || assetPath(); // PB_OUT_ROOT: tools/export-model-dds.mjs writes to a temp dir
 export const AXIS = [-1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1]; // i3 asset (Z-up) -> three (Y-up), row vector
 
@@ -58,7 +58,7 @@ const zoneOf = (n) => ZONES[(n.match(/^([A-Z]+)_/) || [])[1]] || 'body';
 // packDir: client Pack folder; texFallback: other pack files (same pack name in the other clients) searched for
 // textures the pack itself does not carry. maxTex: longest texture side kept (larger maps are box-downscaled).
 // texOverride(path) -> I3IB entry | null: replacement maps (weapon skins, see export-batch.mjs).
-export function loadPack(packName, { packDir = path.join(gameDir(), 'Pack'), texFallback = [], maxTex = 0, texOverride = null, i3s = null } = {}) {
+export function loadPack(packName, { packDir = PACKS, texFallback = [], maxTex = 0, texOverride = null, i3s = null } = {}) {
   const file = path.join(packDir, packName + '.i3Pack');
   const d = fs.readFileSync(file);
   // i3s: a pack can hold several models (Weapon_C5: BombTrigger.I3S = the hand detonator, C5.I3S = the brick): pick the
@@ -292,7 +292,7 @@ export function addSkeletonNodes(G, bones, rootChildren) {
 }
 
 // ---- weapons ------------------------------------------------------------------------------
-export function exportWeapon({ pack, id, kind, packDir = path.join(gameDir(), 'Pack'), texFallback = [], texOverride = null, i3s = null, extra = {} }, { outRoot = OUT, log = console.log, maxTex = 0 } = {}) {
+export function exportWeapon({ pack, id, kind, packDir = PACKS, texFallback = [], texOverride = null, i3s = null, extra = {} }, { outRoot = OUT, log = console.log, maxTex = 0 } = {}) {
   const P = loadPack(pack, { packDir, texFallback, maxTex, texOverride, i3s });
   const lod = P.body.lods[0];
   const sk = readSkeleton(P.d, P.scene, P.scene.byId.get(lod.skeleton));
@@ -432,7 +432,7 @@ function exportCharaGLB(P, name, lod, { outDir, glbName, texUri, clips, hitboxes
 
 // id: output folder (default name lower-cased); packDir / animDir: client folders (animDir = Chara/<X> with the
 // i3AnimPacks, null = no embedded clips); extra: fields merged into the index entry.
-export function exportChara({ name, team, id = name.toLowerCase(), packDir = path.join(gameDir(), 'Pack'), animDir = path.join(gameDir(), 'Chara', name), texFallback = [], extra = {} },
+export function exportChara({ name, team, id = name.toLowerCase(), packDir = PACKS, animDir = path.join(GAME, 'Chara', name), texFallback = [], extra = {} },
   { outRoot = OUT, log = console.log, maxTex = 0 } = {}) {
   const P = loadPack('Chara_' + name, { packDir, texFallback, maxTex });
   const outDir = path.join(outRoot, 'chars', id);

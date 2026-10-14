@@ -1,0 +1,10338 @@
+{
+ "format": "pb-cross-icons-web-ids/1",
+ "source": "3.123 name join frozen from the export of 2026-10-12 (Backups main-assets-pre-cross-2026-10-13/ui/cross/icons/index.json): web id -> [family, Cross name, match]. Cells are re-read from the Cross pef by export-cross-icons.mjs. Added after the join: 602006 SWAT_Male (chars/index.json swat_male, name in itemNames.json) and 601005 Viper Red = REBEL_ViperRed (the shop base, the 2026-10-12 alias) [INFERIDO].",
+ "icons": {
+  "103001": [
+   "weapon",
+   "SG550_DotSight",
+   "name"
+  ],
+  "103002": [
+   "weapon",
+   "AK-47_DualMag",
+   "name"
+  ],
+  "103003": [
+   "weapon",
+   "M4A1_Scope2",
+   "name"
+  ],
+  "103004": [
+   "weapon",
+   "K-2",
+   "name"
+  ],
+  "103005": [
+   "weapon",
+   "F2000",
+   "name"
+  ],
+  "103009": [
+   "weapon",
+   "AK-47_Gold",
+   "name"
+  ],
+  "103010": [
+   "weapon",
+   "M4A1_SE",
+   "name"
+  ],
+  "103011": [
+   "weapon",
+   "K201",
+   "name"
+  ],
+  "103013": [
+   "weapon",
+   "G36C",
+   "name"
+  ],
+  "103014": [
+   "weapon",
+   "SG550_Camo",
+   "name"
+  ],
+  "103015": [
+   "weapon",
+   "AK-SOPMOD",
+   "name"
+  ],
+  "103017": [
+   "weapon",
+   "AK-47_Silver",
+   "name"
+  ],
+  "103018": [
+   "weapon",
+   "SG550_MB",
+   "name"
+  ],
+  "103019": [
+   "weapon",
+   "SG550_Silver",
+   "name"
+  ],
+  "103020": [
+   "weapon",
+   "SG550_White",
+   "name"
+  ],
+  "103021": [
+   "weapon",
+   "M4A1_Silver",
+   "name"
+  ],
+  "103022": [
+   "weapon",
+   "M4A1_White",
+   "name"
+  ],
+  "103023": [
+   "weapon",
+   "M4A1_Gold",
+   "name"
+  ],
+  "103024": [
+   "weapon",
+   "M4A1_G_Exp_Pt_30",
+   "name"
+  ],
+  "103025": [
+   "weapon",
+   "AK-47_Point15",
+   "name"
+  ],
+  "103026": [
+   "weapon",
+   "SG550_Point10",
+   "name"
+  ],
+  "103027": [
+   "weapon",
+   "G36C_Event",
+   "name"
+  ],
+  "103029": [
+   "weapon",
+   "G36C_Silver",
+   "name"
+  ],
+  "103030": [
+   "weapon",
+   "SG550_MB_Exp_Pt_20",
+   "name"
+  ],
+  "103031": [
+   "weapon",
+   "G36C_Silver_Special_Exp_Pt_20",
+   "name"
+  ],
+  "103032": [
+   "weapon",
+   "F2000_Silver",
+   "name"
+  ],
+  "103033": [
+   "weapon",
+   "AK-SOPMOD_Exp_Pt_20",
+   "name"
+  ],
+  "103034": [
+   "weapon",
+   "G36C_Silver_Exp_Pt_20",
+   "name"
+  ],
+  "103035": [
+   "weapon",
+   "SG550_Camo D",
+   "name"
+  ],
+  "103037": [
+   "weapon",
+   "AUG-A3_Gold",
+   "name"
+  ],
+  "103038": [
+   "weapon",
+   "G36C D",
+   "name"
+  ],
+  "103039": [
+   "weapon",
+   "AK-SOPMOD_D",
+   "name"
+  ],
+  "103041": [
+   "weapon",
+   "AK-SOPMOD_KingCobra",
+   "name"
+  ],
+  "103042": [
+   "weapon",
+   "M4-SR16-LV1",
+   "name"
+  ],
+  "103043": [
+   "weapon",
+   "M4-SR16-LV2",
+   "name"
+  ],
+  "103044": [
+   "weapon",
+   "M4-SR16-LV3",
+   "name"
+  ],
+  "103045": [
+   "weapon",
+   "M4-SR16-FC",
+   "name"
+  ],
+  "103046": [
+   "weapon",
+   "F2000_Silver_P",
+   "name"
+  ],
+  "103047": [
+   "weapon",
+   "K-2_IN_MODE",
+   "name"
+  ],
+  "103048": [
+   "weapon",
+   "AUG-A3_Black",
+   "name"
+  ],
+  "103049": [
+   "weapon",
+   "FAMAS_G2",
+   "name"
+  ],
+  "103050": [
+   "weapon",
+   "FAMAS_G2_Commando",
+   "name"
+  ],
+  "103051": [
+   "weapon",
+   "FAMAS_G2_Scope",
+   "name"
+  ],
+  "103052": [
+   "weapon",
+   "FAMAS_G2_M203",
+   "name"
+  ],
+  "103053": [
+   "weapon",
+   "Pindad_SS2_V4",
+   "name"
+  ],
+  "103054": [
+   "weapon",
+   "AK-47_Gold_D",
+   "name"
+  ],
+  "103055": [
+   "weapon",
+   "M4A1_White_D",
+   "name"
+  ],
+  "103056": [
+   "weapon",
+   "SG550_Silver_D",
+   "name"
+  ],
+  "103057": [
+   "weapon",
+   "Vz52",
+   "name"
+  ],
+  "103058": [
+   "weapon",
+   "AK_FC",
+   "name"
+  ],
+  "103059": [
+   "weapon",
+   "AK-47_Non_Ext",
+   "name"
+  ],
+  "103060": [
+   "weapon",
+   "M4_Non_Ext",
+   "name"
+  ],
+  "103061": [
+   "weapon",
+   "Pindad_SS2_V4_Gold",
+   "name"
+  ],
+  "103062": [
+   "weapon",
+   "FAMAS_G2_Commando_ESports",
+   "name"
+  ],
+  "103063": [
+   "weapon",
+   "AUG-A3_ESports",
+   "name"
+  ],
+  "103064": [
+   "weapon",
+   "FAMAS_G2_Commando_Gold",
+   "name"
+  ],
+  "103065": [
+   "weapon",
+   "AUG-A3_Blue",
+   "name"
+  ],
+  "103066": [
+   "weapon",
+   "SG550_NON_EXT",
+   "name"
+  ],
+  "103067": [
+   "weapon",
+   "G36C_NON_EXT",
+   "name"
+  ],
+  "103069": [
+   "weapon",
+   "SCAR-H_CQC",
+   "name"
+  ],
+  "103070": [
+   "weapon",
+   "SCAR_STD_SILENCER",
+   "formula"
+  ],
+  "103071": [
+   "weapon",
+   "AUG-A3_IC",
+   "name"
+  ],
+  "103072": [
+   "weapon",
+   "AK-47_OLD_SPEC",
+   "name"
+  ],
+  "103073": [
+   "weapon",
+   "SG550_S_EV",
+   "name"
+  ],
+  "103074": [
+   "weapon",
+   "AK-SOPMOD_EV",
+   "name"
+  ],
+  "103076": [
+   "weapon",
+   "AK-47_Point15_EV",
+   "name"
+  ],
+  "103077": [
+   "weapon",
+   "F2000_Silver_EV",
+   "name"
+  ],
+  "103078": [
+   "weapon",
+   "AK-47_Ext_EV",
+   "name"
+  ],
+  "103079": [
+   "weapon",
+   "M4A1_Ext_EV",
+   "name"
+  ],
+  "103080": [
+   "weapon",
+   "M4A1_S_EV",
+   "name"
+  ],
+  "103081": [
+   "weapon",
+   "M4A1_Silver_EV",
+   "name"
+  ],
+  "103082": [
+   "weapon",
+   "M4-SR16-LV1_EV",
+   "name"
+  ],
+  "103083": [
+   "weapon",
+   "M4-SR16-LV2_EV",
+   "name"
+  ],
+  "103084": [
+   "weapon",
+   "M4-SR16-LV3_EV",
+   "name"
+  ],
+  "103085": [
+   "weapon",
+   "SCAR-H_CQC_100M",
+   "formula"
+  ],
+  "103086": [
+   "weapon",
+   "AK-47_Taiwan1",
+   "name"
+  ],
+  "103087": [
+   "weapon",
+   "FAMAS_G2_Sl",
+   "name"
+  ],
+  "103088": [
+   "weapon",
+   "SCAR_LB_SNIPER",
+   "formula"
+  ],
+  "103089": [
+   "weapon",
+   "AUG-A3_Gold_Non",
+   "name"
+  ],
+  "103090": [
+   "weapon",
+   "FAMAS_G2M",
+   "name"
+  ],
+  "103092": [
+   "weapon",
+   "AK-SOPMOD_R",
+   "name"
+  ],
+  "103093": [
+   "weapon",
+   "AUG-A3_Blaze",
+   "name"
+  ],
+  "103094": [
+   "weapon",
+   "SCAR-L_Carbine",
+   "name"
+  ],
+  "103095": [
+   "weapon",
+   "SCAR-L_Recon",
+   "name"
+  ],
+  "103096": [
+   "weapon",
+   "SCAR-L_FC",
+   "name"
+  ],
+  "103097": [
+   "weapon",
+   "AUG_A3_GRS",
+   "name"
+  ],
+  "103098": [
+   "weapon",
+   "M4A1_GRS",
+   "name"
+  ],
+  "103099": [
+   "weapon",
+   "AK-SOPMOD_GRS",
+   "name"
+  ],
+  "103100": [
+   "weapon",
+   "FAMAS_G2_GRS",
+   "name"
+  ],
+  "103101": [
+   "weapon",
+   "AK-SOPMOD_PBNC",
+   "name"
+  ],
+  "103103": [
+   "weapon",
+   "M4A1_FC_D-Hunter",
+   "name"
+  ],
+  "103104": [
+   "weapon",
+   "AUG_A3_GSL",
+   "name"
+  ],
+  "103105": [
+   "weapon",
+   "FAMAS_G2_Commando_GSL",
+   "name"
+  ],
+  "103106": [
+   "weapon",
+   "AUG-A3_ITALIA",
+   "name"
+  ],
+  "103107": [
+   "weapon",
+   "AUG-A3_Black_P",
+   "name"
+  ],
+  "103108": [
+   "weapon",
+   "AUG_A3_GRS_EV",
+   "name"
+  ],
+  "103109": [
+   "weapon",
+   "AUG_A3_TW1st",
+   "name"
+  ],
+  "103110": [
+   "weapon",
+   "AUG_A3_TW1st_P",
+   "name"
+  ],
+  "103111": [
+   "weapon",
+   "AUG-A3_BR-Camo",
+   "name"
+  ],
+  "103112": [
+   "weapon",
+   "AUG-A3_Turkey",
+   "name"
+  ],
+  "103113": [
+   "weapon",
+   "FAMAS_G2_GRS_EV",
+   "name"
+  ],
+  "103114": [
+   "weapon",
+   "M4A1_Elite",
+   "name"
+  ],
+  "103115": [
+   "weapon",
+   "AN-94",
+   "name"
+  ],
+  "103116": [
+   "weapon",
+   "F2000_Reload",
+   "name"
+  ],
+  "103117": [
+   "weapon",
+   "SG550_Reload",
+   "name"
+  ],
+  "103118": [
+   "weapon",
+   "Pindad_SS2_V4_Reload",
+   "name"
+  ],
+  "103119": [
+   "weapon",
+   "AK-47_Elite",
+   "name"
+  ],
+  "103120": [
+   "weapon",
+   "AUG-A3_PBIC2013",
+   "name"
+  ],
+  "103121": [
+   "weapon",
+   "M4A1_PBIC2013",
+   "name"
+  ],
+  "103122": [
+   "weapon",
+   "AK-47_PBIC2013",
+   "name"
+  ],
+  "103123": [
+   "weapon",
+   "TAR-21",
+   "name"
+  ],
+  "103124": [
+   "weapon",
+   "AK-47_Gold_P",
+   "name"
+  ],
+  "103125": [
+   "weapon",
+   "AK_FC_P",
+   "name"
+  ],
+  "103126": [
+   "weapon",
+   "AK-SOPMOD_KingCobra_P",
+   "name"
+  ],
+  "103127": [
+   "weapon",
+   "M4A1_SE_P",
+   "name"
+  ],
+  "103130": [
+   "weapon",
+   "AUG-A3_Gold_BLOODY",
+   "name"
+  ],
+  "103131": [
+   "weapon",
+   "AUG-A3_LATIN3",
+   "name"
+  ],
+  "103143": [
+   "weapon",
+   "FG42",
+   "name"
+  ],
+  "103144": [
+   "weapon",
+   "AUG_A3_R",
+   "name"
+  ],
+  "103145": [
+   "weapon",
+   "FG42_Gold",
+   "name"
+  ],
+  "103146": [
+   "weapon",
+   "G36C_Elite",
+   "name"
+  ],
+  "103147": [
+   "weapon",
+   "AUG-A3_Inferno",
+   "name"
+  ],
+  "103148": [
+   "weapon",
+   "AUG-A3_PBNC5",
+   "name"
+  ],
+  "103149": [
+   "weapon",
+   "AUG_A3_GSL2014",
+   "name"
+  ],
+  "103150": [
+   "weapon",
+   "TAR-21_Midnight",
+   "name"
+  ],
+  "103151": [
+   "weapon",
+   "TAR-21_BR_Camo",
+   "name"
+  ],
+  "103152": [
+   "weapon",
+   "AK-SOPMOD_BR_Camo",
+   "name"
+  ],
+  "103153": [
+   "weapon",
+   "SC_2010",
+   "name"
+  ],
+  "103154": [
+   "weapon",
+   "SC_2010_Gold",
+   "name"
+  ],
+  "103155": [
+   "weapon",
+   "AUG-A3_Brazuca",
+   "name"
+  ],
+  "103156": [
+   "weapon",
+   "Pindad_SS2_V4_Gold_GW",
+   "name"
+  ],
+  "103157": [
+   "weapon",
+   "AUG-A3_Champion",
+   "name"
+  ],
+  "103158": [
+   "weapon",
+   "AUG_A3_WOE",
+   "name"
+  ],
+  "103159": [
+   "weapon",
+   "AUG_A3_PBIC2014",
+   "name"
+  ],
+  "103161": [
+   "weapon",
+   "AUG-A3_LATIN3_NonLogo",
+   "name"
+  ],
+  "103162": [
+   "weapon",
+   "TAR-21_Midnight_NonLogo",
+   "name"
+  ],
+  "103163": [
+   "weapon",
+   "AUG-A3_PC_Cafe",
+   "name"
+  ],
+  "103164": [
+   "weapon",
+   "AUG_A3_G_ESports",
+   "name"
+  ],
+  "103165": [
+   "weapon",
+   "AUG_A3_Toy",
+   "name"
+  ],
+  "103166": [
+   "weapon",
+   "SC_2010_Q",
+   "name"
+  ],
+  "103167": [
+   "weapon",
+   "AN-94_Gold",
+   "name"
+  ],
+  "103168": [
+   "weapon",
+   "HK417_Gold",
+   "name"
+  ],
+  "103169": [
+   "weapon",
+   "TAR-21_Gold",
+   "name"
+  ],
+  "103170": [
+   "weapon",
+   "SCAR-L_Carbine_Gold",
+   "name"
+  ],
+  "103173": [
+   "weapon",
+   "AUG_A3_Cangaceiro",
+   "name"
+  ],
+  "103174": [
+   "weapon",
+   "XM8",
+   "name"
+  ],
+  "103175": [
+   "weapon",
+   "SCAR-L_Carbine_D",
+   "name"
+  ],
+  "103176": [
+   "weapon",
+   "SCAR-L_Recon_D",
+   "name"
+  ],
+  "103177": [
+   "weapon",
+   "XM8_Gold",
+   "name"
+  ],
+  "103178": [
+   "weapon",
+   "AUG-A3_CoupleBreaker",
+   "name"
+  ],
+  "103180": [
+   "weapon",
+   "AUG_A3_CNY-2015",
+   "name"
+  ],
+  "103181": [
+   "weapon",
+   "AUG-A3_Sheep",
+   "name"
+  ],
+  "103182": [
+   "weapon",
+   "TAR-21_Sheep",
+   "name"
+  ],
+  "103183": [
+   "weapon",
+   "AUG-A3_GRS2",
+   "name"
+  ],
+  "103185": [
+   "weapon",
+   "SC_2010_NEWBORN_2015",
+   "name"
+  ],
+  "103186": [
+   "weapon",
+   "AUG_A3_GSL2015",
+   "name"
+  ],
+  "103187": [
+   "weapon",
+   "AUG-A3_PBNC6",
+   "name"
+  ],
+  "103188": [
+   "weapon",
+   "AUG-A3_Ongame",
+   "name"
+  ],
+  "103189": [
+   "weapon",
+   "AUG-A3_Redemption",
+   "name"
+  ],
+  "103192": [
+   "weapon",
+   "AUG_A3_Rose",
+   "name"
+  ],
+  "103193": [
+   "weapon",
+   "AUG_A3_LionFlame",
+   "name"
+  ],
+  "103194": [
+   "weapon",
+   "AUG_A3_Independence",
+   "name"
+  ],
+  "103195": [
+   "weapon",
+   "AUG-A3_Brazil",
+   "name"
+  ],
+  "103196": [
+   "weapon",
+   "AUG_A3_PBST2015",
+   "name"
+  ],
+  "103197": [
+   "weapon",
+   "AUG_A3_4Game",
+   "name"
+  ],
+  "103198": [
+   "weapon",
+   "AUG_A3_4Game-SE",
+   "name"
+  ],
+  "103199": [
+   "weapon",
+   "AUG_A3_Emblem-Mexico",
+   "name"
+  ],
+  "103200": [
+   "weapon",
+   "AUG_A3_Emblem-Bolivia",
+   "name"
+  ],
+  "103201": [
+   "weapon",
+   "AUG_A3_Emblem-Ecuador",
+   "name"
+  ],
+  "103202": [
+   "weapon",
+   "AUG_A3_Emblem-Columbia",
+   "name"
+  ],
+  "103203": [
+   "weapon",
+   "AUG_A3_Emblem-Venezuela",
+   "name"
+  ],
+  "103204": [
+   "weapon",
+   "AUG_A3_Emblem-Argentian",
+   "name"
+  ],
+  "103205": [
+   "weapon",
+   "AUG_A3_Emblem-Chile",
+   "name"
+  ],
+  "103206": [
+   "weapon",
+   "AUG_A3_Emblem-Peru",
+   "name"
+  ],
+  "103207": [
+   "weapon",
+   "AUG-A3_Lebaran2015",
+   "name"
+  ],
+  "103209": [
+   "weapon",
+   "Vz52_Black_Pearl",
+   "name"
+  ],
+  "103210": [
+   "weapon",
+   "AUG-A3_Egypt",
+   "name"
+  ],
+  "103211": [
+   "weapon",
+   "AUG-A3_Jordan",
+   "name"
+  ],
+  "103212": [
+   "weapon",
+   "AUG-A3_Saudi",
+   "name"
+  ],
+  "103213": [
+   "weapon",
+   "AUG-A3_UAE",
+   "name"
+  ],
+  "103214": [
+   "weapon",
+   "AUG-A3_PBNC2015",
+   "name"
+  ],
+  "103215": [
+   "weapon",
+   "AUG-A3_PBTC2015",
+   "name"
+  ],
+  "103216": [
+   "weapon",
+   "AUG-A3_Mech",
+   "name"
+  ],
+  "103217": [
+   "weapon",
+   "AUG-A3_DarkDays",
+   "name"
+  ],
+  "103218": [
+   "weapon",
+   "SCAR-L_FC_PBNC2015_US",
+   "name"
+  ],
+  "103219": [
+   "weapon",
+   "AUG-A3_PBIC2015",
+   "name"
+  ],
+  "103221": [
+   "weapon",
+   "AK-47_SOPMOD_Gold",
+   "name"
+  ],
+  "103222": [
+   "weapon",
+   "AUG-A3_VeraCruz",
+   "name"
+  ],
+  "103223": [
+   "weapon",
+   "M14-EBR",
+   "name"
+  ],
+  "103224": [
+   "weapon",
+   "AUG-A3_Basketball",
+   "name"
+  ],
+  "103225": [
+   "weapon",
+   "AK-47_SOPMOD_Medical",
+   "name"
+  ],
+  "103227": [
+   "weapon",
+   "AUG-A3_Cobra",
+   "name"
+  ],
+  "103228": [
+   "weapon",
+   "AUG-A3_Camo-Soldier",
+   "name"
+  ],
+  "103229": [
+   "weapon",
+   "G36C_Camo-Soldier",
+   "name"
+  ],
+  "103231": [
+   "weapon",
+   "AUG_A3_Steam",
+   "name"
+  ],
+  "103232": [
+   "weapon",
+   "AUG_A3_Halloween",
+   "name"
+  ],
+  "103233": [
+   "weapon",
+   "AUG_A3_SPY",
+   "name"
+  ],
+  "103234": [
+   "weapon",
+   "AUG_A3_LATIN5",
+   "name"
+  ],
+  "103235": [
+   "weapon",
+   "AUG_A3_Obsidian",
+   "name"
+  ],
+  "103236": [
+   "weapon",
+   "K2C",
+   "name"
+  ],
+  "103237": [
+   "weapon",
+   "K2C_Gold",
+   "name"
+  ],
+  "103238": [
+   "weapon",
+   "AUG_A3_Spy-Deluxe",
+   "name"
+  ],
+  "103239": [
+   "weapon",
+   "M14-EBR_Gold",
+   "name"
+  ],
+  "103240": [
+   "weapon",
+   "AUG_A3_DFN",
+   "name"
+  ],
+  "103241": [
+   "weapon",
+   "AUG_A3_Xmas2015",
+   "name"
+  ],
+  "103243": [
+   "weapon",
+   "AUG_A3_Monkey",
+   "name"
+  ],
+  "103244": [
+   "weapon",
+   "AUG_A3_Arena-Normal",
+   "name"
+  ],
+  "103245": [
+   "weapon",
+   "AUG_A3_Arena-Deluxe",
+   "name"
+  ],
+  "103246": [
+   "weapon",
+   "AK_12",
+   "name"
+  ],
+  "103247": [
+   "weapon",
+   "AK_12_Gold",
+   "name"
+  ],
+  "103248": [
+   "weapon",
+   "AUG_A3_VeraCruz2016",
+   "name"
+  ],
+  "103250": [
+   "weapon",
+   "AUG_A3_Cupid",
+   "name"
+  ],
+  "103251": [
+   "weapon",
+   "AUG-A3_Sakura",
+   "name"
+  ],
+  "103252": [
+   "weapon",
+   "AK-SOPMOD_Sakura",
+   "name"
+  ],
+  "103253": [
+   "weapon",
+   "AUG_A3_Serpent",
+   "name"
+  ],
+  "103254": [
+   "weapon",
+   "WaterGun2016",
+   "name"
+  ],
+  "103255": [
+   "weapon",
+   "AUG_A3_GRS3",
+   "name"
+  ],
+  "103256": [
+   "weapon",
+   "AUG_A3_Beast",
+   "name"
+  ],
+  "103257": [
+   "weapon",
+   "AUG-A3_PBGC",
+   "name"
+  ],
+  "103258": [
+   "weapon",
+   "AUG_A3_GSL2016",
+   "name"
+  ],
+  "103259": [
+   "weapon",
+   "AUG_A3_Tiger-Normal",
+   "name"
+  ],
+  "103260": [
+   "weapon",
+   "AUG_A3_Tiger-Deluxe",
+   "name"
+  ],
+  "103261": [
+   "weapon",
+   "AUG-A3_Midnight2",
+   "name"
+  ],
+  "103263": [
+   "weapon",
+   "AUG_A3_E-Sports2",
+   "name"
+  ],
+  "103264": [
+   "weapon",
+   "FAMAS_G2_M203_E-Sports2",
+   "name"
+  ],
+  "103265": [
+   "weapon",
+   "AUG_A3_Dragon",
+   "name"
+  ],
+  "103266": [
+   "weapon",
+   "AUG_A3_PBWC",
+   "name"
+  ],
+  "103267": [
+   "weapon",
+   "AUG_A3_Mummy",
+   "name"
+  ],
+  "103268": [
+   "weapon",
+   "Pindad_SS2_V5",
+   "name"
+  ],
+  "103269": [
+   "weapon",
+   "Pindad_SS2_V5_Gold",
+   "name"
+  ],
+  "103270": [
+   "weapon",
+   "Pindad_SS2_V5_Silver",
+   "name"
+  ],
+  "103271": [
+   "weapon",
+   "AUG_A3_ID_1stAnni",
+   "name"
+  ],
+  "103272": [
+   "weapon",
+   "AUG_A3_Strike",
+   "name"
+  ],
+  "103273": [
+   "weapon",
+   "SC_2010_Strike",
+   "name"
+  ],
+  "103274": [
+   "weapon",
+   "AUG_A3_Demonic",
+   "name"
+  ],
+  "103275": [
+   "weapon",
+   "AUG_A3_Dolphin",
+   "name"
+  ],
+  "103276": [
+   "weapon",
+   "SC_2010_Dolphin",
+   "name"
+  ],
+  "103277": [
+   "weapon",
+   "AUG_A3_BlueDiamond",
+   "name"
+  ],
+  "103278": [
+   "weapon",
+   "AUG_A3_Lebaran2016",
+   "name"
+  ],
+  "103279": [
+   "weapon",
+   "AUG_A3_Alien",
+   "name"
+  ],
+  "103280": [
+   "weapon",
+   "AUG_A3_Woody",
+   "name"
+  ],
+  "103281": [
+   "weapon",
+   "XM8_Woody",
+   "name"
+  ],
+  "103282": [
+   "weapon",
+   "FAMAS_G2_Commando_Newborn2016",
+   "name"
+  ],
+  "103283": [
+   "weapon",
+   "AUG_A3_Puzzle",
+   "name"
+  ],
+  "103284": [
+   "weapon",
+   "Groza",
+   "name"
+  ],
+  "103285": [
+   "weapon",
+   "Groza_Gold",
+   "name"
+  ],
+  "103286": [
+   "weapon",
+   "Groza_Silver",
+   "name"
+  ],
+  "103287": [
+   "weapon",
+   "SC_2010_Dracula",
+   "name"
+  ],
+  "103288": [
+   "weapon",
+   "Groza_Russian_Normal",
+   "name"
+  ],
+  "103289": [
+   "weapon",
+   "Groza_Russian_Deluxe",
+   "name"
+  ],
+  "103290": [
+   "weapon",
+   "AUG_A3_Liberty",
+   "name"
+  ],
+  "103291": [
+   "weapon",
+   "AUG_A3_PBIC2016",
+   "name"
+  ],
+  "103292": [
+   "weapon",
+   "SC_2010_PBIC2016",
+   "name"
+  ],
+  "103293": [
+   "weapon",
+   "K2C_PBIC2016",
+   "name"
+  ],
+  "103294": [
+   "weapon",
+   "AUG-A3_PBTC2016",
+   "name"
+  ],
+  "103295": [
+   "weapon",
+   "AUG_A3_DarkSteel",
+   "name"
+  ],
+  "103298": [
+   "weapon",
+   "AUG_A3_PBST2016",
+   "name"
+  ],
+  "103299": [
+   "weapon",
+   "AUG-A3_Supreme",
+   "name"
+  ],
+  "103300": [
+   "weapon",
+   "AUG_A3_Halloween2016",
+   "name"
+  ],
+  "103301": [
+   "weapon",
+   "AK_12_Gorgeous",
+   "name"
+  ],
+  "103302": [
+   "weapon",
+   "AUG_A3_Gorgeous",
+   "name"
+  ],
+  "104001": [
+   "weapon",
+   "MP5K_Silencer",
+   "name"
+  ],
+  "104002": [
+   "weapon",
+   "Spectre_SteadyAim",
+   "name"
+  ],
+  "104003": [
+   "weapon",
+   "K-1_Zoom",
+   "name"
+  ],
+  "104004": [
+   "weapon",
+   "MP7_DotSight",
+   "name"
+  ],
+  "104005": [
+   "weapon",
+   "KrissSuperV_Cupid",
+   "name"
+  ],
+  "104006": [
+   "weapon",
+   "K-1",
+   "name"
+  ],
+  "104007": [
+   "weapon",
+   "MP5K_SERIF",
+   "name"
+  ],
+  "104008": [
+   "weapon",
+   "UMP45_DualMag",
+   "name"
+  ],
+  "104009": [
+   "weapon",
+   "Spectre_SE",
+   "name"
+  ],
+  "104010": [
+   "weapon",
+   "P90MC",
+   "name"
+  ],
+  "104011": [
+   "weapon",
+   "P90_Ext",
+   "name"
+  ],
+  "104012": [
+   "weapon",
+   "KrissSuperV_Dummy",
+   "name"
+  ],
+  "104013": [
+   "weapon",
+   "KrissSuperV",
+   "name"
+  ],
+  "104014": [
+   "weapon",
+   "MP5K_Silver",
+   "name"
+  ],
+  "104015": [
+   "weapon",
+   "MP5K_White",
+   "name"
+  ],
+  "104016": [
+   "weapon",
+   "Spectre_White",
+   "name"
+  ],
+  "104017": [
+   "weapon",
+   "P90_Ext_Cupid",
+   "name"
+  ],
+  "104018": [
+   "weapon",
+   "KrissSuperV_Cupid_Dummy",
+   "name"
+  ],
+  "104019": [
+   "weapon",
+   "KrissSuperV_Event",
+   "name"
+  ],
+  "104020": [
+   "weapon",
+   "Spectre_Silver",
+   "name"
+  ],
+  "104021": [
+   "weapon",
+   "K-1_Sliver",
+   "name"
+  ],
+  "104022": [
+   "weapon",
+   "MP7_Silver",
+   "name"
+  ],
+  "104023": [
+   "weapon",
+   "UMP45_Silver",
+   "name"
+  ],
+  "104024": [
+   "weapon",
+   "MP5K_SERIF D",
+   "name"
+  ],
+  "104025": [
+   "weapon",
+   "Spectre_White_D",
+   "name"
+  ],
+  "104026": [
+   "weapon",
+   "KrissSuperV_Gold",
+   "name"
+  ],
+  "104027": [
+   "weapon",
+   "P90MC_Camo",
+   "name"
+  ],
+  "104028": [
+   "weapon",
+   "KrissSuperV_Gold_Dummy",
+   "name"
+  ],
+  "104029": [
+   "weapon",
+   "P90_Ext D",
+   "name"
+  ],
+  "104030": [
+   "weapon",
+   "KrissSuperV_Dummy_D",
+   "name"
+  ],
+  "104031": [
+   "weapon",
+   "KrissSuperV_D",
+   "name"
+  ],
+  "104032": [
+   "weapon",
+   "P90MC_D",
+   "name"
+  ],
+  "104033": [
+   "weapon",
+   "AKS74U_Zoom",
+   "name"
+  ],
+  "104034": [
+   "weapon",
+   "M4-CQBR-LV1",
+   "name"
+  ],
+  "104035": [
+   "weapon",
+   "M4-CQBR-LV2",
+   "name"
+  ],
+  "104036": [
+   "weapon",
+   "M4-CQBR-LV3",
+   "name"
+  ],
+  "104037": [
+   "weapon",
+   "MP7_Silver_P",
+   "name"
+  ],
+  "104038": [
+   "weapon",
+   "MP7_Camo",
+   "name"
+  ],
+  "104039": [
+   "weapon",
+   "KrissSuperV_Black",
+   "name"
+  ],
+  "104040": [
+   "weapon",
+   "KrissSuperV_Black_Dummy",
+   "name"
+  ],
+  "104041": [
+   "weapon",
+   "MP5K_Silver_D",
+   "name"
+  ],
+  "104042": [
+   "weapon",
+   "Spectre_Silver_D",
+   "name"
+  ],
+  "104043": [
+   "weapon",
+   "Pindad_SS1_R5",
+   "name"
+  ],
+  "104044": [
+   "weapon",
+   "KrissSuperV_Sakura_Dummy",
+   "name"
+  ],
+  "104045": [
+   "weapon",
+   "MP7_DotSight_D",
+   "name"
+  ],
+  "104046": [
+   "weapon",
+   "UMP45_DualMag_D",
+   "name"
+  ],
+  "104047": [
+   "weapon",
+   "KrissSuperV_Batik_D",
+   "name"
+  ],
+  "104048": [
+   "weapon",
+   "KrissSuperV_Batik_Dummy_D",
+   "name"
+  ],
+  "104049": [
+   "weapon",
+   "Pindad_SS1_R5_Gold",
+   "name"
+  ],
+  "104050": [
+   "weapon",
+   "KrissSuperV_ESports",
+   "name"
+  ],
+  "104051": [
+   "weapon",
+   "KrissSuperV_ESports_Dummy",
+   "name"
+  ],
+  "104052": [
+   "weapon",
+   "KrissSuperV_Batik",
+   "name"
+  ],
+  "104053": [
+   "weapon",
+   "KrissSuperV_Batik_Dummy",
+   "name"
+  ],
+  "104054": [
+   "weapon",
+   "KrissSuperV_Vector",
+   "name"
+  ],
+  "104056": [
+   "weapon",
+   "MP7_NON_EXT",
+   "name"
+  ],
+  "104057": [
+   "weapon",
+   "Spectre_NON_EXT",
+   "name"
+  ],
+  "104058": [
+   "weapon",
+   "UMP45_Black",
+   "name"
+  ],
+  "104059": [
+   "weapon",
+   "MP7_SE2",
+   "name"
+  ],
+  "104060": [
+   "weapon",
+   "KrissSuperV_IC",
+   "name"
+  ],
+  "104061": [
+   "weapon",
+   "KrissSuperV_IC_Dummy",
+   "name"
+  ],
+  "104062": [
+   "weapon",
+   "Spectre_W_EV",
+   "name"
+  ],
+  "104063": [
+   "weapon",
+   "MP5K_G_EV",
+   "name"
+  ],
+  "104064": [
+   "weapon",
+   "P90MC_S_EV",
+   "name"
+  ],
+  "104065": [
+   "weapon",
+   "KrissSuperV_EV",
+   "name"
+  ],
+  "104066": [
+   "weapon",
+   "MP7_Ext_EV",
+   "name"
+  ],
+  "104067": [
+   "weapon",
+   "MP5K_Silver_EV",
+   "name"
+  ],
+  "104068": [
+   "weapon",
+   "UMP45_Silver_EV",
+   "name"
+  ],
+  "104069": [
+   "weapon",
+   "P90_Ext_EV",
+   "name"
+  ],
+  "104070": [
+   "weapon",
+   "M4-CQBR-LV1_EV",
+   "name"
+  ],
+  "104071": [
+   "weapon",
+   "M4-CQBR-LV2_EV",
+   "name"
+  ],
+  "104072": [
+   "weapon",
+   "M4-CQBR-LV3_EV",
+   "name"
+  ],
+  "104073": [
+   "weapon",
+   "KrissSuperV_EV_Dummy",
+   "name"
+  ],
+  "104074": [
+   "weapon",
+   "Spectre_Silver_EV",
+   "name"
+  ],
+  "104075": [
+   "weapon",
+   "P90_Gold",
+   "name"
+  ],
+  "104076": [
+   "weapon",
+   "AKS74U_Zoom_100M",
+   "name"
+  ],
+  "104077": [
+   "weapon",
+   "P90_W_PBSC",
+   "name"
+  ],
+  "104078": [
+   "weapon",
+   "P90_PBTN",
+   "name"
+  ],
+  "104081": [
+   "weapon",
+   "MP7_GRS",
+   "name"
+  ],
+  "104082": [
+   "weapon",
+   "P90_MC_GRS",
+   "name"
+  ],
+  "104083": [
+   "weapon",
+   "KrissSuperV_GRS",
+   "name"
+  ],
+  "104084": [
+   "weapon",
+   "KrissSuperV_GRS_Dummy",
+   "name"
+  ],
+  "104085": [
+   "weapon",
+   "P90_NEWBORN",
+   "name"
+  ],
+  "104086": [
+   "weapon",
+   "P90MC_PBNC",
+   "name"
+  ],
+  "104087": [
+   "weapon",
+   "KrissSuperV_GSL",
+   "name"
+  ],
+  "104088": [
+   "weapon",
+   "KrissSuperV_GSL_Dummy",
+   "name"
+  ],
+  "104089": [
+   "weapon",
+   "P90_GSL",
+   "name"
+  ],
+  "104090": [
+   "weapon",
+   "KrissSuperV_Black_P",
+   "name"
+  ],
+  "104091": [
+   "weapon",
+   "KrissSuperV_Black_P_Dummy",
+   "name"
+  ],
+  "104092": [
+   "weapon",
+   "UMP45_Black_P",
+   "name"
+  ],
+  "104093": [
+   "weapon",
+   "KrissSuperV_GRS_EV",
+   "name"
+  ],
+  "104094": [
+   "weapon",
+   "KrissSuperV_GRS_EV_Dummy",
+   "name"
+  ],
+  "104095": [
+   "weapon",
+   "P90_MC_GRS_EV",
+   "name"
+  ],
+  "104096": [
+   "weapon",
+   "AKS74U_Reload",
+   "name"
+  ],
+  "104097": [
+   "weapon",
+   "UMP45_Reload",
+   "name"
+  ],
+  "104098": [
+   "weapon",
+   "Spectre_Reload",
+   "name"
+  ],
+  "104099": [
+   "weapon",
+   "Pindad_SS1_R5_Reload",
+   "name"
+  ],
+  "104100": [
+   "weapon",
+   "MP5K_Reload",
+   "name"
+  ],
+  "104101": [
+   "weapon",
+   "KrissSuperV_4th_Anniversary",
+   "name"
+  ],
+  "104102": [
+   "weapon",
+   "KrissSuperV_4th_Anniversary_Dummy",
+   "name"
+  ],
+  "104103": [
+   "weapon",
+   "KrissSuperV_PBIC2013",
+   "name"
+  ],
+  "104104": [
+   "weapon",
+   "KrissSuperV_PBIC2013_Dummy",
+   "name"
+  ],
+  "104105": [
+   "weapon",
+   "MP7_GRS_EV",
+   "name"
+  ],
+  "104106": [
+   "weapon",
+   "PP19",
+   "name"
+  ],
+  "104107": [
+   "weapon",
+   "MP9_Ext",
+   "name"
+  ],
+  "104108": [
+   "weapon",
+   "KrissSuperV_SILENCE",
+   "name"
+  ],
+  "104109": [
+   "weapon",
+   "KrissSuperV_SILENCE_Dummy",
+   "name"
+  ],
+  "104110": [
+   "weapon",
+   "KrissSuperV_Turkey",
+   "name"
+  ],
+  "104111": [
+   "weapon",
+   "KrissSuperV_Turkey_Dummy",
+   "name"
+  ],
+  "104112": [
+   "weapon",
+   "P90_MC_BLOODY",
+   "name"
+  ],
+  "104113": [
+   "weapon",
+   "P90MC_LATIN3",
+   "name"
+  ],
+  "104114": [
+   "weapon",
+   "P90_BR_CAMO",
+   "name"
+  ],
+  "104115": [
+   "weapon",
+   "KrissSuperV_Sakura",
+   "name"
+  ],
+  "104116": [
+   "weapon",
+   "KrissSuperV_Serpent",
+   "name"
+  ],
+  "104117": [
+   "weapon",
+   "KrissSuperV_Serpent_Dummy",
+   "name"
+  ],
+  "104118": [
+   "weapon",
+   "P90_Ext_Serpent",
+   "name"
+  ],
+  "104123": [
+   "weapon",
+   "KrissSuperV_R",
+   "name"
+  ],
+  "104124": [
+   "weapon",
+   "KrissSuperV_R_Dummy",
+   "name"
+  ],
+  "104125": [
+   "weapon",
+   "P90_NEWBORN_2014",
+   "name"
+  ],
+  "104126": [
+   "weapon",
+   "KrissSuperV_Inferno",
+   "name"
+  ],
+  "104127": [
+   "weapon",
+   "KrissSuperV_Inferno_DUMMY",
+   "name"
+  ],
+  "104128": [
+   "weapon",
+   "P90_Ext_Inferno",
+   "name"
+  ],
+  "104129": [
+   "weapon",
+   "P90_Ext_PBNC5",
+   "name"
+  ],
+  "104130": [
+   "weapon",
+   "KrissSuperV_GSL2014",
+   "name"
+  ],
+  "104131": [
+   "weapon",
+   "KrissSuperV_GSL2014_Dummy",
+   "name"
+  ],
+  "104132": [
+   "weapon",
+   "KrissSuperV_Midnight",
+   "name"
+  ],
+  "104133": [
+   "weapon",
+   "KrissSuperV_Midnight_Dummy",
+   "name"
+  ],
+  "104134": [
+   "weapon",
+   "OA93",
+   "name"
+  ],
+  "104136": [
+   "weapon",
+   "OA93_Gold",
+   "name"
+  ],
+  "104138": [
+   "weapon",
+   "P90_Ext_Brazuca",
+   "name"
+  ],
+  "104139": [
+   "weapon",
+   "KrissSuperV_Brazuca",
+   "name"
+  ],
+  "104140": [
+   "weapon",
+   "KrissSuperV_Brazuca_Dummy",
+   "name"
+  ],
+  "104141": [
+   "weapon",
+   "P90_Ext_5th_Anniversary",
+   "name"
+  ],
+  "104142": [
+   "weapon",
+   "KrissSuperV_Champion",
+   "name"
+  ],
+  "104143": [
+   "weapon",
+   "KrissSuperV_Champion_Dummy",
+   "name"
+  ],
+  "104144": [
+   "weapon",
+   "KrissSuperV_WOE",
+   "name"
+  ],
+  "104145": [
+   "weapon",
+   "KrissSuperV_WOE_Dummy",
+   "name"
+  ],
+  "104146": [
+   "weapon",
+   "P90_Ext_PBIC2014",
+   "name"
+  ],
+  "104147": [
+   "weapon",
+   "P90_W_PBSC_NonLogo",
+   "name"
+  ],
+  "104148": [
+   "weapon",
+   "P90MC_LATIN3_NonLogo",
+   "name"
+  ],
+  "104149": [
+   "weapon",
+   "KrissSuperV_Midnight_NonLogo",
+   "name"
+  ],
+  "104150": [
+   "weapon",
+   "KrissSuperV_Midnight_NonLogo_Dummy",
+   "name"
+  ],
+  "104151": [
+   "weapon",
+   "KrissSuperV_PC_Cafe",
+   "name"
+  ],
+  "104152": [
+   "weapon",
+   "KrissSuperV_PC_Cafe_Dummy",
+   "name"
+  ],
+  "104153": [
+   "weapon",
+   "KrissSuperV_PBSC2014",
+   "name"
+  ],
+  "104154": [
+   "weapon",
+   "KrissSuperV_PBSC2014_Dummy",
+   "name"
+  ],
+  "104155": [
+   "weapon",
+   "KrissSuperV_G_ESports",
+   "name"
+  ],
+  "104156": [
+   "weapon",
+   "KrissSuperV_G_ESports_Dummy",
+   "name"
+  ],
+  "104157": [
+   "weapon",
+   "KrissSuperV_Toy",
+   "name"
+  ],
+  "104158": [
+   "weapon",
+   "KrissSuperV_Toy_Dummy",
+   "name"
+  ],
+  "104159": [
+   "weapon",
+   "OA93_Q",
+   "name"
+  ],
+  "104161": [
+   "weapon",
+   "MP9_Ext_Gold",
+   "name"
+  ],
+  "104162": [
+   "weapon",
+   "PP19_Gold",
+   "name"
+  ],
+  "104164": [
+   "weapon",
+   "MP9_Ext_Xmas",
+   "name"
+  ],
+  "104165": [
+   "weapon",
+   "OA93_Xmas",
+   "name"
+  ],
+  "104167": [
+   "weapon",
+   "PP19_Xmas",
+   "name"
+  ],
+  "104168": [
+   "weapon",
+   "KrissSuperV_Xmas",
+   "name"
+  ],
+  "104169": [
+   "weapon",
+   "KrissSuperV_Xmas_Dummy",
+   "name"
+  ],
+  "104170": [
+   "weapon",
+   "KrissSuperV_CoupleBreaker",
+   "name"
+  ],
+  "104171": [
+   "weapon",
+   "KrissSuperV_CoupleBreaker_Dummy",
+   "name"
+  ],
+  "104172": [
+   "weapon",
+   "KrissSuperV_CNY-2015",
+   "name"
+  ],
+  "104173": [
+   "weapon",
+   "KrissSuperV_CNY-2015_Dummy",
+   "name"
+  ],
+  "104174": [
+   "weapon",
+   "P90MC_Sheep",
+   "name"
+  ],
+  "104175": [
+   "weapon",
+   "KrissSuperV_GRS2",
+   "name"
+  ],
+  "104176": [
+   "weapon",
+   "KrissSuperV_GRS2_Dummy",
+   "name"
+  ],
+  "104178": [
+   "weapon",
+   "KrissSuperV_NEWBORN_2015",
+   "name"
+  ],
+  "104179": [
+   "weapon",
+   "KrissSuperV_NEWBORN_2015_Dummy",
+   "name"
+  ],
+  "104180": [
+   "weapon",
+   "OA93_GSL2015",
+   "name"
+  ],
+  "104182": [
+   "weapon",
+   "P90_Ext_Silence_GSL2015",
+   "name"
+  ],
+  "104183": [
+   "weapon",
+   "KrissSuperV_PBNC6",
+   "name"
+  ],
+  "104184": [
+   "weapon",
+   "KrissSuperV_PBNC6_Dummy",
+   "name"
+  ],
+  "104185": [
+   "weapon",
+   "KrissSuperV_Ongame",
+   "name"
+  ],
+  "104186": [
+   "weapon",
+   "KrissSuperV_Ongame_Dummy",
+   "name"
+  ],
+  "104187": [
+   "weapon",
+   "P90_Ext_Ongame",
+   "name"
+  ],
+  "104188": [
+   "weapon",
+   "KrissSuperV_Redemption",
+   "name"
+  ],
+  "104189": [
+   "weapon",
+   "KrissSuperV_Redemption_DUMMY",
+   "name"
+  ],
+  "104190": [
+   "weapon",
+   "P90_Ext_Redemption",
+   "name"
+  ],
+  "104191": [
+   "weapon",
+   "KrissSuperV_Summer",
+   "name"
+  ],
+  "104192": [
+   "weapon",
+   "KrissSuperV_Summer_Dummy",
+   "name"
+  ],
+  "104193": [
+   "weapon",
+   "EVO3",
+   "name"
+  ],
+  "104194": [
+   "weapon",
+   "EVO3_Gold",
+   "name"
+  ],
+  "104196": [
+   "weapon",
+   "KrissSuperV_Harimau",
+   "name"
+  ],
+  "104197": [
+   "weapon",
+   "KrissSuperV_Harimau_Dummy",
+   "name"
+  ],
+  "104198": [
+   "weapon",
+   "OA93_Independence",
+   "name"
+  ],
+  "104200": [
+   "weapon",
+   "P90_MC_Brazil",
+   "name"
+  ],
+  "104203": [
+   "weapon",
+   "OA93_PBST2015",
+   "name"
+  ],
+  "104205": [
+   "weapon",
+   "KrissSuperV_PBNC2015",
+   "name"
+  ],
+  "104206": [
+   "weapon",
+   "KrissSuperV_PBNC2015_Dummy",
+   "name"
+  ],
+  "104207": [
+   "weapon",
+   "KrissSuperV_PBTC2015",
+   "name"
+  ],
+  "104208": [
+   "weapon",
+   "KrissSuperV_PBTC2015_Dummy",
+   "name"
+  ],
+  "104209": [
+   "weapon",
+   "KrissSuperV_Mech",
+   "name"
+  ],
+  "104210": [
+   "weapon",
+   "P90_Ext_Mech",
+   "name"
+  ],
+  "104211": [
+   "weapon",
+   "KrissSuperV_Mech_Dummy",
+   "name"
+  ],
+  "104212": [
+   "weapon",
+   "KrissSuperV_DarkDays",
+   "name"
+  ],
+  "104213": [
+   "weapon",
+   "KrissSuperV_DarkDays_Dummy",
+   "name"
+  ],
+  "104214": [
+   "weapon",
+   "OA93_PBNC2015_US",
+   "name"
+  ],
+  "104215": [
+   "weapon",
+   "OA93_PBNC2015_US_Dummy",
+   "name"
+  ],
+  "104216": [
+   "weapon",
+   "KrissSuperV_PBIC2015",
+   "name"
+  ],
+  "104217": [
+   "weapon",
+   "KrissSuperV_PBIC2015_Dummy",
+   "name"
+  ],
+  "104218": [
+   "weapon",
+   "P90_Ext_PBIC2015",
+   "name"
+  ],
+  "104219": [
+   "weapon",
+   "P90_MC_Gold",
+   "name"
+  ],
+  "104220": [
+   "weapon",
+   "P90_M.C_VeraCruz",
+   "name"
+  ],
+  "104221": [
+   "weapon",
+   "KrissSuperV_Sheep",
+   "name"
+  ],
+  "104222": [
+   "weapon",
+   "KrissSuperV_Sheep_Dummy",
+   "name"
+  ],
+  "104223": [
+   "weapon",
+   "KrissSuperV_Basketball",
+   "name"
+  ],
+  "104224": [
+   "weapon",
+   "KrissSuperV_Basketball_Dummy",
+   "name"
+  ],
+  "104225": [
+   "weapon",
+   "OA93_Basketball",
+   "name"
+  ],
+  "104226": [
+   "weapon",
+   "OA93_Basketball_Dummy",
+   "name"
+  ],
+  "104230": [
+   "weapon",
+   "P90_Ext_Medical",
+   "name"
+  ],
+  "104231": [
+   "weapon",
+   "MP9_Ext_D",
+   "name"
+  ],
+  "104234": [
+   "weapon",
+   "P90MC_Camo-Soldier",
+   "name"
+  ],
+  "104235": [
+   "weapon",
+   "KrissSuperV_Steam",
+   "name"
+  ],
+  "104236": [
+   "weapon",
+   "KrissSuperV_Steam_Dummy",
+   "name"
+  ],
+  "104240": [
+   "weapon",
+   "P90MC_SPY",
+   "name"
+  ],
+  "104241": [
+   "weapon",
+   "P90_MC_LATIN5",
+   "name"
+  ],
+  "104242": [
+   "weapon",
+   "KrissSuperV_Obsidian",
+   "name"
+  ],
+  "104243": [
+   "weapon",
+   "KrissSuperV_Obsidian_Dummy",
+   "name"
+  ],
+  "104244": [
+   "weapon",
+   "P90_MC_Spy-Deluxe",
+   "name"
+  ],
+  "104245": [
+   "weapon",
+   "KrissSuperV_DFN",
+   "name"
+  ],
+  "104246": [
+   "weapon",
+   "KrissSuperV_DFN_Dummy",
+   "name"
+  ],
+  "104247": [
+   "weapon",
+   "OA93_DFN",
+   "name"
+  ],
+  "104248": [
+   "weapon",
+   "OA93_DFN_Dummy",
+   "name"
+  ],
+  "104249": [
+   "weapon",
+   "KrissSuperV_Xmas2015",
+   "name"
+  ],
+  "104250": [
+   "weapon",
+   "KrissSuperV_Xmas2015_Dummy",
+   "name"
+  ],
+  "104253": [
+   "weapon",
+   "KrissSuperV_Monkey",
+   "name"
+  ],
+  "104254": [
+   "weapon",
+   "KrissSuperV_Monkey_Dummy",
+   "name"
+  ],
+  "104255": [
+   "weapon",
+   "P90_MC_VeraCruz2016",
+   "name"
+  ],
+  "104256": [
+   "weapon",
+   "KrissSuperV_GRS3",
+   "name"
+  ],
+  "104258": [
+   "weapon",
+   "KrissSuperV_Beast",
+   "name"
+  ],
+  "104259": [
+   "weapon",
+   "KrissSuperV_Beast_Dummy",
+   "name"
+  ],
+  "104260": [
+   "weapon",
+   "KrissSuperV_PBGC",
+   "name"
+  ],
+  "104261": [
+   "weapon",
+   "KrissSuperV_PBGC_Dummy",
+   "name"
+  ],
+  "104262": [
+   "weapon",
+   "P90_Ext_PBGC",
+   "name"
+  ],
+  "104263": [
+   "weapon",
+   "KrissSuperV_GSL2016",
+   "name"
+  ],
+  "104264": [
+   "weapon",
+   "KrissSuperV_GSL2016_Dummy",
+   "name"
+  ],
+  "104265": [
+   "weapon",
+   "KrissSuperV_Midnight2",
+   "name"
+  ],
+  "104266": [
+   "weapon",
+   "KrissSuperV_Midnight2_Dummy",
+   "name"
+  ],
+  "104267": [
+   "weapon",
+   "KrissSuperV_Skeleton",
+   "name"
+  ],
+  "104268": [
+   "weapon",
+   "KrissSuperV_Skeleton_Dummy",
+   "name"
+  ],
+  "104269": [
+   "weapon",
+   "P90_Ext_Skeleton",
+   "name"
+  ],
+  "104270": [
+   "weapon",
+   "KrissSuperV_E-Sports2",
+   "name"
+  ],
+  "104271": [
+   "weapon",
+   "KrissSuperV_E-Sports2_Dummy",
+   "name"
+  ],
+  "104272": [
+   "weapon",
+   "P90_Ext_Dragon",
+   "name"
+  ],
+  "104273": [
+   "weapon",
+   "OA93_PBWC",
+   "name"
+  ],
+  "104274": [
+   "weapon",
+   "OA93_PBWC_Dummy",
+   "name"
+  ],
+  "104275": [
+   "weapon",
+   "KrissSuperV_PBWC",
+   "name"
+  ],
+  "104276": [
+   "weapon",
+   "KrissSuperV_PBWC_Dummy",
+   "name"
+  ],
+  "104277": [
+   "weapon",
+   "P90_MC_PBWC",
+   "name"
+  ],
+  "104278": [
+   "weapon",
+   "KrissSuperV_Mummy",
+   "name"
+  ],
+  "104279": [
+   "weapon",
+   "KrissSuperV_Mummy_Dummy",
+   "name"
+  ],
+  "104280": [
+   "weapon",
+   "KrissSuperV_ID_1stAnni",
+   "name"
+  ],
+  "104281": [
+   "weapon",
+   "KrissSuperV_ID_1stAnni_Dummy",
+   "name"
+  ],
+  "104282": [
+   "weapon",
+   "P90_Ext_ID_1stAnni",
+   "name"
+  ],
+  "104283": [
+   "weapon",
+   "KrissSuperV_Strike",
+   "name"
+  ],
+  "104284": [
+   "weapon",
+   "KrissSuperV_Strike_Dummy",
+   "name"
+  ],
+  "104285": [
+   "weapon",
+   "P90_Ext_Silence_Strike",
+   "name"
+  ],
+  "104286": [
+   "weapon",
+   "KrissSuperV_Demonic",
+   "name"
+  ],
+  "104287": [
+   "weapon",
+   "KrissSuperV_Demonic_Dummy",
+   "name"
+  ],
+  "104288": [
+   "weapon",
+   "P90_Ext_Demonic",
+   "name"
+  ],
+  "104289": [
+   "weapon",
+   "KrissSuperV_Dolphin",
+   "name"
+  ],
+  "104290": [
+   "weapon",
+   "KrissSuperV_Dolphin_Dummy",
+   "name"
+  ],
+  "104291": [
+   "weapon",
+   "P90_Ext_Dolphin",
+   "name"
+  ],
+  "104292": [
+   "weapon",
+   "OA93_BlueDiamond",
+   "name"
+  ],
+  "104293": [
+   "weapon",
+   "OA93_BlueDiamond_Dummy",
+   "name"
+  ],
+  "104294": [
+   "weapon",
+   "P90_Ext_Lebaran2016",
+   "name"
+  ],
+  "104295": [
+   "weapon",
+   "KrissSuperV_Lebaran2016",
+   "name"
+  ],
+  "104296": [
+   "weapon",
+   "KrissSuperV_Lebaran2016_Dummy",
+   "name"
+  ],
+  "104298": [
+   "weapon",
+   "KrissSuperV_Alien",
+   "name"
+  ],
+  "104299": [
+   "weapon",
+   "KrissSuperV_Alien_Dummy",
+   "name"
+  ],
+  "104300": [
+   "weapon",
+   "OA93_Woody",
+   "name"
+  ],
+  "104301": [
+   "weapon",
+   "OA93_Woody_Dummy",
+   "name"
+  ],
+  "104302": [
+   "weapon",
+   "OA93_Newborn2016",
+   "name"
+  ],
+  "104303": [
+   "weapon",
+   "OA93_Newborn2016_Dummy",
+   "name"
+  ],
+  "104304": [
+   "weapon",
+   "KrissSuperV_Puzzle",
+   "name"
+  ],
+  "104305": [
+   "weapon",
+   "KrissSuperV_Puzzle_Dummy",
+   "name"
+  ],
+  "104306": [
+   "weapon",
+   "P90_Ext_Puzzle",
+   "name"
+  ],
+  "104307": [
+   "weapon",
+   "PP19_Russian_Normal",
+   "name"
+  ],
+  "104308": [
+   "weapon",
+   "PP19_Russian_Deluxe",
+   "name"
+  ],
+  "104309": [
+   "weapon",
+   "OA93_Liberty",
+   "name"
+  ],
+  "104310": [
+   "weapon",
+   "OA93_Liberty_Dummy",
+   "name"
+  ],
+  "104311": [
+   "weapon",
+   "P90_Ext_Liberty",
+   "name"
+  ],
+  "104312": [
+   "weapon",
+   "KrissSuperV_PBIC2016",
+   "name"
+  ],
+  "104313": [
+   "weapon",
+   "KrissSuperV_PBIC2016_Dummy",
+   "name"
+  ],
+  "104314": [
+   "weapon",
+   "OA93_PBIC2016",
+   "name"
+  ],
+  "104315": [
+   "weapon",
+   "OA93_PBIC2016_Dummy",
+   "name"
+  ],
+  "104316": [
+   "weapon",
+   "KrissSuperV_PBTC2016",
+   "name"
+  ],
+  "104317": [
+   "weapon",
+   "KrissSuperV_PBTC2016_Dummy",
+   "name"
+  ],
+  "104318": [
+   "weapon",
+   "KrissSuperV_DarkSteel",
+   "name"
+  ],
+  "104319": [
+   "weapon",
+   "KrissSuperV_DarkSteel_Dummy",
+   "name"
+  ],
+  "104320": [
+   "weapon",
+   "P90_Ext_DarkSteel",
+   "name"
+  ],
+  "104321": [
+   "weapon",
+   "KrissSuperV_PBNC2016",
+   "name"
+  ],
+  "104322": [
+   "weapon",
+   "KrissSuperV_PBNC2016_Dummy",
+   "name"
+  ],
+  "104323": [
+   "weapon",
+   "KrissSuperV_PBST2016",
+   "name"
+  ],
+  "104324": [
+   "weapon",
+   "KrissSuperV_PBST2016_Dummy",
+   "name"
+  ],
+  "104325": [
+   "weapon",
+   "KrissSuperV_Supreme",
+   "name"
+  ],
+  "104326": [
+   "weapon",
+   "KrissSuperV_Supreme_Dummy",
+   "name"
+  ],
+  "104327": [
+   "weapon",
+   "P90_Ext_Supreme",
+   "name"
+  ],
+  "104328": [
+   "weapon",
+   "OA93_Halloween2016",
+   "name"
+  ],
+  "104329": [
+   "weapon",
+   "OA93_Halloween2016_Dummy",
+   "name"
+  ],
+  "104330": [
+   "weapon",
+   "KrissSuperV_Gorgeous",
+   "name"
+  ],
+  "104331": [
+   "weapon",
+   "KrissSuperV_Gorgeous_Dummy",
+   "name"
+  ],
+  "104332": [
+   "weapon",
+   "OA93_Gorgeous",
+   "name"
+  ],
+  "104333": [
+   "weapon",
+   "OA93_Gorgeous_Dummy",
+   "name"
+  ],
+  "104576": [
+   "weapon",
+   "KrissSuperV_Red",
+   "name"
+  ],
+  "104577": [
+   "weapon",
+   "KrissSuperV_Red_Dummy",
+   "name"
+  ],
+  "105001": [
+   "weapon",
+   "SVD-Dragunov",
+   "name"
+  ],
+  "105002": [
+   "weapon",
+   "HK-PSG1",
+   "name"
+  ],
+  "105003": [
+   "weapon",
+   "SSG69",
+   "name"
+  ],
+  "105004": [
+   "weapon",
+   "SSG69_Camo",
+   "name"
+  ],
+  "105005": [
+   "weapon",
+   "L115A1",
+   "name"
+  ],
+  "105006": [
+   "weapon",
+   "SVD-Dragunov_SE",
+   "name"
+  ],
+  "105007": [
+   "weapon",
+   "HK-PSG1_S",
+   "name"
+  ],
+  "105008": [
+   "weapon",
+   "SSG69_Silver",
+   "name"
+  ],
+  "105009": [
+   "weapon",
+   "HK-PSG1_Silver",
+   "name"
+  ],
+  "105010": [
+   "weapon",
+   "SVD-Dragunov_Silver",
+   "name"
+  ],
+  "105011": [
+   "weapon",
+   "SVD-Dragunov_KingCobra_Silver",
+   "name"
+  ],
+  "105012": [
+   "weapon",
+   "SVD-Dragunov_KingCobra_Gold",
+   "name"
+  ],
+  "105014": [
+   "weapon",
+   "SVD-Dragunov_G_D",
+   "name"
+  ],
+  "105015": [
+   "weapon",
+   "L115A1_Gold",
+   "name"
+  ],
+  "105016": [
+   "weapon",
+   "HK-PSG1_S_D",
+   "name"
+  ],
+  "105017": [
+   "weapon",
+   "L115A1 D",
+   "name"
+  ],
+  "105018": [
+   "weapon",
+   "M4-SPR-LV1",
+   "name"
+  ],
+  "105019": [
+   "weapon",
+   "M4-SPR-LV2",
+   "name"
+  ],
+  "105020": [
+   "weapon",
+   "M4-SPR-LV3",
+   "name"
+  ],
+  "105021": [
+   "weapon",
+   "RangeMaster338",
+   "name"
+  ],
+  "105022": [
+   "weapon",
+   "RangeMaster762",
+   "name"
+  ],
+  "105023": [
+   "weapon",
+   "RangeMaster762Stby",
+   "name"
+  ],
+  "105024": [
+   "weapon",
+   "HK-PSG1_Gold",
+   "name"
+  ],
+  "105025": [
+   "weapon",
+   "SSG69_IN_MODE",
+   "name"
+  ],
+  "105026": [
+   "weapon",
+   "L115A1_Black",
+   "name"
+  ],
+  "105027": [
+   "weapon",
+   "SSG69_Silver_D",
+   "name"
+  ],
+  "105028": [
+   "weapon",
+   "SVD-Dragunov_D",
+   "name"
+  ],
+  "105029": [
+   "weapon",
+   "VSK94",
+   "name"
+  ],
+  "105030": [
+   "weapon",
+   "Cheytac_M200",
+   "name"
+  ],
+  "105031": [
+   "weapon",
+   "Winchester_M70",
+   "name"
+  ],
+  "105032": [
+   "weapon",
+   "Barrett",
+   "name"
+  ],
+  "105033": [
+   "weapon",
+   "L115A1_ESports",
+   "name"
+  ],
+  "105034": [
+   "weapon",
+   "DSR-1",
+   "name"
+  ],
+  "105035": [
+   "weapon",
+   "SVU",
+   "name"
+  ],
+  "105036": [
+   "weapon",
+   "L115A1_SE",
+   "name"
+  ],
+  "105038": [
+   "weapon",
+   "HK-PSG1_S_EV",
+   "name"
+  ],
+  "105039": [
+   "weapon",
+   "SVD-Dragunov_G_EV",
+   "name"
+  ],
+  "105040": [
+   "weapon",
+   "SVD-Dragunov_Silver_EV",
+   "name"
+  ],
+  "105041": [
+   "weapon",
+   "L115A1_EV",
+   "name"
+  ],
+  "105042": [
+   "weapon",
+   "HK-PSG1_Silver_EV",
+   "name"
+  ],
+  "105043": [
+   "weapon",
+   "SSG69_Silver_EV",
+   "name"
+  ],
+  "105044": [
+   "weapon",
+   "M4-SPR-LV1_EV",
+   "name"
+  ],
+  "105045": [
+   "weapon",
+   "M4-SPR-LV2_EV",
+   "name"
+  ],
+  "105046": [
+   "weapon",
+   "M4-SPR-LV3_EV",
+   "name"
+  ],
+  "105048": [
+   "weapon",
+   "VSK94_100M",
+   "name"
+  ],
+  "105049": [
+   "weapon",
+   "SVD-Dragunov_KingCobra_Gold_P",
+   "name"
+  ],
+  "105051": [
+   "weapon",
+   "LSRS_TEMP",
+   "formula"
+  ],
+  "105052": [
+   "weapon",
+   "Cheytac_M200_GRS",
+   "name"
+  ],
+  "105053": [
+   "weapon",
+   "L115A1_PBNC",
+   "name"
+  ],
+  "105054": [
+   "weapon",
+   "SVU_SE",
+   "name"
+  ],
+  "105055": [
+   "weapon",
+   "Cheytac_M200_GSL",
+   "name"
+  ],
+  "105056": [
+   "weapon",
+   "L115A1_Black_P",
+   "name"
+  ],
+  "105057": [
+   "weapon",
+   "Cheytac_M200_BLOODY",
+   "name"
+  ],
+  "105058": [
+   "weapon",
+   "Cheytac_M200_GRS_EV",
+   "name"
+  ],
+  "105059": [
+   "weapon",
+   "HK-PSG1_Reload",
+   "name"
+  ],
+  "105060": [
+   "weapon",
+   "RangeMaster338_Reload",
+   "name"
+  ],
+  "105061": [
+   "weapon",
+   "RangeMaster762_Reload",
+   "formula"
+  ],
+  "105062": [
+   "weapon",
+   "RangeMaster762Stby_Reload",
+   "formula"
+  ],
+  "105063": [
+   "weapon",
+   "Cheytac_M200_Turkey",
+   "name"
+  ],
+  "105064": [
+   "weapon",
+   "L115A1_LATIN3",
+   "name"
+  ],
+  "105065": [
+   "weapon",
+   "L115A1_BR_CAMO",
+   "name"
+  ],
+  "105068": [
+   "weapon",
+   "XM2010",
+   "name"
+  ],
+  "105072": [
+   "weapon",
+   "Walther_wa2000",
+   "name"
+  ],
+  "105073": [
+   "weapon",
+   "Cheytac_M200_R",
+   "name"
+  ],
+  "105074": [
+   "weapon",
+   "Walther_wa2000_Gold",
+   "name"
+  ],
+  "105075": [
+   "weapon",
+   "HK-PSG1_Elite",
+   "name"
+  ],
+  "105076": [
+   "weapon",
+   "SVD-Dragunov_Elite",
+   "name"
+  ],
+  "105077": [
+   "weapon",
+   "SVU_Elite",
+   "name"
+  ],
+  "105078": [
+   "weapon",
+   "VSK94_Elite",
+   "name"
+  ],
+  "105079": [
+   "weapon",
+   "Cheytac_M200_Inferno",
+   "name"
+  ],
+  "105080": [
+   "weapon",
+   "Cheytac_M200_PBNC5",
+   "name"
+  ],
+  "105081": [
+   "weapon",
+   "L115A1_GSL2014",
+   "name"
+  ],
+  "105082": [
+   "weapon",
+   "Barrett_P",
+   "name"
+  ],
+  "105083": [
+   "weapon",
+   "Cheytac_M200_Brazuca",
+   "name"
+  ],
+  "105084": [
+   "weapon",
+   "Cheytac_M200_Champion",
+   "name"
+  ],
+  "105085": [
+   "weapon",
+   "SVD-Dragunov_WOE",
+   "name"
+  ],
+  "105086": [
+   "weapon",
+   "Cheytac_M200_WOE",
+   "name"
+  ],
+  "105087": [
+   "weapon",
+   "Cheytac_M200_PBIC2014",
+   "name"
+  ],
+  "105088": [
+   "weapon",
+   "L115A1_LATIN3_NonLogo",
+   "name"
+  ],
+  "105090": [
+   "weapon",
+   "Cheytac_M200_Merdeka",
+   "name"
+  ],
+  "105091": [
+   "weapon",
+   "Cheytac_M200_G_ESports",
+   "name"
+  ],
+  "105092": [
+   "weapon",
+   "L115A1_Toy",
+   "name"
+  ],
+  "105093": [
+   "weapon",
+   "VSK94_Gold",
+   "name"
+  ],
+  "105094": [
+   "weapon",
+   "SVU_Gold",
+   "name"
+  ],
+  "105095": [
+   "weapon",
+   "DSR-1_Gold",
+   "name"
+  ],
+  "105097": [
+   "weapon",
+   "Cheytac_M200_Cangaceiro",
+   "name"
+  ],
+  "105098": [
+   "weapon",
+   "DSR-1_D",
+   "name"
+  ],
+  "105099": [
+   "weapon",
+   "Cheytac_M200_CoupleBreaker",
+   "name"
+  ],
+  "105100": [
+   "weapon",
+   "Cheytac_M200_GRS2",
+   "name"
+  ],
+  "105101": [
+   "weapon",
+   "L115A1_NEWBORN_2015",
+   "name"
+  ],
+  "105102": [
+   "weapon",
+   "Cheytac_M200_GSL2015",
+   "name"
+  ],
+  "105103": [
+   "weapon",
+   "Cheytac_M200_PBNC6",
+   "name"
+  ],
+  "105104": [
+   "weapon",
+   "Cheytac_M200_Ongame",
+   "name"
+  ],
+  "105105": [
+   "weapon",
+   "Cheytac_M200_Redemption",
+   "name"
+  ],
+  "105106": [
+   "weapon",
+   "L115A1_Summer",
+   "name"
+  ],
+  "105107": [
+   "weapon",
+   "SVD-Dragunov_Rose",
+   "name"
+  ],
+  "105108": [
+   "weapon",
+   "Cheytac_M200_LionFlame",
+   "name"
+  ],
+  "105109": [
+   "weapon",
+   "L115A1_Harimau",
+   "name"
+  ],
+  "105110": [
+   "weapon",
+   "Cheytac_M200_Brazil",
+   "name"
+  ],
+  "105111": [
+   "weapon",
+   "Cheytac_M200_PBST2015",
+   "name"
+  ],
+  "105112": [
+   "weapon",
+   "Cheytac_M200_4Game",
+   "name"
+  ],
+  "105113": [
+   "weapon",
+   "Cheytac_M200_4Game-SE",
+   "name"
+  ],
+  "105114": [
+   "weapon",
+   "Cheytac_M200_PBNC2015",
+   "name"
+  ],
+  "105115": [
+   "weapon",
+   "Cheytac_M200_PBTC2015",
+   "name"
+  ],
+  "105116": [
+   "weapon",
+   "SVU_PBTC2015",
+   "name"
+  ],
+  "105117": [
+   "weapon",
+   "L115A1_Mech",
+   "name"
+  ],
+  "105118": [
+   "weapon",
+   "CheyTac_M200_DarkDays",
+   "name"
+  ],
+  "105119": [
+   "weapon",
+   "XM2010_PBNC2015_US",
+   "name"
+  ],
+  "105120": [
+   "weapon",
+   "Cheytac_M200_PBIC2015",
+   "name"
+  ],
+  "105121": [
+   "weapon",
+   "Cheytac_M200_Gold",
+   "name"
+  ],
+  "105122": [
+   "weapon",
+   "Cheytac_M200_VeraCruz",
+   "name"
+  ],
+  "105123": [
+   "weapon",
+   "Tactilite_T2",
+   "name"
+  ],
+  "105124": [
+   "weapon",
+   "Cheytac_M200_Sheep",
+   "name"
+  ],
+  "105125": [
+   "weapon",
+   "L115A1_Basketball",
+   "name"
+  ],
+  "105126": [
+   "weapon",
+   "Cheytac_M200_Medical",
+   "name"
+  ],
+  "105127": [
+   "weapon",
+   "L115A1_Cobra",
+   "name"
+  ],
+  "105128": [
+   "weapon",
+   "RangeMaster338_Camo-Soldier",
+   "name"
+  ],
+  "105130": [
+   "weapon",
+   "Cheytac_M200_Steam",
+   "name"
+  ],
+  "105131": [
+   "weapon",
+   "Cheytac_M200_Halloween",
+   "name"
+  ],
+  "105133": [
+   "weapon",
+   "DSR_1_SPY",
+   "name"
+  ],
+  "105134": [
+   "weapon",
+   "Cheytac_M200_LATIN5",
+   "name"
+  ],
+  "105135": [
+   "weapon",
+   "Cheytac_M200_Obsidian",
+   "name"
+  ],
+  "105136": [
+   "weapon",
+   "DSR_1_Spy-Deluxe",
+   "name"
+  ],
+  "105137": [
+   "weapon",
+   "Cheytac_M200_DFN",
+   "name"
+  ],
+  "105138": [
+   "weapon",
+   "Cheytac_M200_Xmas2015",
+   "name"
+  ],
+  "105139": [
+   "weapon",
+   "Tactilite_T2_Xmas2015",
+   "name"
+  ],
+  "105140": [
+   "weapon",
+   "Cheytac_M200_Monkey",
+   "name"
+  ],
+  "105141": [
+   "weapon",
+   "Cheytac_M200_Arena-Normal",
+   "name"
+  ],
+  "105142": [
+   "weapon",
+   "Cheytac_M200_Arena-Deluxe",
+   "name"
+  ],
+  "105143": [
+   "weapon",
+   "Cheytac_M200_VeraCruz2016",
+   "name"
+  ],
+  "105144": [
+   "weapon",
+   "Cheytac_M200_Silence",
+   "name"
+  ],
+  "105145": [
+   "weapon",
+   "PGM-Hecate2",
+   "name"
+  ],
+  "105146": [
+   "weapon",
+   "PGM-Hecate2_Gold",
+   "name"
+  ],
+  "105147": [
+   "weapon",
+   "Cheytac_M200_Cupid",
+   "name"
+  ],
+  "105148": [
+   "weapon",
+   "Cheytac_M200_Sakura",
+   "name"
+  ],
+  "105149": [
+   "weapon",
+   "Cheytac_M200_Serpent",
+   "name"
+  ],
+  "105150": [
+   "weapon",
+   "Tactilite_T2_GRS3",
+   "name"
+  ],
+  "105151": [
+   "weapon",
+   "Cheytac_M200_Beast",
+   "name"
+  ],
+  "105152": [
+   "weapon",
+   "Cheytac_M200_PBGC",
+   "name"
+  ],
+  "105153": [
+   "weapon",
+   "Cheytac_M200_GSL2016",
+   "name"
+  ],
+  "105154": [
+   "weapon",
+   "Tactilite_T2_GSL2016",
+   "name"
+  ],
+  "105155": [
+   "weapon",
+   "Cheytac_M200_Tiger-Normal",
+   "name"
+  ],
+  "105156": [
+   "weapon",
+   "Cheytac_M200_Tiger-Deluxe",
+   "name"
+  ],
+  "105157": [
+   "weapon",
+   "AS_50",
+   "name"
+  ],
+  "105158": [
+   "weapon",
+   "Cheytac_M200_Midnight2",
+   "name"
+  ],
+  "105159": [
+   "weapon",
+   "AS_50_Gold",
+   "name"
+  ],
+  "105160": [
+   "weapon",
+   "Cheytac_M200_Skeleton",
+   "name"
+  ],
+  "105161": [
+   "weapon",
+   "Tactilite_T2_E-Sports2",
+   "name"
+  ],
+  "105162": [
+   "weapon",
+   "Tactilite_T2_Dragon",
+   "name"
+  ],
+  "105163": [
+   "weapon",
+   "Cheytac_M200_PBWC",
+   "name"
+  ],
+  "105164": [
+   "weapon",
+   "AS_50_D",
+   "name"
+  ],
+  "105165": [
+   "weapon",
+   "Cheytac_M200_ID_1stAnni",
+   "name"
+  ],
+  "105166": [
+   "weapon",
+   "Cheytac_M200_Strike",
+   "name"
+  ],
+  "105167": [
+   "weapon",
+   "Cheytac_M200_Demonic",
+   "name"
+  ],
+  "105168": [
+   "weapon",
+   "Cheytac_M200_Dolphin",
+   "name"
+  ],
+  "105169": [
+   "weapon",
+   "L115A1_Dolphin",
+   "name"
+  ],
+  "105170": [
+   "weapon",
+   "Cheytac_M200_BlueDiamond",
+   "name"
+  ],
+  "105171": [
+   "weapon",
+   "Tactilite_T2_BlueDiamond",
+   "name"
+  ],
+  "105172": [
+   "weapon",
+   "Cheytac_M200_Lebaran2016",
+   "name"
+  ],
+  "105173": [
+   "weapon",
+   "Cheytac_M200_Alien",
+   "name"
+  ],
+  "105174": [
+   "weapon",
+   "L115A1_Alien",
+   "name"
+  ],
+  "105175": [
+   "weapon",
+   "Cheytac_M200_Woody",
+   "name"
+  ],
+  "105176": [
+   "weapon",
+   "Tactilite_T2_Newborn2016",
+   "name"
+  ],
+  "105177": [
+   "weapon",
+   "Tactilite_T2_Puzzle",
+   "name"
+  ],
+  "105178": [
+   "weapon",
+   "SVD-Dragunov_Russian_Normal",
+   "name"
+  ],
+  "105179": [
+   "weapon",
+   "SVD-Dragunov_Russian_Deluxe",
+   "name"
+  ],
+  "105180": [
+   "weapon",
+   "Tactilite_T2_Liberty",
+   "name"
+  ],
+  "105181": [
+   "weapon",
+   "Cheytac_M200_PBIC2016",
+   "name"
+  ],
+  "105182": [
+   "weapon",
+   "Tactilite_T2_PBIC2016",
+   "name"
+  ],
+  "105183": [
+   "weapon",
+   "Cheytac_M200_PBTC2016",
+   "name"
+  ],
+  "105184": [
+   "weapon",
+   "AS_50_PBTC2016",
+   "name"
+  ],
+  "105185": [
+   "weapon",
+   "Cheytac_M200_DarkSteel",
+   "name"
+  ],
+  "105187": [
+   "weapon",
+   "Cheytac_M200_PBST2016",
+   "name"
+  ],
+  "105188": [
+   "weapon",
+   "Cheytac_M200_Supreme",
+   "name"
+  ],
+  "105189": [
+   "weapon",
+   "Cheytac_M200_Halloween2016",
+   "name"
+  ],
+  "105190": [
+   "weapon",
+   "Cheytac_M200_Azerbaijan",
+   "name"
+  ],
+  "106001": [
+   "weapon",
+   "870MCS",
+   "name"
+  ],
+  "106002": [
+   "weapon",
+   "870MCS_E",
+   "name"
+  ],
+  "106003": [
+   "weapon",
+   "SPAS15",
+   "name"
+  ],
+  "106004": [
+   "weapon",
+   "870MCS_W",
+   "name"
+  ],
+  "106005": [
+   "weapon",
+   "M1887",
+   "name"
+  ],
+  "106006": [
+   "weapon",
+   "SPAS15_Silver",
+   "name"
+  ],
+  "106007": [
+   "weapon",
+   "870MCS_IN_MODE",
+   "name"
+  ],
+  "106008": [
+   "weapon",
+   "870MCS_Silver",
+   "name"
+  ],
+  "106009": [
+   "weapon",
+   "SPAS15_Silver_ExpPt_20",
+   "name"
+  ],
+  "106010": [
+   "weapon",
+   "M1887 W",
+   "name"
+  ],
+  "106011": [
+   "weapon",
+   "870MCS_W D",
+   "name"
+  ],
+  "106012": [
+   "weapon",
+   "SPAS15 D",
+   "name"
+  ],
+  "106013": [
+   "weapon",
+   "M26_LSS",
+   "name"
+  ],
+  "106014": [
+   "weapon",
+   "870MCS_Silver_D",
+   "name"
+  ],
+  "106015": [
+   "weapon",
+   "870MCS_D",
+   "name"
+  ],
+  "106016": [
+   "weapon",
+   "SPAS15_Silver_D",
+   "name"
+  ],
+  "106017": [
+   "weapon",
+   "M1887_D",
+   "name"
+  ],
+  "106018": [
+   "weapon",
+   "SPAS15_MSC",
+   "name"
+  ],
+  "106019": [
+   "weapon",
+   "JackHammer",
+   "name"
+  ],
+  "106020": [
+   "weapon",
+   "Kel_Tec_KSG_15",
+   "name"
+  ],
+  "106021": [
+   "weapon",
+   "M1887_SL",
+   "name"
+  ],
+  "106022": [
+   "weapon",
+   "SPAS15_EV",
+   "name"
+  ],
+  "106023": [
+   "weapon",
+   "870MCS_W_EV",
+   "name"
+  ],
+  "106024": [
+   "weapon",
+   "SPAS15_Silver_EV",
+   "name"
+  ],
+  "106025": [
+   "weapon",
+   "M26_LSS_EV",
+   "name"
+  ],
+  "106026": [
+   "weapon",
+   "M1887-W_GRS",
+   "name"
+  ],
+  "106027": [
+   "weapon",
+   "M1887_PBNC",
+   "name"
+  ],
+  "106028": [
+   "weapon",
+   "M1887-W_GRS_EV",
+   "name"
+  ],
+  "106029": [
+   "weapon",
+   "SPAS15_PBSC2013",
+   "name"
+  ],
+  "106030": [
+   "weapon",
+   "M1887_BLOODY",
+   "name"
+  ],
+  "106032": [
+   "weapon",
+   "SPAS15_Elite",
+   "name"
+  ],
+  "106034": [
+   "weapon",
+   "M1887-W_R",
+   "name"
+  ],
+  "106035": [
+   "weapon",
+   "M1887_PBNC5",
+   "name"
+  ],
+  "106036": [
+   "weapon",
+   "Kel_Tec_KSG_15_GSL2014",
+   "name"
+  ],
+  "106037": [
+   "weapon",
+   "M1887_Brazuca",
+   "name"
+  ],
+  "106040": [
+   "weapon",
+   "SPAS15_PBSC2013_NonLogo",
+   "name"
+  ],
+  "106041": [
+   "weapon",
+   "M1887_LionHeart",
+   "name"
+  ],
+  "106042": [
+   "weapon",
+   "Zombie_Slayer",
+   "name"
+  ],
+  "106043": [
+   "weapon",
+   "Remington_ETA",
+   "name"
+  ],
+  "106044": [
+   "weapon",
+   "Remington_ETA_Gold",
+   "name"
+  ],
+  "106047": [
+   "weapon",
+   "Cerberus",
+   "name"
+  ],
+  "106048": [
+   "weapon",
+   "UTS-15_Gold",
+   "name"
+  ],
+  "106049": [
+   "weapon",
+   "M1887_GSL2015",
+   "name"
+  ],
+  "106050": [
+   "weapon",
+   "SPAS15_PBNC6",
+   "name"
+  ],
+  "106051": [
+   "weapon",
+   "WaterGun",
+   "name"
+  ],
+  "106052": [
+   "weapon",
+   "M1887_Summer",
+   "name"
+  ],
+  "106053": [
+   "weapon",
+   "M1887_PBNC2015",
+   "name"
+  ],
+  "106054": [
+   "weapon",
+   "SPAS15_PBNC2015",
+   "name"
+  ],
+  "106055": [
+   "weapon",
+   "M1887_PBTC2015",
+   "name"
+  ],
+  "106056": [
+   "weapon",
+   "M1887_Mech",
+   "name"
+  ],
+  "106057": [
+   "weapon",
+   "SPAS15_MSC_PBNC2015_US",
+   "name"
+  ],
+  "106058": [
+   "weapon",
+   "M1887_PBIC2015",
+   "name"
+  ],
+  "106059": [
+   "weapon",
+   "M1887_Gold",
+   "name"
+  ],
+  "106060": [
+   "weapon",
+   "M1887_Medical",
+   "name"
+  ],
+  "106061": [
+   "weapon",
+   "M1887_Steam",
+   "name"
+  ],
+  "106062": [
+   "weapon",
+   "M1887_Obsidian",
+   "name"
+  ],
+  "106063": [
+   "weapon",
+   "M1887_Arena-Normal",
+   "name"
+  ],
+  "106064": [
+   "weapon",
+   "M1887_Arena-Deluxe",
+   "name"
+  ],
+  "106065": [
+   "weapon",
+   "M1887_Cupid",
+   "name"
+  ],
+  "106066": [
+   "weapon",
+   "M1887_GRS3",
+   "name"
+  ],
+  "106068": [
+   "weapon",
+   "M1887_PBGC",
+   "name"
+  ],
+  "106069": [
+   "weapon",
+   "M1887_Skeleton",
+   "name"
+  ],
+  "106070": [
+   "weapon",
+   "M1887_Dragon",
+   "name"
+  ],
+  "106071": [
+   "weapon",
+   "M1887_ID_1stAnni",
+   "name"
+  ],
+  "106072": [
+   "weapon",
+   "M1887_Dolphin",
+   "name"
+  ],
+  "106073": [
+   "weapon",
+   "SPAS15_BlueDiamond",
+   "name"
+  ],
+  "106074": [
+   "weapon",
+   "M1887_Lebaran2016",
+   "name"
+  ],
+  "106075": [
+   "weapon",
+   "M1887_Woody",
+   "name"
+  ],
+  "106076": [
+   "weapon",
+   "M1887_Newborn2016",
+   "name"
+  ],
+  "106077": [
+   "weapon",
+   "M1887_Liberty",
+   "name"
+  ],
+  "106078": [
+   "weapon",
+   "M1887_PBIC2016",
+   "name"
+  ],
+  "106079": [
+   "weapon",
+   "M1887_PBTC2016",
+   "name"
+  ],
+  "106080": [
+   "weapon",
+   "M1887_DarkSteel",
+   "name"
+  ],
+  "106081": [
+   "weapon",
+   "M1887_PBNC2016",
+   "name"
+  ],
+  "106082": [
+   "weapon",
+   "M1887_Supreme",
+   "name"
+  ],
+  "106083": [
+   "weapon",
+   "M1887_Gorgeous",
+   "name"
+  ],
+  "106084": [
+   "weapon",
+   "Cerberus_Gorgeous",
+   "name"
+  ],
+  "109011": [
+   "weapon",
+   "SentryGun",
+   "formula"
+  ],
+  "109012": [
+   "weapon",
+   "SentryGun_Lv2",
+   "formula"
+  ],
+  "110001": [
+   "weapon",
+   "MK46_SteadyAim",
+   "name"
+  ],
+  "110002": [
+   "weapon",
+   "MK46_Silver",
+   "name"
+  ],
+  "110003": [
+   "weapon",
+   "RPD",
+   "name"
+  ],
+  "110004": [
+   "weapon",
+   "L86",
+   "name"
+  ],
+  "110005": [
+   "weapon",
+   "MK46_Ext_EV",
+   "name"
+  ],
+  "110006": [
+   "weapon",
+   "RPD_100M",
+   "name"
+  ],
+  "110008": [
+   "weapon",
+   "RPD_EV",
+   "name"
+  ],
+  "110011": [
+   "weapon",
+   "Ultimax-100",
+   "name"
+  ],
+  "110012": [
+   "weapon",
+   "Ultimax-100_Gold",
+   "name"
+  ],
+  "110013": [
+   "weapon",
+   "Ultimax-100_Madness",
+   "name"
+  ],
+  "110014": [
+   "weapon",
+   "Ultimax-100_Mummy",
+   "name"
+  ],
+  "116001": [
+   "weapon",
+   "RPG7_Outpost",
+   "name"
+  ],
+  "116002": [
+   "weapon",
+   "RPG7",
+   "name"
+  ],
+  "116003": [
+   "weapon",
+   "RPG7_Boss",
+   "name"
+  ],
+  "117001": [
+   "weapon",
+   "M197",
+   "name"
+  ],
+  "118001": [
+   "weapon",
+   "KrissSuperV_Dual",
+   "name"
+  ],
+  "118002": [
+   "weapon",
+   "KrissSuperV_Dual_Gold",
+   "name"
+  ],
+  "118003": [
+   "weapon",
+   "KrissSuperV_Dual_D",
+   "name"
+  ],
+  "118004": [
+   "weapon",
+   "Dual_Uzi",
+   "name"
+  ],
+  "118005": [
+   "weapon",
+   "Dual_Uzi_Mini",
+   "name"
+  ],
+  "118006": [
+   "weapon",
+   "Dual_Uzi_Micro",
+   "name"
+  ],
+  "118007": [
+   "weapon",
+   "Dual_Uzi_Silencer",
+   "name"
+  ],
+  "118008": [
+   "weapon",
+   "Dual_Uzi_Mini_Silencer",
+   "name"
+  ],
+  "118009": [
+   "weapon",
+   "Dual_Uzi_Micro_Silencer",
+   "name"
+  ],
+  "118010": [
+   "weapon",
+   "KrissSuperV_Dual_Black",
+   "name"
+  ],
+  "118011": [
+   "weapon",
+   "Dual_Uzi_Micro_Silencer_Silver",
+   "name"
+  ],
+  "118012": [
+   "weapon",
+   "KrissSuperV_Dual_Batik",
+   "name"
+  ],
+  "118013": [
+   "weapon",
+   "Dual_Uzi_Mini_Gold",
+   "name"
+  ],
+  "118014": [
+   "weapon",
+   "KrissSuperV_Dual_Esports",
+   "name"
+  ],
+  "118015": [
+   "weapon",
+   "KrissSuperV_Dual_Batik_D",
+   "name"
+  ],
+  "118016": [
+   "weapon",
+   "KrissSuperV_Dual_Vector",
+   "name"
+  ],
+  "118017": [
+   "weapon",
+   "KrissSuperV_Dual_IC",
+   "name"
+  ],
+  "118018": [
+   "weapon",
+   "KrissSuperV_Dual_EV",
+   "name"
+  ],
+  "118019": [
+   "weapon",
+   "KrissSuperV_Dual_PBTN",
+   "name"
+  ],
+  "118020": [
+   "weapon",
+   "KrissSuperV_Dual_GRS",
+   "name"
+  ],
+  "118021": [
+   "weapon",
+   "KrissSuperV_Dual_GSL",
+   "name"
+  ],
+  "118022": [
+   "weapon",
+   "KrissSuperV_Dual_Black_P",
+   "name"
+  ],
+  "118023": [
+   "weapon",
+   "KrissSuperV_Dual_GRS_EV",
+   "name"
+  ],
+  "118024": [
+   "weapon",
+   "KrissSuperV_Dual_4th_Anniversary",
+   "name"
+  ],
+  "118025": [
+   "weapon",
+   "KrissSuperV_Dual_PBIC2013",
+   "name"
+  ],
+  "118026": [
+   "weapon",
+   "KrissSuperV_Dual_SILENCE",
+   "name"
+  ],
+  "118027": [
+   "weapon",
+   "KrissSuperV_Dual_Turkey",
+   "name"
+  ],
+  "118029": [
+   "weapon",
+   "KrissSuperV_Dual_R",
+   "name"
+  ],
+  "118030": [
+   "weapon",
+   "KrissSuperV_Dual_Inferno",
+   "name"
+  ],
+  "118031": [
+   "weapon",
+   "KrissSuperV_Dual_GSL2014",
+   "name"
+  ],
+  "118032": [
+   "weapon",
+   "KrissSuperV_Dual_Midnight",
+   "name"
+  ],
+  "118033": [
+   "weapon",
+   "OA93_Dual",
+   "name"
+  ],
+  "118035": [
+   "weapon",
+   "KrissSuperV_Dual_Brazuca",
+   "name"
+  ],
+  "118036": [
+   "weapon",
+   "KrissSuperV_Dual_Champion",
+   "name"
+  ],
+  "118037": [
+   "weapon",
+   "KrissSuperV_Dual_WOE",
+   "name"
+  ],
+  "118038": [
+   "weapon",
+   "KrissSuperV_Dual_Midnight_NonLogo",
+   "name"
+  ],
+  "118039": [
+   "weapon",
+   "KrissSuperV_Dual_PC_Cafe",
+   "name"
+  ],
+  "118040": [
+   "weapon",
+   "KrissSuperV_Dual_PBSC2014",
+   "name"
+  ],
+  "118041": [
+   "weapon",
+   "KrissSuperV_Dual_G_ESports",
+   "name"
+  ],
+  "118042": [
+   "weapon",
+   "KrissSuperV_Dual_Toy",
+   "name"
+  ],
+  "118044": [
+   "weapon",
+   "OA93_Dual_Xmas",
+   "name"
+  ],
+  "118045": [
+   "weapon",
+   "KrissSuperV_Dual_Xmas",
+   "name"
+  ],
+  "118046": [
+   "weapon",
+   "KrissSuperV_Dual_CoupleBreaker",
+   "name"
+  ],
+  "118047": [
+   "weapon",
+   "KrissSuperV_Dual_CNY-2015",
+   "name"
+  ],
+  "118048": [
+   "weapon",
+   "KrissSuperV_Dual_GRS2",
+   "name"
+  ],
+  "118049": [
+   "weapon",
+   "KrissSuperV_Dual_NEWBORN_2015",
+   "name"
+  ],
+  "118050": [
+   "weapon",
+   "OA93_Dual_GSL2015",
+   "name"
+  ],
+  "118051": [
+   "weapon",
+   "KrissSuperV_Dual_PBNC6",
+   "name"
+  ],
+  "118052": [
+   "weapon",
+   "KrissSuperV_Dual_Ongame",
+   "name"
+  ],
+  "118053": [
+   "weapon",
+   "KrissSuperV_Dual_Redemption",
+   "name"
+  ],
+  "118054": [
+   "weapon",
+   "KrissSuperV_Dual_Summer",
+   "name"
+  ],
+  "118055": [
+   "weapon",
+   "KrissSuperV_Dual_Harimau",
+   "name"
+  ],
+  "118056": [
+   "weapon",
+   "OA93_Dual_Independence",
+   "name"
+  ],
+  "118057": [
+   "weapon",
+   "OA93_Dual_PBST2015",
+   "name"
+  ],
+  "118059": [
+   "weapon",
+   "KrissSuperV_Dual_PBNC2015",
+   "name"
+  ],
+  "118060": [
+   "weapon",
+   "KrissSuperV_Dual_PBTC2015",
+   "name"
+  ],
+  "118061": [
+   "weapon",
+   "KrissSuperV_Dual_Mech",
+   "name"
+  ],
+  "118062": [
+   "weapon",
+   "KrissSuperV_Dual_DarkDays",
+   "name"
+  ],
+  "118063": [
+   "weapon",
+   "OA93_Dual_PBNC2015_US",
+   "name"
+  ],
+  "118064": [
+   "weapon",
+   "KrissSuperV_Dual_PBIC2015",
+   "name"
+  ],
+  "118065": [
+   "weapon",
+   "OA93_Dual_Cobra",
+   "name"
+  ],
+  "118066": [
+   "weapon",
+   "OA93_Dual_Medical",
+   "name"
+  ],
+  "118067": [
+   "weapon",
+   "KrissSuperV_Dual_Sheep",
+   "name"
+  ],
+  "118068": [
+   "weapon",
+   "KrissSuperV_Dual_Basketball",
+   "name"
+  ],
+  "118069": [
+   "weapon",
+   "OA93_Dual_Basketball",
+   "name"
+  ],
+  "118070": [
+   "weapon",
+   "KrissSuperV_Dual_Steam",
+   "name"
+  ],
+  "118072": [
+   "weapon",
+   "KrissSuperV_Dual_Obsidian",
+   "name"
+  ],
+  "118073": [
+   "weapon",
+   "KrissSuperV_Dual_DFN",
+   "name"
+  ],
+  "118074": [
+   "weapon",
+   "OA93_Dual_DFN",
+   "name"
+  ],
+  "118075": [
+   "weapon",
+   "KrissSuperV_Dual_Xmas2015",
+   "name"
+  ],
+  "118076": [
+   "weapon",
+   "OA93_Dual_Xmas2015",
+   "name"
+  ],
+  "118077": [
+   "weapon",
+   "KrissSuperV_Dual_Monkey",
+   "name"
+  ],
+  "118078": [
+   "weapon",
+   "KrissSuperV_Dual_Cupid",
+   "name"
+  ],
+  "118079": [
+   "weapon",
+   "KrissSuperV_Dual_Sakura",
+   "name"
+  ],
+  "118080": [
+   "weapon",
+   "KrissSuperV_Dual_Serpent",
+   "name"
+  ],
+  "118081": [
+   "weapon",
+   "KrissSuperV_Dual_GRS3",
+   "name"
+  ],
+  "118082": [
+   "weapon",
+   "KrissSuperV_Dual_Beast",
+   "name"
+  ],
+  "118083": [
+   "weapon",
+   "KrissSuperV_Dual_PBGC",
+   "name"
+  ],
+  "118084": [
+   "weapon",
+   "KrissSuperV_Dual_GSL2016",
+   "name"
+  ],
+  "118085": [
+   "weapon",
+   "KrissSuperV_Dual_Midnight2",
+   "name"
+  ],
+  "118086": [
+   "weapon",
+   "KrissSuperV_Dual_Skeleton",
+   "name"
+  ],
+  "118087": [
+   "weapon",
+   "KrissSuperV_Dual_E-Sports2",
+   "name"
+  ],
+  "118088": [
+   "weapon",
+   "KrissSuperV_Dual_PBWC",
+   "name"
+  ],
+  "118089": [
+   "weapon",
+   "OA93_Dual_PBWC",
+   "name"
+  ],
+  "118090": [
+   "weapon",
+   "KrissSuperV_Dual_Mummy",
+   "name"
+  ],
+  "118091": [
+   "weapon",
+   "KrissSuperV_Dual_ID_1stAnni",
+   "name"
+  ],
+  "118092": [
+   "weapon",
+   "KrissSuperV_Dual_Strike",
+   "name"
+  ],
+  "118093": [
+   "weapon",
+   "KrissSuperV_Dual_Demonic",
+   "name"
+  ],
+  "118094": [
+   "weapon",
+   "KrissSuperV_Dual_Dolphin",
+   "name"
+  ],
+  "118095": [
+   "weapon",
+   "OA93_Dual_BlueDiamond",
+   "name"
+  ],
+  "118096": [
+   "weapon",
+   "KrissSuperV_Dual_Lebaran2016",
+   "name"
+  ],
+  "118097": [
+   "weapon",
+   "KrissSuperV_Dual_Alien",
+   "name"
+  ],
+  "118098": [
+   "weapon",
+   "OA93_Dual_Woody",
+   "name"
+  ],
+  "118099": [
+   "weapon",
+   "OA93_Dual_Newborn2016",
+   "name"
+  ],
+  "118100": [
+   "weapon",
+   "KrissSuperV_Dual_Puzzle",
+   "name"
+  ],
+  "118101": [
+   "weapon",
+   "OA93_Dual_Liberty",
+   "name"
+  ],
+  "118102": [
+   "weapon",
+   "KrissSuperV_Dual_PBIC2016",
+   "name"
+  ],
+  "118103": [
+   "weapon",
+   "OA93_Dual_PBIC2016",
+   "name"
+  ],
+  "118104": [
+   "weapon",
+   "KrissSuperV_Dual_PBTC2016",
+   "name"
+  ],
+  "118105": [
+   "weapon",
+   "KrissSuperV_Dual_DarkSteel",
+   "name"
+  ],
+  "118106": [
+   "weapon",
+   "KrissSuperV_Dual_PBNC2016",
+   "name"
+  ],
+  "118107": [
+   "weapon",
+   "KrissSuperV_Dual_PBST2016",
+   "name"
+  ],
+  "118108": [
+   "weapon",
+   "KrissSuperV_Dual_Supreme",
+   "name"
+  ],
+  "118109": [
+   "weapon",
+   "OA93_Dual_Halloween2016",
+   "name"
+  ],
+  "118110": [
+   "weapon",
+   "KrissSuperV_Dual_Gorgeous",
+   "name"
+  ],
+  "118111": [
+   "weapon",
+   "OA93_Dual_Gorgeous",
+   "name"
+  ],
+  "118209": [
+   "weapon",
+   "KrissSuperV_Dual_Red",
+   "name"
+  ],
+  "126001": [
+   "weapon",
+   "Compound_Bow_Blue",
+   "formula"
+  ],
+  "126002": [
+   "weapon",
+   "Compound_Bow",
+   "formula"
+  ],
+  "126003": [
+   "weapon",
+   "Compound_Bow_Silver",
+   "formula"
+  ],
+  "126004": [
+   "weapon",
+   "Compound_Bow_Gold",
+   "formula"
+  ],
+  "126005": [
+   "weapon",
+   "Compound_Bow_Blue_New",
+   "formula"
+  ],
+  "126006": [
+   "weapon",
+   "Compound_Bow_Black",
+   "formula"
+  ],
+  "135001": [
+   "weapon",
+   "Cerberus_Dual",
+   "name"
+  ],
+  "202001": [
+   "weapon",
+   "DesertEagle",
+   "name"
+  ],
+  "202002": [
+   "weapon",
+   "MK23_Silencer",
+   "name"
+  ],
+  "202003": [
+   "weapon",
+   "K5",
+   "name"
+  ],
+  "202005": [
+   "weapon",
+   "DesertEagle_REF",
+   "name"
+  ],
+  "202008": [
+   "weapon",
+   "DesertEagle_Gold",
+   "name"
+  ],
+  "202009": [
+   "weapon",
+   "K5_Dual_Dummy",
+   "name"
+  ],
+  "202010": [
+   "weapon",
+   "ColtPython_Gold_Exp_Pt_10",
+   "name"
+  ],
+  "202011": [
+   "weapon",
+   "Glock18",
+   "name"
+  ],
+  "202013": [
+   "weapon",
+   "Taurus_454SS_2M",
+   "name"
+  ],
+  "202014": [
+   "weapon",
+   "Taurus_454SS_5M",
+   "name"
+  ],
+  "202015": [
+   "weapon",
+   "Taurus_454SS_8M",
+   "name"
+  ],
+  "202016": [
+   "weapon",
+   "Taurus_454SS_Scope",
+   "name"
+  ],
+  "202017": [
+   "weapon",
+   "ColtPython_Gold",
+   "name"
+  ],
+  "202018": [
+   "weapon",
+   "ColtPython_Gold_D",
+   "name"
+  ],
+  "202019": [
+   "weapon",
+   "MK23_Silencer_D",
+   "name"
+  ],
+  "202021": [
+   "weapon",
+   "Glock18 D",
+   "name"
+  ],
+  "202022": [
+   "weapon",
+   "Colt45",
+   "name"
+  ],
+  "202023": [
+   "weapon",
+   "IMI_Uzi9",
+   "name"
+  ],
+  "202024": [
+   "weapon",
+   "Kriss_Vector_SDP",
+   "name"
+  ],
+  "202025": [
+   "weapon",
+   "Hk45",
+   "name"
+  ],
+  "202026": [
+   "weapon",
+   "HK69",
+   "name"
+  ],
+  "202027": [
+   "weapon",
+   "MK23_Silver",
+   "name"
+  ],
+  "202028": [
+   "weapon",
+   "M79",
+   "name"
+  ],
+  "202029": [
+   "weapon",
+   "GL_06",
+   "name"
+  ],
+  "202030": [
+   "weapon",
+   "DesertEagle_EV",
+   "name"
+  ],
+  "202031": [
+   "weapon",
+   "Colt45_100M",
+   "name"
+  ],
+  "202032": [
+   "weapon",
+   "DesertEagle_GRS",
+   "name"
+  ],
+  "202033": [
+   "weapon",
+   "Glock18_PBNC",
+   "name"
+  ],
+  "202034": [
+   "weapon",
+   "Taurus_454SS_Scope_PBSC2013",
+   "name"
+  ],
+  "202035": [
+   "weapon",
+   "MK23_Reload",
+   "name"
+  ],
+  "202036": [
+   "weapon",
+   "DesertEagle_Reload",
+   "name"
+  ],
+  "202037": [
+   "weapon",
+   "Glock18_Turkey",
+   "name"
+  ],
+  "202038": [
+   "weapon",
+   "Hk45_Halloween",
+   "name"
+  ],
+  "202040": [
+   "weapon",
+   "ColtPython_PBNC5",
+   "name"
+  ],
+  "202047": [
+   "weapon",
+   "Glock18_BR_Camo",
+   "name"
+  ],
+  "202048": [
+   "weapon",
+   "DesertEagle_BR_Camo",
+   "name"
+  ],
+  "202049": [
+   "weapon",
+   "ColtPython_Brazuca",
+   "name"
+  ],
+  "202050": [
+   "weapon",
+   "Taurus_454SS_Scope_PBSC2013_NonLogo",
+   "name"
+  ],
+  "202051": [
+   "weapon",
+   "DesertEagle_G_ESports",
+   "name"
+  ],
+  "202052": [
+   "weapon",
+   "ColtPython_Toy",
+   "name"
+  ],
+  "202054": [
+   "weapon",
+   "GL_06_CNY-2015",
+   "name"
+  ],
+  "202056": [
+   "weapon",
+   "ColtPython_PBNC6",
+   "name"
+  ],
+  "202057": [
+   "weapon",
+   "DesertEagle_Ongame",
+   "name"
+  ],
+  "202058": [
+   "weapon",
+   "ColtPython_Summer",
+   "name"
+  ],
+  "202059": [
+   "weapon",
+   "ColtPython_Rose",
+   "name"
+  ],
+  "202060": [
+   "weapon",
+   "ColtPython_Brazil",
+   "name"
+  ],
+  "202061": [
+   "weapon",
+   "Glock18_PBST2015",
+   "name"
+  ],
+  "202062": [
+   "weapon",
+   "Glock18_4Game",
+   "name"
+  ],
+  "202063": [
+   "weapon",
+   "Glock18_4Game-SE",
+   "name"
+  ],
+  "202064": [
+   "weapon",
+   "DesertEagle_Lebaran2015",
+   "name"
+  ],
+  "202067": [
+   "weapon",
+   "ColtPython_PBNC2015",
+   "name"
+  ],
+  "202068": [
+   "weapon",
+   "Taurus_454SS_Scope_Mech",
+   "name"
+  ],
+  "202069": [
+   "weapon",
+   "Kriss_Vector_SDP_DarkDays",
+   "name"
+  ],
+  "202070": [
+   "weapon",
+   "Taurus_454SS_Scope_PBIC2015",
+   "name"
+  ],
+  "202071": [
+   "weapon",
+   "Glock18_Gold",
+   "name"
+  ],
+  "202072": [
+   "weapon",
+   "ColtPython_VeraCruz",
+   "name"
+  ],
+  "202073": [
+   "weapon",
+   "Tarus_454SS_Scope_Cobra",
+   "name"
+  ],
+  "202074": [
+   "weapon",
+   "Kriss_Vector_SDP_Camo-Soldier",
+   "name"
+  ],
+  "202075": [
+   "weapon",
+   "MK23_SPY",
+   "name"
+  ],
+  "202076": [
+   "weapon",
+   "ColtPython_LATIN5",
+   "name"
+  ],
+  "202077": [
+   "weapon",
+   "MK23_Spy-Deluxe",
+   "name"
+  ],
+  "202079": [
+   "weapon",
+   "ColtPython_Arena-Normal",
+   "name"
+  ],
+  "202080": [
+   "weapon",
+   "ColtPython_Arena-Deluxe",
+   "name"
+  ],
+  "202081": [
+   "weapon",
+   "Taurus_454SS_Scope_VeraCruz2016",
+   "name"
+  ],
+  "202082": [
+   "weapon",
+   "ColtPython_Sakura",
+   "name"
+  ],
+  "202084": [
+   "weapon",
+   "ColtPython_GSL2016",
+   "name"
+  ],
+  "202085": [
+   "weapon",
+   "DesertEagle_Tiger-Normal",
+   "name"
+  ],
+  "202086": [
+   "weapon",
+   "DesertEagle_Tiger-Deluxe",
+   "name"
+  ],
+  "202087": [
+   "weapon",
+   "ColtPython_PBWC",
+   "name"
+  ],
+  "202088": [
+   "weapon",
+   "Glock18_Mummy",
+   "name"
+  ],
+  "202089": [
+   "weapon",
+   "MK23_BlueDiamond",
+   "name"
+  ],
+  "202090": [
+   "weapon",
+   "DesertEagle_Lebaran2016",
+   "name"
+  ],
+  "202092": [
+   "weapon",
+   "ColtPython_Newborn2016",
+   "name"
+  ],
+  "202093": [
+   "weapon",
+   "Kriss_Vector_SDP_Puzzle",
+   "name"
+  ],
+  "202094": [
+   "weapon",
+   "U22-Neos",
+   "name"
+  ],
+  "202095": [
+   "weapon",
+   "U22-Neos_Silver",
+   "name"
+  ],
+  "202096": [
+   "weapon",
+   "U22-Neos_Gold",
+   "name"
+  ],
+  "202097": [
+   "weapon",
+   "ColtPython_PBIC2016",
+   "name"
+  ],
+  "202098": [
+   "weapon",
+   "ColtPython_DarkSteel",
+   "name"
+  ],
+  "202099": [
+   "weapon",
+   "Taurus_454SS_Scope_PBST2016",
+   "name"
+  ],
+  "202100": [
+   "weapon",
+   "ColtPython_Supreme",
+   "name"
+  ],
+  "213001": [
+   "weapon",
+   "P99-Hak_CIC",
+   "name"
+  ],
+  "213002": [
+   "weapon",
+   "P99-Hak_CIC_Silver",
+   "name"
+  ],
+  "213003": [
+   "weapon",
+   "P99-Hak_CIC D",
+   "name"
+  ],
+  "213004": [
+   "weapon",
+   "P99-Hak_CIC_Silver_D",
+   "name"
+  ],
+  "213005": [
+   "weapon",
+   "P99-Hak_CIC_EV",
+   "name"
+  ],
+  "213006": [
+   "weapon",
+   "P99-Hak_CIC D_GW",
+   "name"
+  ],
+  "213007": [
+   "weapon",
+   "P99-Hak_CIC_Reload",
+   "name"
+  ],
+  "214001": [
+   "weapon",
+   "MK23-K5_Dual",
+   "name"
+  ],
+  "214002": [
+   "weapon",
+   "DesertEagle_Dual",
+   "name"
+  ],
+  "214004": [
+   "weapon",
+   "DesertEagle_DualGold",
+   "name"
+  ],
+  "214005": [
+   "weapon",
+   "MK23-K5_Dual D",
+   "name"
+  ],
+  "214006": [
+   "weapon",
+   "DesertEagle_Dual D",
+   "name"
+  ],
+  "214007": [
+   "weapon",
+   "Hk45_Dual",
+   "name"
+  ],
+  "214008": [
+   "weapon",
+   "MK23-K5_Dual_EV",
+   "name"
+  ],
+  "214009": [
+   "weapon",
+   "DesertEagle_Dual_EV",
+   "name"
+  ],
+  "214010": [
+   "weapon",
+   "DesertEagle_DualGold_P",
+   "name"
+  ],
+  "214011": [
+   "weapon",
+   "DesertEagle_Dual_GRS",
+   "name"
+  ],
+  "214012": [
+   "weapon",
+   "Hk45_Halloween_Dual",
+   "name"
+  ],
+  "214015": [
+   "weapon",
+   "DesertEagle_Dual_BR_Camo",
+   "name"
+  ],
+  "214017": [
+   "weapon",
+   "Scorpion_Vz61",
+   "name"
+  ],
+  "214018": [
+   "weapon",
+   "Scorpion_Vz61_Gold",
+   "name"
+  ],
+  "214019": [
+   "weapon",
+   "DesertEagle_Dual_Lebaran2016",
+   "name"
+  ],
+  "214020": [
+   "weapon",
+   "Scorpion_Vz61_Woody",
+   "name"
+  ],
+  "214021": [
+   "weapon",
+   "Scorpion_Vz61_Gorgeous",
+   "name"
+  ],
+  "234001": [
+   "weapon",
+   "Compound_Bow",
+   "name"
+  ],
+  "234002": [
+   "weapon",
+   "Compound_Bow_Silver",
+   "name"
+  ],
+  "234003": [
+   "weapon",
+   "Compound_Bow_Gold",
+   "name"
+  ],
+  "234004": [
+   "weapon",
+   "Compound_Bow_Blue",
+   "name"
+  ],
+  "234005": [
+   "weapon",
+   "Compound_Bow_Black",
+   "name"
+  ],
+  "301001": [
+   "weapon",
+   "M-7",
+   "name"
+  ],
+  "301002": [
+   "weapon",
+   "M-9",
+   "name"
+  ],
+  "301003": [
+   "weapon",
+   "Hak_Dummy",
+   "name"
+  ],
+  "301004": [
+   "weapon",
+   "Kukrii",
+   "name"
+  ],
+  "301006": [
+   "weapon",
+   "MiniAxe_Dummy",
+   "name"
+  ],
+  "301007": [
+   "weapon",
+   "MiniAxe",
+   "name"
+  ],
+  "301008": [
+   "weapon",
+   "MiniAxe_E",
+   "formula"
+  ],
+  "301009": [
+   "weapon",
+   "M-7_Gold",
+   "name"
+  ],
+  "301010": [
+   "weapon",
+   "Hak_Silver_Dummy",
+   "name"
+  ],
+  "301011": [
+   "weapon",
+   "Kukrii_D",
+   "name"
+  ],
+  "301012": [
+   "weapon",
+   "MiniAxe_D",
+   "name"
+  ],
+  "301013": [
+   "weapon",
+   "MiniAxe_Dummy_D",
+   "name"
+  ],
+  "301014": [
+   "weapon",
+   "GH5007",
+   "name"
+  ],
+  "301017": [
+   "weapon",
+   "FangBlade",
+   "name"
+  ],
+  "301018": [
+   "weapon",
+   "BallisticKnife",
+   "name"
+  ],
+  "301019": [
+   "weapon",
+   "BallisticKnife_Dummy",
+   "formula"
+  ],
+  "301020": [
+   "weapon",
+   "BallisticKnife_I3S",
+   "name"
+  ],
+  "301021": [
+   "weapon",
+   "Keris",
+   "name"
+  ],
+  "301023": [
+   "weapon",
+   "Keris_SE",
+   "name"
+  ],
+  "301024": [
+   "weapon",
+   "CandyCane",
+   "name"
+  ],
+  "301025": [
+   "weapon",
+   "Field_Shovel",
+   "name"
+  ],
+  "301026": [
+   "weapon",
+   "Kukrii_EV",
+   "name"
+  ],
+  "301027": [
+   "weapon",
+   "MiniAxe_EV",
+   "name"
+  ],
+  "301028": [
+   "weapon",
+   "MiniAxe_Dummy_EV",
+   "name"
+  ],
+  "301029": [
+   "weapon",
+   "Hak_EV_Dummy",
+   "name"
+  ],
+  "301030": [
+   "weapon",
+   "Hak_GW_Dummy",
+   "name"
+  ],
+  "301031": [
+   "weapon",
+   "Hak_D_Dummy",
+   "name"
+  ],
+  "301032": [
+   "weapon",
+   "Hak_Silver_D_Dummy",
+   "name"
+  ],
+  "301033": [
+   "weapon",
+   "M-7_MiniAxe",
+   "name"
+  ],
+  "301034": [
+   "weapon",
+   "M-7_MiniAxe_D",
+   "name"
+  ],
+  "301035": [
+   "weapon",
+   "M-7_MiniAxe_EV",
+   "name"
+  ],
+  "301036": [
+   "weapon",
+   "M-7_BallisticKnife",
+   "name"
+  ],
+  "301038": [
+   "weapon",
+   "BallisticKnife_GRS_Dummy",
+   "formula"
+  ],
+  "301039": [
+   "weapon",
+   "BallisticKnife_GRS_I3S",
+   "name"
+  ],
+  "301041": [
+   "weapon",
+   "Arabian_Sword",
+   "name"
+  ],
+  "301042": [
+   "weapon",
+   "M-9_PBNC",
+   "name"
+  ],
+  "301043": [
+   "weapon",
+   "GH5007_Gold",
+   "name"
+  ],
+  "301044": [
+   "weapon",
+   "GH5007_PBSC2013",
+   "name"
+  ],
+  "301045": [
+   "weapon",
+   "Hak_Reload_Dummy",
+   "name"
+  ],
+  "301046": [
+   "weapon",
+   "Kukrii_Turkey",
+   "name"
+  ],
+  "301049": [
+   "weapon",
+   "Arabian_Sword2",
+   "name"
+  ],
+  "301050": [
+   "weapon",
+   "FangBlade_PBNC5",
+   "name"
+  ],
+  "301051": [
+   "weapon",
+   "FangBlade_GSL2014",
+   "name"
+  ],
+  "301052": [
+   "weapon",
+   "FangBlade_Brazuca",
+   "name"
+  ],
+  "301057": [
+   "weapon",
+   "FangBlade_Inferno",
+   "name"
+  ],
+  "301058": [
+   "weapon",
+   "ChineseCleaver",
+   "name"
+  ],
+  "301059": [
+   "weapon",
+   "GH5007_PBSC2013_NonLogo",
+   "name"
+  ],
+  "301060": [
+   "weapon",
+   "ChineseCleaver_DUMMY",
+   "name"
+  ],
+  "301063": [
+   "weapon",
+   "Field_Shovel_Dummy",
+   "name"
+  ],
+  "301064": [
+   "weapon",
+   "BadmintonRacket",
+   "name"
+  ],
+  "301065": [
+   "weapon",
+   "Keris_G_ESports",
+   "name"
+  ],
+  "301066": [
+   "weapon",
+   "Death-Scythe",
+   "name"
+  ],
+  "301069": [
+   "weapon",
+   "Ice_Fork",
+   "name"
+  ],
+  "301070": [
+   "weapon",
+   "GH5007_Cangaceiro",
+   "name"
+  ],
+  "301071": [
+   "weapon",
+   "Goat_Hammer",
+   "name"
+  ],
+  "301072": [
+   "weapon",
+   "Goat_Hammer_Dummy",
+   "name"
+  ],
+  "301073": [
+   "weapon",
+   "ChineseCleaver_CNY-2015",
+   "name"
+  ],
+  "301074": [
+   "weapon",
+   "ChineseCleaver_CNY-2015_DUMMY",
+   "name"
+  ],
+  "301077": [
+   "weapon",
+   "FangBlade_NEWBORN_2015",
+   "name"
+  ],
+  "301078": [
+   "weapon",
+   "FangBlade_PBNC6",
+   "name"
+  ],
+  "301079": [
+   "weapon",
+   "FangBlade_Ongame",
+   "name"
+  ],
+  "301080": [
+   "weapon",
+   "Field_Shovel_Royal",
+   "name"
+  ],
+  "301081": [
+   "weapon",
+   "Field_Shovel_Royal_Dummy",
+   "name"
+  ],
+  "301082": [
+   "weapon",
+   "Arabian_Sword_Midnight",
+   "name"
+  ],
+  "301083": [
+   "weapon",
+   "Nunchaku",
+   "name"
+  ],
+  "301084": [
+   "weapon",
+   "GH5007_Rose",
+   "name"
+  ],
+  "301085": [
+   "weapon",
+   "Madness_M-7",
+   "name"
+  ],
+  "301086": [
+   "weapon",
+   "Madness_Kukrii",
+   "name"
+  ],
+  "301088": [
+   "weapon",
+   "Madness_FangBlade",
+   "name"
+  ],
+  "301089": [
+   "weapon",
+   "Madness_Keris",
+   "name"
+  ],
+  "301090": [
+   "weapon",
+   "Madness_Arabian_Sword",
+   "name"
+  ],
+  "301092": [
+   "weapon",
+   "Madness_GH5007",
+   "name"
+  ],
+  "301093": [
+   "weapon",
+   "GH5007_Brazil",
+   "name"
+  ],
+  "301094": [
+   "weapon",
+   "FangBlade_PBST2015",
+   "name"
+  ],
+  "301095": [
+   "weapon",
+   "GH5007_4Game",
+   "name"
+  ],
+  "301096": [
+   "weapon",
+   "GH5007_4Game-SE",
+   "name"
+  ],
+  "301097": [
+   "weapon",
+   "HairDryer_Indonesia",
+   "name"
+  ],
+  "301098": [
+   "weapon",
+   "HairDryer",
+   "name"
+  ],
+  "301100": [
+   "weapon",
+   "HairDryer_Indonesia_Dummy",
+   "name"
+  ],
+  "301101": [
+   "weapon",
+   "Fangblade_PBNC2015",
+   "name"
+  ],
+  "301103": [
+   "weapon",
+   "Bamboo-Runcing",
+   "name"
+  ],
+  "301104": [
+   "weapon",
+   "Keris_PBIC2015",
+   "name"
+  ],
+  "301105": [
+   "weapon",
+   "Cutlass_Dummy",
+   "name"
+  ],
+  "301106": [
+   "weapon",
+   "GH5007_VeraCruz",
+   "name"
+  ],
+  "301108": [
+   "weapon",
+   "FangBlade_Cobra",
+   "name"
+  ],
+  "301110": [
+   "weapon",
+   "BallisticKnife_SPY",
+   "name"
+  ],
+  "301111": [
+   "weapon",
+   "BallisticKnife_SPY_Dummy",
+   "formula"
+  ],
+  "301112": [
+   "weapon",
+   "BallisticKnife_SPY_I3S",
+   "name"
+  ],
+  "301113": [
+   "weapon",
+   "FangBlade_LATIN5",
+   "name"
+  ],
+  "301115": [
+   "weapon",
+   "BallisticKnife_Deluxe_Dummy",
+   "formula"
+  ],
+  "301117": [
+   "weapon",
+   "M-7_BallisticKnife_DELUXE",
+   "name"
+  ],
+  "301118": [
+   "weapon",
+   "M-7_BallisticKnife_SPY",
+   "name"
+  ],
+  "301119": [
+   "weapon",
+   "GH5007_DFN",
+   "name"
+  ],
+  "301120": [
+   "weapon",
+   "Monkey_Hammer",
+   "name"
+  ],
+  "301121": [
+   "weapon",
+   "Monkey_Hammer_Dummy",
+   "name"
+  ],
+  "301122": [
+   "weapon",
+   "ButterflyKnife",
+   "name"
+  ],
+  "301123": [
+   "weapon",
+   "FangBlade_Arena-Normal",
+   "name"
+  ],
+  "301124": [
+   "weapon",
+   "FangBlade_Arena-Deluxe",
+   "name"
+  ],
+  "301125": [
+   "weapon",
+   "M-9_VeraCruz2016",
+   "name"
+  ],
+  "301127": [
+   "weapon",
+   "FangBlade_Sakura",
+   "name"
+  ],
+  "301130": [
+   "weapon",
+   "FangBlade_PBGC",
+   "name"
+  ],
+  "301131": [
+   "weapon",
+   "Keris_GSL2016",
+   "name"
+  ],
+  "301132": [
+   "weapon",
+   "FangBlade_Tiger-Normal",
+   "name"
+  ],
+  "301133": [
+   "weapon",
+   "FangBlade_Tiger-Deluxe",
+   "name"
+  ],
+  "301136": [
+   "weapon",
+   "FangBlade_Dragon",
+   "name"
+  ],
+  "301138": [
+   "weapon",
+   "GH5007_PBWC",
+   "name"
+  ],
+  "301139": [
+   "weapon",
+   "Kukrii_Mummy",
+   "name"
+  ],
+  "301140": [
+   "weapon",
+   "MiniAxe_Poison",
+   "name"
+  ],
+  "301141": [
+   "weapon",
+   "MiniAxe_Dummy_Poison",
+   "name"
+  ],
+  "301142": [
+   "weapon",
+   "M-7_MiniAxe_Poison",
+   "name"
+  ],
+  "301143": [
+   "weapon",
+   "Kukrii_Poison",
+   "name"
+  ],
+  "301144": [
+   "weapon",
+   "Keris_ID_1stAnni",
+   "name"
+  ],
+  "301145": [
+   "weapon",
+   "GH5007_Strike",
+   "name"
+  ],
+  "301146": [
+   "weapon",
+   "Death_Scythe_Demonic",
+   "name"
+  ],
+  "301147": [
+   "weapon",
+   "Karambit",
+   "name"
+  ],
+  "301148": [
+   "weapon",
+   "Ladle_Lebaran2016",
+   "name"
+  ],
+  "301149": [
+   "weapon",
+   "FangBlade_Alien",
+   "name"
+  ],
+  "301150": [
+   "weapon",
+   "GH5007_Newborn2016",
+   "name"
+  ],
+  "301151": [
+   "weapon",
+   "BallisticKnife_Russian_Normal",
+   "name"
+  ],
+  "301153": [
+   "weapon",
+   "BallisticKnife_Russian_Deluxe",
+   "name"
+  ],
+  "301155": [
+   "weapon",
+   "GH5007_PBIC2016",
+   "name"
+  ],
+  "301156": [
+   "weapon",
+   "M-7_BallisticKnife_RU_Normal",
+   "formula"
+  ],
+  "301157": [
+   "weapon",
+   "M-7_BallisticKnife_RU_Deluxe",
+   "formula"
+  ],
+  "301158": [
+   "weapon",
+   "Sword_TH",
+   "name"
+  ],
+  "301159": [
+   "weapon",
+   "FangBlade_DarkSteel",
+   "name"
+  ],
+  "301160": [
+   "weapon",
+   "Arabian_Sword_PBNC2016",
+   "name"
+  ],
+  "301161": [
+   "weapon",
+   "FangBlade_Supreme",
+   "name"
+  ],
+  "301162": [
+   "weapon",
+   "Halloween_Hammer",
+   "name"
+  ],
+  "301163": [
+   "weapon",
+   "Halloween_Hammer_DUMMY",
+   "name"
+  ],
+  "315001": [
+   "weapon",
+   "M-9_Dual",
+   "name"
+  ],
+  "315002": [
+   "weapon",
+   "M-9_Dual_D",
+   "name"
+  ],
+  "315003": [
+   "weapon",
+   "Dual_BoneKnife",
+   "name"
+  ],
+  "315004": [
+   "weapon",
+   "M-9_Dual_EV",
+   "name"
+  ],
+  "315005": [
+   "weapon",
+   "Dual_BoneKnife_GRS",
+   "name"
+  ],
+  "315006": [
+   "weapon",
+   "M-9_Dual_PBNC",
+   "name"
+  ],
+  "315007": [
+   "weapon",
+   "Dual_BoneKnife_GRS2",
+   "name"
+  ],
+  "315009": [
+   "weapon",
+   "Dual_BoneKnife_PBNC2015",
+   "name"
+  ],
+  "315010": [
+   "weapon",
+   "Dual_BoneKnife_Camo-Soldier",
+   "name"
+  ],
+  "315011": [
+   "weapon",
+   "M-9_Dual_VeraCruz2016",
+   "name"
+  ],
+  "315012": [
+   "weapon",
+   "Dual_Kunai_Serpent",
+   "name"
+  ],
+  "315013": [
+   "weapon",
+   "Dual_BoneKnife_Skeleton",
+   "name"
+  ],
+  "315014": [
+   "weapon",
+   "Dual_BoneKnife_E-Sports2",
+   "name"
+  ],
+  "315015": [
+   "weapon",
+   "Dual_Sword_TH",
+   "name"
+  ],
+  "323001": [
+   "weapon",
+   "BareFist",
+   "name"
+  ],
+  "323002": [
+   "weapon",
+   "BlackKnuckle",
+   "name"
+  ],
+  "323003": [
+   "weapon",
+   "BrassKnuckle",
+   "name"
+  ],
+  "323004": [
+   "weapon",
+   "SilverKnuckle",
+   "name"
+  ],
+  "323005": [
+   "weapon",
+   "PumpkinKnuckle",
+   "name"
+  ],
+  "323006": [
+   "weapon",
+   "SpikedKnuckle",
+   "name"
+  ],
+  "323007": [
+   "weapon",
+   "BallockKnuckle",
+   "name"
+  ],
+  "323009": [
+   "weapon",
+   "GarenaKnuckle",
+   "name"
+  ],
+  "323010": [
+   "weapon",
+   "ZombieToothKnuckle",
+   "name"
+  ],
+  "407001": [
+   "weapon",
+   "K-400",
+   "name"
+  ],
+  "407002": [
+   "weapon",
+   "C5",
+   "name"
+  ],
+  "407003": [
+   "weapon",
+   "C5_D",
+   "name"
+  ],
+  "407004": [
+   "weapon",
+   "K-413",
+   "name"
+  ],
+  "407005": [
+   "weapon",
+   "ChocolateGrenade",
+   "name"
+  ],
+  "407006": [
+   "weapon",
+   "C5_EV",
+   "name"
+  ],
+  "407007": [
+   "weapon",
+   "K-413_Gold",
+   "name"
+  ],
+  "407008": [
+   "weapon",
+   "Ketupat_Grenade",
+   "name"
+  ],
+  "407009": [
+   "weapon",
+   "CANDYGRENADE",
+   "name"
+  ],
+  "407010": [
+   "weapon",
+   "Fanoos_Grenade",
+   "name"
+  ],
+  "407011": [
+   "weapon",
+   "Maamoul_Grenade",
+   "name"
+  ],
+  "407012": [
+   "weapon",
+   "Decoy_bomb",
+   "name"
+  ],
+  "407013": [
+   "weapon",
+   "M14_Mine",
+   "name"
+  ],
+  "407014": [
+   "weapon",
+   "K-479",
+   "name"
+  ],
+  "407015": [
+   "weapon",
+   "K-400_Easter",
+   "name"
+  ],
+  "407016": [
+   "weapon",
+   "Football_bomb",
+   "name"
+  ],
+  "407017": [
+   "weapon",
+   "K-413_T",
+   "name"
+  ],
+  "407018": [
+   "weapon",
+   "M14_Mine_D",
+   "name"
+  ],
+  "407019": [
+   "weapon",
+   "K-413_Traditional",
+   "name"
+  ],
+  "407020": [
+   "weapon",
+   "K-413_PC_Cafe",
+   "name"
+  ],
+  "407021": [
+   "weapon",
+   "ShuttleCock_Grenade",
+   "name"
+  ],
+  "407022": [
+   "weapon",
+   "Sepaktakraw_Grenade",
+   "name"
+  ],
+  "407023": [
+   "weapon",
+   "M18A1_Claymore",
+   "name"
+  ],
+  "407024": [
+   "weapon",
+   "K-413_GW",
+   "name"
+  ],
+  "407025": [
+   "weapon",
+   "K-400_Goat",
+   "name"
+  ],
+  "407026": [
+   "weapon",
+   "Decoy_bomb",
+   "formula"
+  ],
+  "407027": [
+   "weapon",
+   "M14_Mine",
+   "formula"
+  ],
+  "407028": [
+   "weapon",
+   "K-479",
+   "formula"
+  ],
+  "407030": [
+   "weapon",
+   "K-400_Easter",
+   "formula"
+  ],
+  "407033": [
+   "weapon",
+   "Football_bomb",
+   "formula"
+  ],
+  "407034": [
+   "weapon",
+   "K-413_T",
+   "formula"
+  ],
+  "407035": [
+   "weapon",
+   "M14_Mine_D",
+   "formula"
+  ],
+  "407036": [
+   "weapon",
+   "K-413_Traditional",
+   "formula"
+  ],
+  "407037": [
+   "weapon",
+   "K-413_PC_Cafe",
+   "formula"
+  ],
+  "407038": [
+   "weapon",
+   "ShuttleCock_Grenade",
+   "formula"
+  ],
+  "407039": [
+   "weapon",
+   "Sepaktakraw_Grenade",
+   "formula"
+  ],
+  "407040": [
+   "weapon",
+   "M18A1_Claymore",
+   "formula"
+  ],
+  "407041": [
+   "weapon",
+   "K-413_GW",
+   "formula"
+  ],
+  "407042": [
+   "weapon",
+   "K-400_Goat",
+   "formula"
+  ],
+  "407044": [
+   "weapon",
+   "C5_CNY-2015",
+   "name"
+  ],
+  "407045": [
+   "weapon",
+   "K-413_Chocolate",
+   "name"
+  ],
+  "407046": [
+   "weapon",
+   "K-413_Redemption",
+   "name"
+  ],
+  "407047": [
+   "weapon",
+   "K-413_4Game",
+   "name"
+  ],
+  "407048": [
+   "weapon",
+   "K-413_4Game-SE",
+   "name"
+  ],
+  "407049": [
+   "weapon",
+   "Snowman_Grenade",
+   "name"
+  ],
+  "407050": [
+   "weapon",
+   "WaterBomb",
+   "name"
+  ],
+  "407051": [
+   "weapon",
+   "K-413_Tiger-Normal",
+   "name"
+  ],
+  "407052": [
+   "weapon",
+   "K-413_Tiger-Deluxe",
+   "name"
+  ],
+  "407053": [
+   "weapon",
+   "C5_PBWC",
+   "name"
+  ],
+  "407054": [
+   "weapon",
+   "K-400_Mummy",
+   "name"
+  ],
+  "407055": [
+   "weapon",
+   "K-413_BlueDiamond",
+   "name"
+  ],
+  "407056": [
+   "weapon",
+   "K-400_Alien",
+   "name"
+  ],
+  "407057": [
+   "weapon",
+   "K-413_Puzzle",
+   "name"
+  ],
+  "407058": [
+   "weapon",
+   "K-413_Russian_Normal",
+   "name"
+  ],
+  "407059": [
+   "weapon",
+   "K-413_Russian_Deluxe",
+   "name"
+  ],
+  "407061": [
+   "weapon",
+   "C5_PBIC2016",
+   "name"
+  ],
+  "407062": [
+   "weapon",
+   "C5_PBNC2016",
+   "name"
+  ],
+  "411001": [
+   "weapon",
+   "GrenadeShell",
+   "name"
+  ],
+  "411002": [
+   "weapon",
+   "GrenadeShell_Boss",
+   "name"
+  ],
+  "411003": [
+   "weapon",
+   "RPG7ShellForDino",
+   "name"
+  ],
+  "411004": [
+   "weapon",
+   "RPG7Shell",
+   "name"
+  ],
+  "411005": [
+   "weapon",
+   "GrenadeShell_M4_SR16_LV3",
+   "name"
+  ],
+  "411006": [
+   "weapon",
+   "GrenadeShell_M4_SR16_FC",
+   "name"
+  ],
+  "411007": [
+   "weapon",
+   "GrenadeShell_FAMAS_G2_M203",
+   "name"
+  ],
+  "411008": [
+   "weapon",
+   "GrenadeShell_AK_FC",
+   "name"
+  ],
+  "411010": [
+   "weapon",
+   "GrenadeShell_Arrow",
+   "formula"
+  ],
+  "411011": [
+   "weapon",
+   "GrenadeShell_HK69",
+   "name"
+  ],
+  "411012": [
+   "weapon",
+   "GrenadeShell_M79",
+   "name"
+  ],
+  "411014": [
+   "weapon",
+   "GrenadeShell_GL_06",
+   "name"
+  ],
+  "411015": [
+   "weapon",
+   "GrenadeShell_K201",
+   "name"
+  ],
+  "411016": [
+   "weapon",
+   "RPG7ShellForMode",
+   "name"
+  ],
+  "411017": [
+   "weapon",
+   "GrenadeShell_SCAR-L_FC",
+   "name"
+  ],
+  "411019": [
+   "weapon",
+   "GrenadeShell_AK_FC_P",
+   "name"
+  ],
+  "411025": [
+   "weapon",
+   "GrenadeShell_GL_06_CNY2015",
+   "name"
+  ],
+  "411026": [
+   "weapon",
+   "GrenadeShell_EVO3",
+   "name"
+  ],
+  "411027": [
+   "weapon",
+   "GrenadeShell_EVO3_Gold",
+   "name"
+  ],
+  "411028": [
+   "weapon",
+   "GrenadeShell_SCAR-L_FC_PBNC2015_US",
+   "name"
+  ],
+  "411029": [
+   "weapon",
+   "GrenadeShell_AK_12",
+   "name"
+  ],
+  "411030": [
+   "weapon",
+   "GrenadeShell_AK_12_Gold",
+   "name"
+  ],
+  "411032": [
+   "weapon",
+   "GrenadeShell_AK_12_Gorgeous",
+   "name"
+  ],
+  "507002": [
+   "weapon",
+   "SmokeGrenade",
+   "formula"
+  ],
+  "507003": [
+   "weapon",
+   "FlashBang",
+   "formula"
+  ],
+  "507005": [
+   "weapon",
+   "WP_SmokeGrenade",
+   "formula"
+  ],
+  "507007": [
+   "weapon",
+   "WP_SmokeGrenade_D",
+   "formula"
+  ],
+  "507010": [
+   "weapon",
+   "SmokeGrenadePlus",
+   "formula"
+  ],
+  "507011": [
+   "weapon",
+   "Medical_Kit",
+   "formula"
+  ],
+  "507012": [
+   "weapon",
+   "WP_SmokeGrenadePlus",
+   "formula"
+  ],
+  "507013": [
+   "weapon",
+   "FlashBangPlus",
+   "formula"
+  ],
+  "507014": [
+   "weapon",
+   "Halloween_Medical_Kit",
+   "formula"
+  ],
+  "507015": [
+   "weapon",
+   "Chocolate_Kit",
+   "formula"
+  ],
+  "507017": [
+   "weapon",
+   "WP_SmokeGrenade_EV",
+   "formula"
+  ],
+  "507021": [
+   "weapon",
+   "Medical_Kit_Lotus",
+   "formula"
+  ],
+  "507022": [
+   "weapon",
+   "WP_SmokeGrenadePlus_P",
+   "formula"
+  ],
+  "507025": [
+   "weapon",
+   "Medical_Kit_Opor_Ayam",
+   "formula"
+  ],
+  "507029": [
+   "weapon",
+   "Medical_Kit_PBNC5",
+   "formula"
+  ],
+  "507031": [
+   "weapon",
+   "Medical_Kit_Easter",
+   "formula"
+  ],
+  "507032": [
+   "weapon",
+   "Medical_Kit_Lotus2",
+   "formula"
+  ],
+  "507043": [
+   "weapon",
+   "Medical_Kit_Kurma",
+   "formula"
+  ],
+  "507046": [
+   "weapon",
+   "Medical_Kit_PBNC6",
+   "formula"
+  ],
+  "507048": [
+   "weapon",
+   "Medical_Kit_Pigeon",
+   "formula"
+  ],
+  "507051": [
+   "weapon",
+   "Medical_Kit_PBNC2015",
+   "formula"
+  ],
+  "507059": [
+   "weapon",
+   "SmokeGrenade_Pink",
+   "formula"
+  ],
+  "507060": [
+   "weapon",
+   "SmokeGrenade_Blue",
+   "formula"
+  ],
+  "507061": [
+   "weapon",
+   "SmokeGrenade_Yellow",
+   "formula"
+  ],
+  "508001": [
+   "weapon",
+   "SmokeGrenade",
+   "name"
+  ],
+  "508002": [
+   "weapon",
+   "FlashBang",
+   "name"
+  ],
+  "508003": [
+   "weapon",
+   "SmokeGrenadePlus",
+   "name"
+  ],
+  "508004": [
+   "weapon",
+   "FlashBangPlus",
+   "name"
+  ],
+  "508005": [
+   "weapon",
+   "SmokeGrenade_Pink",
+   "name"
+  ],
+  "508006": [
+   "weapon",
+   "SmokeGrenade_Blue",
+   "name"
+  ],
+  "508007": [
+   "weapon",
+   "SmokeGrenade_Yellow",
+   "name"
+  ],
+  "527001": [
+   "weapon",
+   "WP_SmokeGrenade",
+   "name"
+  ],
+  "527002": [
+   "weapon",
+   "WP_SmokeGrenade_D",
+   "name"
+  ],
+  "527003": [
+   "weapon",
+   "WP_SmokeGrenadePlus",
+   "name"
+  ],
+  "527004": [
+   "weapon",
+   "WP_SmokeGrenade_EV",
+   "name"
+  ],
+  "527005": [
+   "weapon",
+   "WP_SmokeGrenadePlus_P",
+   "name"
+  ],
+  "528001": [
+   "weapon",
+   "Medical_Kit",
+   "name"
+  ],
+  "528002": [
+   "weapon",
+   "Halloween_Medical_Kit",
+   "name"
+  ],
+  "528003": [
+   "weapon",
+   "Chocolate_Kit",
+   "name"
+  ],
+  "528004": [
+   "weapon",
+   "Medical_Kit_Lotus",
+   "name"
+  ],
+  "528005": [
+   "weapon",
+   "Medical_Kit_Opor_Ayam",
+   "name"
+  ],
+  "528006": [
+   "weapon",
+   "Medical_Kit_PBNC5",
+   "name"
+  ],
+  "528007": [
+   "weapon",
+   "Medical_Kit_Easter",
+   "name"
+  ],
+  "528008": [
+   "weapon",
+   "Medical_Kit_Lotus2",
+   "name"
+  ],
+  "528009": [
+   "weapon",
+   "Medical_Kit_Kurma",
+   "name"
+  ],
+  "528010": [
+   "weapon",
+   "Medical_Kit_PBNC6",
+   "name"
+  ],
+  "528011": [
+   "weapon",
+   "Medical_Kit_Pigeon",
+   "name"
+  ],
+  "528012": [
+   "weapon",
+   "Medical_Kit_PBNC2015",
+   "name"
+  ],
+  "601001": [
+   "chara",
+   "REBEL_Male",
+   "alias [INFERIDO]"
+  ],
+  "601003": [
+   "chara",
+   "REBEL_Female",
+   "alias [INFERIDO]"
+  ],
+  "601005": [
+   "chara",
+   "REBEL_ViperRed",
+   "alias [INFERIDO]"
+  ],
+  "601007": [
+   "chara",
+   "D-Fox",
+   "name"
+  ],
+  "601012": [
+   "chara",
+   "Normal_D-Fox",
+   "name"
+  ],
+  "601015": [
+   "chara",
+   "REBEL_ViperRed",
+   "name"
+  ],
+  "601016": [
+   "chara",
+   "Reinforced_REBEL_Male",
+   "name"
+  ],
+  "601018": [
+   "chara",
+   "Reinforced_REBEL_Female",
+   "name"
+  ],
+  "601020": [
+   "chara",
+   "Reinforced_D-Fox",
+   "name"
+  ],
+  "601022": [
+   "chara",
+   "Reinforced_ViperRed",
+   "name"
+  ],
+  "601024": [
+   "chara",
+   "Reinforced_Bella",
+   "name"
+  ],
+  "601026": [
+   "chara",
+   "Reinforced_Combo_D-Fox",
+   "name"
+  ],
+  "601028": [
+   "chara",
+   "Reinforced_Combo_ViperRed",
+   "name"
+  ],
+  "601030": [
+   "chara",
+   "REBEL_Male_GRS",
+   "name"
+  ],
+  "601032": [
+   "chara",
+   "REBEL_Female_GRS",
+   "name"
+  ],
+  "601037": [
+   "chara",
+   "REBEL_Soccer",
+   "name"
+  ],
+  "601038": [
+   "chara",
+   "REBEL_ViperShadow",
+   "name"
+  ],
+  "601068": [
+   "chara",
+   "REBEL_Viper_Kopassus",
+   "name"
+  ],
+  "602002": [
+   "chara",
+   "SWAT_Male",
+   "alias [INFERIDO]"
+  ],
+  "602004": [
+   "chara",
+   "SWAT_Female",
+   "alias [INFERIDO]"
+  ],
+  "602006": [
+   "chara",
+   "SWAT_Male",
+   "itemNames [INFERIDO]"
+  ],
+  "602008": [
+   "chara",
+   "Leopard",
+   "name"
+  ],
+  "602009": [
+   "chara",
+   "Hide",
+   "name"
+  ],
+  "602011": [
+   "chara",
+   "Chou",
+   "name"
+  ],
+  "602013": [
+   "chara",
+   "Normal_Leopard",
+   "name"
+  ],
+  "602014": [
+   "chara",
+   "Normal_Hide",
+   "name"
+  ],
+  "602017": [
+   "chara",
+   "Reinforced_SWAT_Male",
+   "name"
+  ],
+  "602019": [
+   "chara",
+   "Reinforced_SWAT_Female",
+   "name"
+  ],
+  "602021": [
+   "chara",
+   "Reinforced_Leopard",
+   "name"
+  ],
+  "602023": [
+   "chara",
+   "Reinforced_Hide",
+   "name"
+  ],
+  "602025": [
+   "chara",
+   "Reinforced_Chou",
+   "name"
+  ],
+  "602027": [
+   "chara",
+   "Reinforced_Combo_Leopard",
+   "name"
+  ],
+  "602029": [
+   "chara",
+   "Reinforced_Combo_Hide",
+   "name"
+  ],
+  "602031": [
+   "chara",
+   "SWAT_Male_GRS",
+   "name"
+  ],
+  "602033": [
+   "chara",
+   "SWAT_Female_GRS",
+   "name"
+  ],
+  "602034": [
+   "chara",
+   "Hide_Kopassus",
+   "name"
+  ],
+  "602035": [
+   "chara",
+   "Leopard_Bope",
+   "name"
+  ],
+  "602036": [
+   "chara",
+   "Hide_Soccer",
+   "name"
+  ],
+  "602039": [
+   "chara",
+   "Hide_Recon",
+   "name"
+  ],
+  "602058": [
+   "chara",
+   "SWAT_Female_Madness",
+   "name"
+  ],
+  "602059": [
+   "chara",
+   "SWAT_Male_Madness",
+   "name"
+  ],
+  "602060": [
+   "chara",
+   "Hide_Madness",
+   "name"
+  ],
+  "602061": [
+   "chara",
+   "Leopard_Madness",
+   "name"
+  ],
+  "602062": [
+   "chara",
+   "SWAT_Male_Madness_Sales",
+   "name"
+  ],
+  "602063": [
+   "chara",
+   "SWAT_Female_Madness_Sales",
+   "name"
+  ],
+  "602064": [
+   "chara",
+   "Hide_Madness_Sales",
+   "name"
+  ],
+  "602065": [
+   "chara",
+   "Leopard_Madness_Sales",
+   "name"
+  ],
+  "602067": [
+   "chara",
+   "Hide_Black",
+   "name"
+  ],
+  "700038": [
+   "mask",
+   "Pumpkin",
+   "name [INFERIDO]"
+  ],
+  "700039": [
+   "mask",
+   "Tiger",
+   "name [INFERIDO]"
+  ],
+  "700122": [
+   "mask",
+   "Skull",
+   "name [INFERIDO]"
+  ],
+  "700128": [
+   "mask",
+   "Red_Devil",
+   "name [INFERIDO]"
+  ],
+  "700179": [
+   "mask",
+   "Gatotkaca",
+   "name [INFERIDO]"
+  ],
+  "700180": [
+   "mask",
+   "Gatotkaca_Gold",
+   "name [INFERIDO]"
+  ],
+  "700191": [
+   "head",
+   "Boonie-Hat_Camo-Soldier",
+   "name [INFERIDO]"
+  ],
+  "800015": [
+   "mask",
+   "BR_Determinado",
+   "name [INFERIDO]"
+  ],
+  "800016": [
+   "mask",
+   "BR_Fuuu",
+   "name [INFERIDO]"
+  ],
+  "800017": [
+   "mask",
+   "BR_Troll",
+   "name [INFERIDO]"
+  ],
+  "800020": [
+   "mask",
+   "Frail_Skull",
+   "name [INFERIDO]"
+  ],
+  "800021": [
+   "mask",
+   "Frail_Skull_Gold",
+   "name [INFERIDO]"
+  ],
+  "999002": [
+   "weapon",
+   "Ammo",
+   "name"
+  ],
+  "1600001": [
+   "item",
+   "XpPlus110",
+   "name"
+  ],
+  "1600002": [
+   "item",
+   "XpPlus130",
+   "name"
+  ],
+  "1600003": [
+   "item",
+   "XpPlus150",
+   "name"
+  ],
+  "1600004": [
+   "item",
+   "PtPlus130",
+   "name"
+  ],
+  "1600005": [
+   "item",
+   "ColorClan",
+   "name"
+  ],
+  "1600006": [
+   "item",
+   "ColorNick",
+   "name"
+  ],
+  "1600007": [
+   "item",
+   "ShortRespawn30",
+   "name"
+  ],
+  "1600008": [
+   "item",
+   "AmmoUp",
+   "name"
+  ],
+  "1600009": [
+   "item",
+   "FakeRank",
+   "name"
+  ],
+  "1600010": [
+   "item",
+   "DisguiseNick",
+   "name"
+  ],
+  "1600011": [
+   "item",
+   "FreeMove",
+   "name"
+  ],
+  "1600012": [
+   "item",
+   "ClanXpPlus150",
+   "name"
+  ],
+  "1600013": [
+   "item",
+   "ChangeCustomCrosshair",
+   "name"
+  ],
+  "1600014": [
+   "item",
+   "ColorCrosshair",
+   "name"
+  ],
+  "1600015": [
+   "item",
+   "ColorChatting",
+   "name"
+  ],
+  "1600017": [
+   "item",
+   "GetDroppedWeapon",
+   "name"
+  ],
+  "1600018": [
+   "item",
+   "XpPlusX2_12PM",
+   "name"
+  ],
+  "1600019": [
+   "item",
+   "XpPlusX2_3PM",
+   "name"
+  ],
+  "1600020": [
+   "item",
+   "XpPlusX2_6PM",
+   "name"
+  ],
+  "1600021": [
+   "item",
+   "XpPlusX2_9PM",
+   "name"
+  ],
+  "1600022": [
+   "item",
+   "PtPlusX2_12PM",
+   "name"
+  ],
+  "1600023": [
+   "item",
+   "PtPlusX2_3PM",
+   "name"
+  ],
+  "1600024": [
+   "item",
+   "PtPlusX2_6PM",
+   "name"
+  ],
+  "1600025": [
+   "item",
+   "PtPlusX2_9PM",
+   "name"
+  ],
+  "1600026": [
+   "item",
+   "QuickChangeWeapon",
+   "name"
+  ],
+  "1600027": [
+   "item",
+   "QuickChangeMagazine",
+   "name"
+  ],
+  "1600028": [
+   "item",
+   "MegaHP10",
+   "name"
+  ],
+  "1600029": [
+   "item",
+   "IncreaseInvincibleTime",
+   "name"
+  ],
+  "1600030": [
+   "item",
+   "BulletProofVest",
+   "name"
+  ],
+  "1600031": [
+   "item",
+   "FullMetalJacketAmmo",
+   "name"
+  ],
+  "1600032": [
+   "item",
+   "HollowPointAmmo",
+   "name"
+  ],
+  "1600033": [
+   "item",
+   "AntiFlashBangMask",
+   "name"
+  ],
+  "1600034": [
+   "item",
+   "C4SpeedKit",
+   "name"
+  ],
+  "1600035": [
+   "item",
+   "IncreaseGrenadeSlot",
+   "name"
+  ],
+  "1600036": [
+   "item",
+   "JacketedHollowPointAmmo",
+   "name"
+  ],
+  "1600037": [
+   "item",
+   "XpPlus200",
+   "name"
+  ],
+  "1600038": [
+   "item",
+   "PtPlus200",
+   "name"
+  ],
+  "1600040": [
+   "item",
+   "MegaHP5",
+   "name"
+  ],
+  "1600044": [
+   "item",
+   "BulletProofVestPlus",
+   "name"
+  ],
+  "1600062": [
+   "item",
+   "XpPlus200_0AM~6AM",
+   "name"
+  ],
+  "1600063": [
+   "item",
+   "XpPlus200_6AM~12PM",
+   "name"
+  ],
+  "1600064": [
+   "item",
+   "ShortRespawn50",
+   "name"
+  ],
+  "1600065": [
+   "item",
+   "BulletProofVestGM",
+   "name"
+  ],
+  "1600077": [
+   "item",
+   "ShortRespawn20",
+   "name"
+  ],
+  "1600078": [
+   "item",
+   "HollowPointAmmoPlus",
+   "name"
+  ],
+  "1600079": [
+   "item",
+   "MetalBulletProofVest",
+   "name"
+  ],
+  "1600080": [
+   "item",
+   "ShortRespawn100",
+   "name"
+  ],
+  "1600109": [
+   "item",
+   "LicenseSilver",
+   "name"
+  ],
+  "1600110": [
+   "item",
+   "LicenseGold",
+   "name"
+  ],
+  "1600119": [
+   "item",
+   "PtPlus150",
+   "name"
+  ],
+  "1600159": [
+   "item",
+   "PtPlus130_EV",
+   "name"
+  ],
+  "1600160": [
+   "item",
+   "XpPlus130_EV",
+   "name"
+  ],
+  "1600161": [
+   "item",
+   "ClanXpPlus150_EV",
+   "name"
+  ],
+  "1600162": [
+   "item",
+   "FreeMove_EV",
+   "name"
+  ],
+  "1600163": [
+   "item",
+   "ShortRespawn30_EV",
+   "name"
+  ],
+  "1600164": [
+   "item",
+   "ShortRespawn20_EV",
+   "name"
+  ],
+  "1600165": [
+   "item",
+   "QuickChangeWeapon_EV",
+   "name"
+  ],
+  "1600166": [
+   "item",
+   "QuickChangeMagazine_EV",
+   "name"
+  ],
+  "1600167": [
+   "item",
+   "IncreaseInvincibleTime_EV",
+   "name"
+  ],
+  "1600168": [
+   "item",
+   "GetDroppedWeapon_EV",
+   "name"
+  ],
+  "1600169": [
+   "item",
+   "HollowPointAmmo_EV",
+   "name"
+  ],
+  "1600170": [
+   "item",
+   "FullMetalJacketAmmo_EV",
+   "name"
+  ],
+  "1600181": [
+   "item",
+   "Captain_Armband",
+   "name"
+  ],
+  "1600182": [
+   "item",
+   "ShortRespawn100_EV",
+   "name"
+  ],
+  "1600183": [
+   "item",
+   "ShortRespawn50_GW",
+   "name"
+  ],
+  "1600185": [
+   "item",
+   "AmmoUp_GW",
+   "name"
+  ],
+  "1600186": [
+   "item",
+   "FakeRankAprilFool",
+   "name"
+  ],
+  "1600191": [
+   "item",
+   "IncreaseThrowing2Slot",
+   "name"
+  ],
+  "1800039": [
+   "item",
+   "GigaBomb",
+   "name"
+  ],
+  "1800041": [
+   "item",
+   "Defcon1",
+   "name"
+  ],
+  "1800042": [
+   "item",
+   "Defcon2",
+   "name"
+  ],
+  "1800043": [
+   "item",
+   "Defcon3",
+   "name"
+  ],
+  "1800045": [
+   "item",
+   "WeaponCrate2",
+   "name"
+  ],
+  "1800046": [
+   "item",
+   "MiniBomb",
+   "name"
+  ],
+  "1800047": [
+   "item",
+   "ChangeNick",
+   "name"
+  ],
+  "1800048": [
+   "item",
+   "ClearHistory",
+   "name"
+  ],
+  "1800049": [
+   "item",
+   "ClearScore",
+   "name"
+  ],
+  "1800050": [
+   "item",
+   "ClearEscape",
+   "name"
+  ],
+  "1800051": [
+   "item",
+   "ChangeClanName",
+   "name"
+  ],
+  "1800052": [
+   "item",
+   "ChangeClanMark",
+   "name"
+  ],
+  "1800053": [
+   "item",
+   "ClearClanHistory",
+   "name"
+  ],
+  "1800054": [
+   "item",
+   "RecordingGame",
+   "name"
+  ],
+  "1800055": [
+   "item",
+   "ClanPersonPlus50",
+   "name"
+  ],
+  "1800056": [
+   "item",
+   "ClearClanPoint",
+   "name"
+  ],
+  "1800058": [
+   "item",
+   "MegaBomb",
+   "name"
+  ],
+  "1800059": [
+   "item",
+   "WeaponCrate",
+   "name"
+  ],
+  "1800060": [
+   "item",
+   "SurvivalKit",
+   "name"
+  ],
+  "1800061": [
+   "item",
+   "MegaBomb_Indo",
+   "name"
+  ],
+  "1800066": [
+   "item",
+   "PointGachapon_I",
+   "name"
+  ],
+  "1800067": [
+   "item",
+   "PointGachapon_II",
+   "name"
+  ],
+  "1800068": [
+   "item",
+   "GigaBox",
+   "name"
+  ],
+  "1800069": [
+   "item",
+   "Swat Kit(Assult) 30Day",
+   "name"
+  ],
+  "1800070": [
+   "item",
+   "Swat Kit(Assult) 7Day",
+   "name"
+  ],
+  "1800071": [
+   "item",
+   "Swat Kit(Support) 7Day",
+   "name"
+  ],
+  "1800072": [
+   "item",
+   "Swat Kit(Support) 30Day",
+   "name"
+  ],
+  "1800073": [
+   "item",
+   "Swat Kit(Infiltration) 7Day",
+   "name"
+  ],
+  "1800074": [
+   "item",
+   "Swat Kit(Infiltration) 30Day",
+   "name"
+  ],
+  "1800075": [
+   "item",
+   "Swat Kit(Combo) 7Day",
+   "name"
+  ],
+  "1800076": [
+   "item",
+   "Swat Kit(Combo) 30Day",
+   "name"
+  ],
+  "1800081": [
+   "item",
+   "MegaBomb_Russia",
+   "name"
+  ],
+  "1800082": [
+   "item",
+   "ItemBox1",
+   "name"
+  ],
+  "1800083": [
+   "item",
+   "ItemBox2",
+   "name"
+  ],
+  "1800084": [
+   "item",
+   "Angpao",
+   "name"
+  ],
+  "1800085": [
+   "item",
+   "ViewOtherUserItemInfo",
+   "name"
+  ],
+  "1800086": [
+   "item",
+   "NewM4SupplyKit",
+   "name"
+  ],
+  "1800087": [
+   "item",
+   "GiftBox",
+   "name"
+  ],
+  "1800088": [
+   "item",
+   "RangemasterSupplyKit",
+   "name"
+  ],
+  "1800089": [
+   "item",
+   "RagingBull454SupplyKit",
+   "name"
+  ],
+  "1800090": [
+   "item",
+   "DualUziSupplyKit",
+   "name"
+  ],
+  "1800091": [
+   "item",
+   "Ketupat",
+   "name"
+  ],
+  "1800092": [
+   "item",
+   "RandomMaskSet",
+   "name"
+  ],
+  "1800093": [
+   "item",
+   "RangemasterSupplyKit_3D",
+   "name"
+  ],
+  "1800094": [
+   "item",
+   "RangemasterSupplyKit_7D",
+   "name"
+  ],
+  "1800095": [
+   "item",
+   "RagingBull454SupplyKit_3D",
+   "name"
+  ],
+  "1800096": [
+   "item",
+   "RagingBull454SupplyKit_7D",
+   "name"
+  ],
+  "1800097": [
+   "item",
+   "FamasG2SupplyKit",
+   "name"
+  ],
+  "1800098": [
+   "item",
+   "DualUziSupplyKit_3D",
+   "name"
+  ],
+  "1800099": [
+   "item",
+   "DualUziSupplyKit_7D",
+   "name"
+  ],
+  "1800100": [
+   "item",
+   "DualUziSupplyKit_30D",
+   "name"
+  ],
+  "1800101": [
+   "item",
+   "ValentineChocolate",
+   "name"
+  ],
+  "1800102": [
+   "item",
+   "FamasG2SupplyKit_3D",
+   "name"
+  ],
+  "1800103": [
+   "item",
+   "FamasG2SupplyKit_7D",
+   "name"
+  ],
+  "1800104": [
+   "item",
+   "FamasG2SupplyKit_30D",
+   "name"
+  ],
+  "1800108": [
+   "item",
+   "CheguevaraSupplyKit",
+   "name"
+  ],
+  "1800109": [
+   "item",
+   "LicenseSilver_30D",
+   "name"
+  ],
+  "1800110": [
+   "item",
+   "LicenseGold_30D",
+   "name"
+  ],
+  "1800111": [
+   "item",
+   "ReadyBoxSilver_Latin",
+   "name"
+  ],
+  "1800112": [
+   "item",
+   "ReadyBoxGold_Latin",
+   "name"
+  ],
+  "1800113": [
+   "item",
+   "ReadyBoxNormal_Latin",
+   "name"
+  ],
+  "1800114": [
+   "item",
+   "PrizeMoney_1000",
+   "name"
+  ],
+  "1800115": [
+   "item",
+   "PrizeMoney_10000",
+   "name"
+  ],
+  "1800116": [
+   "item",
+   "PrizeMoney_30000",
+   "name"
+  ],
+  "1800117": [
+   "item",
+   "PrizeMoney_500",
+   "name"
+  ],
+  "1800118": [
+   "item",
+   "PrizeMoney_5000",
+   "name"
+  ],
+  "1800120": [
+   "item",
+   "PointBomb",
+   "name"
+  ],
+  "1800121": [
+   "item",
+   "PointBombPremium",
+   "name"
+  ],
+  "1800122": [
+   "item",
+   "ReadyBoxSilverPrize_Latin",
+   "name"
+  ],
+  "1800123": [
+   "item",
+   "ReadyBoxGoldPrize_Latin",
+   "name"
+  ],
+  "1800124": [
+   "item",
+   "ReadyBoxNormalPrize_Latin",
+   "name"
+  ],
+  "1800125": [
+   "item",
+   "ReadyBoxSilver",
+   "name"
+  ],
+  "1800126": [
+   "item",
+   "ReadyBoxGold",
+   "name"
+  ],
+  "1800127": [
+   "item",
+   "ReadyBoxNormal",
+   "name"
+  ],
+  "1800128": [
+   "item",
+   "PrizeMoney_100",
+   "name"
+  ],
+  "1800129": [
+   "item",
+   "ChristmasBox",
+   "name"
+  ],
+  "1800130": [
+   "item",
+   "GiftBox_North",
+   "name"
+  ],
+  "1800131": [
+   "item",
+   "FacebookBox",
+   "name"
+  ],
+  "1800132": [
+   "item",
+   "RaptrBox",
+   "name"
+  ],
+  "1800133": [
+   "item",
+   "X_FileBox",
+   "name"
+  ],
+  "1800500": [
+   "item",
+   "RandomBox_Gold",
+   "name"
+  ],
+  "1800501": [
+   "item",
+   "RandomBox_Black",
+   "name"
+  ],
+  "1800502": [
+   "item",
+   "Gatotkaca_Box",
+   "name"
+  ],
+  "1800503": [
+   "item",
+   "PresentBox_Latin",
+   "name"
+  ],
+  "1800504": [
+   "item",
+   "RandomBox_Black_Ru",
+   "name"
+  ],
+  "1800505": [
+   "item",
+   "RandomBox_Gold_Ru",
+   "name"
+  ],
+  "1800506": [
+   "item",
+   "DSR-1_RandomBox",
+   "name"
+  ],
+  "1800507": [
+   "item",
+   "Unique_RandomBox",
+   "name"
+  ],
+  "1800508": [
+   "item",
+   "Dual_K-413_RandomBox",
+   "name"
+  ],
+  "1800509": [
+   "item",
+   "NewM4SupplyKit_3D",
+   "name"
+  ],
+  "1800510": [
+   "item",
+   "NewM4SupplyKit_7D",
+   "name"
+  ],
+  "1800511": [
+   "item",
+   "NewM4SupplyKit_30D",
+   "name"
+  ],
+  "1800512": [
+   "item",
+   "AUG_A3_RandomBox",
+   "name"
+  ],
+  "1800513": [
+   "item",
+   "Tournament_Ticket_Silver",
+   "name"
+  ],
+  "1800514": [
+   "item",
+   "Tournament_Ticket_Gold",
+   "name"
+  ],
+  "1800515": [
+   "item",
+   "Tournament_Ticket_Online",
+   "name"
+  ],
+  "1800516": [
+   "item",
+   "SuperBox",
+   "name"
+  ],
+  "1800517": [
+   "item",
+   "PBNC4_SupplyKit",
+   "name"
+  ],
+  "1800518": [
+   "item",
+   "RandomBox_Point",
+   "name"
+  ],
+  "1800519": [
+   "item",
+   "Garena_Gacha_A",
+   "name"
+  ],
+  "1800520": [
+   "item",
+   "Garena_Gacha_B",
+   "name"
+  ],
+  "1800521": [
+   "item",
+   "Ramadan_Randombox",
+   "name"
+  ],
+  "1800522": [
+   "item",
+   "SuperBox_ID",
+   "name"
+  ],
+  "1800523": [
+   "item",
+   "Garena_Gacha_C",
+   "name"
+  ],
+  "1800524": [
+   "item",
+   "AK_RandomBox_Elite",
+   "name"
+  ],
+  "1800525": [
+   "item",
+   "M4_RandomBox_Elite",
+   "name"
+  ],
+  "1800526": [
+   "item",
+   "PBIC2012_Randombox",
+   "name"
+  ],
+  "1800527": [
+   "item",
+   "GoldenBox_TR",
+   "name"
+  ],
+  "1800528": [
+   "item",
+   "GRS_Supply_Kit_A",
+   "name"
+  ],
+  "1800529": [
+   "item",
+   "GRS_Supply_Kit_B",
+   "name"
+  ],
+  "1800530": [
+   "item",
+   "Elite_Gacha_TH_Assault",
+   "name"
+  ],
+  "1800531": [
+   "item",
+   "Garena_Gacha_D",
+   "name"
+  ],
+  "1800532": [
+   "item",
+   "CrossoverSupplykit",
+   "name"
+  ],
+  "1800533": [
+   "item",
+   "FriendshipBox",
+   "name"
+  ],
+  "1800534": [
+   "item",
+   "BOB_Gacha_TH",
+   "name"
+  ],
+  "1800535": [
+   "item",
+   "Neon_RandomBox",
+   "name"
+  ],
+  "1800536": [
+   "item",
+   "NeonRandomBox_MENA",
+   "name"
+  ],
+  "1800537": [
+   "item",
+   "VacationSupplyKit_2013",
+   "name"
+  ],
+  "1800538": [
+   "item",
+   "BOB_Gacha_ID",
+   "name"
+  ],
+  "1800539": [
+   "item",
+   "PCcafe_Gacha",
+   "name"
+  ],
+  "1800540": [
+   "item",
+   "ZepettoMainSupplyKit",
+   "name"
+  ],
+  "1800541": [
+   "item",
+   "ZepettoSecondarySupplyKit",
+   "name"
+  ],
+  "1800542": [
+   "item",
+   "ZepettoMeleeSupplyKit",
+   "name"
+  ],
+  "1800544": [
+   "item",
+   "Sochi2014SupplyKit",
+   "name"
+  ],
+  "1800545": [
+   "item",
+   "2014WC_RandomBox_A",
+   "name"
+  ],
+  "1800546": [
+   "item",
+   "2014WC_RandomBox_B",
+   "name"
+  ],
+  "1800547": [
+   "item",
+   "2014WC_RandomBox_C",
+   "name"
+  ],
+  "1800548": [
+   "item",
+   "2014WC_RandomBox_D",
+   "name"
+  ],
+  "1800549": [
+   "item",
+   "PBNC5_SupplyKit",
+   "name"
+  ],
+  "1800550": [
+   "item",
+   "SuperLuckyBox",
+   "name"
+  ],
+  "1800551": [
+   "item",
+   "Black_AUGA3_Gacha",
+   "name"
+  ],
+  "1800552": [
+   "item",
+   "Black_Kriss_Gacha",
+   "name"
+  ],
+  "1800553": [
+   "item",
+   "Black_L115A1_Gacha",
+   "name"
+  ],
+  "1800554": [
+   "item",
+   "Brazuca_Supply_Kit",
+   "name"
+  ],
+  "1800556": [
+   "item",
+   "1Day_Gacha",
+   "name"
+  ],
+  "1800557": [
+   "item",
+   "PSG1Elite_RandomBox",
+   "name"
+  ],
+  "1800558": [
+   "item",
+   "WC_Ticket",
+   "name"
+  ],
+  "1800559": [
+   "item",
+   "WC_RedCard",
+   "name"
+  ],
+  "1800560": [
+   "item",
+   "WC_YellowCard",
+   "name"
+  ],
+  "1800561": [
+   "item",
+   "BR_Brazuca_Supply_Kit",
+   "name"
+  ],
+  "1800562": [
+   "item",
+   "2014WC_Event_Gacha",
+   "name"
+  ],
+  "1800563": [
+   "item",
+   "Sol_Festival_RandomBox",
+   "name"
+  ],
+  "1800565": [
+   "item",
+   "Super_Box2",
+   "name"
+  ],
+  "1800566": [
+   "item",
+   "PBIC2013_GACHAPON",
+   "name"
+  ],
+  "1800567": [
+   "item",
+   "SVUElite_RandomBox",
+   "name"
+  ],
+  "1800568": [
+   "item",
+   "PBIC2012_GACHAPON_PH",
+   "name"
+  ],
+  "1800569": [
+   "item",
+   "PBIC2013_GACHAPON_PH",
+   "name"
+  ],
+  "1800570": [
+   "item",
+   "Dragunov_Elite_Supply_Kit",
+   "name"
+  ],
+  "1800571": [
+   "item",
+   "SPAS_Elite_RandomBox",
+   "name"
+  ],
+  "1800572": [
+   "item",
+   "G36C_Elite_SupplyKit",
+   "name"
+  ],
+  "1800573": [
+   "item",
+   "PBIC2014_RandomBox_TR",
+   "name"
+  ],
+  "1800575": [
+   "item",
+   "PBIC2014_RandomBox_ID",
+   "name"
+  ],
+  "1800576": [
+   "item",
+   "New_weapon_supply_kit",
+   "name"
+  ],
+  "1800577": [
+   "item",
+   "SPAS_Elite_RandomBox_TH",
+   "name"
+  ],
+  "1800578": [
+   "item",
+   "Assault_Rifle_Randombox",
+   "name"
+  ],
+  "1800579": [
+   "item",
+   "Sub_Machine_Gun_Randombox",
+   "name"
+  ],
+  "1800580": [
+   "item",
+   "PSG1Elite_Supply_Kit",
+   "name"
+  ],
+  "1800581": [
+   "item",
+   "VSK94Elite_Supply_Kit",
+   "name"
+  ],
+  "1800582": [
+   "item",
+   "SVUElite_Supply_Kit",
+   "name"
+  ],
+  "1800584": [
+   "item",
+   "M1887_Lion_Heart_Gacha",
+   "name"
+  ],
+  "1800587": [
+   "item",
+   "X-mas_Random_Box",
+   "name"
+  ],
+  "1800588": [
+   "item",
+   "XMAS_GiftBox",
+   "name"
+  ],
+  "1800589": [
+   "item",
+   "2015_NY_supplykit_ID",
+   "name"
+  ],
+  "1800590": [
+   "item",
+   "BOB_Gacha_2014_TH",
+   "name"
+  ],
+  "1800591": [
+   "item",
+   "Collection_X-mas_Gacha",
+   "name"
+  ],
+  "1800596": [
+   "item",
+   "X-mas_Random_Box_RU",
+   "name"
+  ],
+  "1800599": [
+   "item",
+   "Toy_series_supply_kit",
+   "name"
+  ],
+  "1800600": [
+   "item",
+   "2015_B.O.B_Supplykit",
+   "name"
+  ],
+  "1800601": [
+   "item",
+   "BestofLatin2_Supplykit",
+   "name"
+  ],
+  "1800602": [
+   "item",
+   "CS_sorry_random_box",
+   "name"
+  ],
+  "1800603": [
+   "item",
+   "TR_Paysafebox_Mini",
+   "name"
+  ],
+  "1800604": [
+   "item",
+   "TR_Paysafebox_Mega",
+   "name"
+  ],
+  "1800605": [
+   "item",
+   "Sorry_RandomBox_2",
+   "name"
+  ],
+  "1800606": [
+   "item",
+   "Thanks_RandomBox_1",
+   "name"
+  ],
+  "1800607": [
+   "item",
+   "Thanks_RandomBox_2",
+   "name"
+  ],
+  "1800608": [
+   "item",
+   "New_Year_AUG_A3_Box",
+   "name"
+  ],
+  "1800609": [
+   "item",
+   "AUG_A3_Kasasi_Random_Box",
+   "name"
+  ],
+  "1800610": [
+   "item",
+   "CNY2015_Random_Box",
+   "name"
+  ],
+  "1800611": [
+   "item",
+   "CNY2015_AUG_Gacha_PH",
+   "name"
+  ],
+  "1800612": [
+   "item",
+   "CNY2015_Kriss_Gacha_PH",
+   "name"
+  ],
+  "1800613": [
+   "item",
+   "Mini_Gacha",
+   "name"
+  ],
+  "1800615": [
+   "item",
+   "CNY_SupplyKit_Premium",
+   "name"
+  ],
+  "1800616": [
+   "item",
+   "CNY_SupplyKit_normal",
+   "name"
+  ],
+  "1800617": [
+   "item",
+   "PointBomb_Mini",
+   "name"
+  ],
+  "1800618": [
+   "item",
+   "PointBomb_Special",
+   "name"
+  ],
+  "1800619": [
+   "item",
+   "PBIC_Mix_Gacha_PH",
+   "name"
+  ],
+  "1800620": [
+   "item",
+   "AUG_A3_Lucky_RandomBox",
+   "name"
+  ],
+  "1800621": [
+   "item",
+   "Kids_box",
+   "name"
+  ],
+  "1800622": [
+   "item",
+   "Latin_AUG_Box",
+   "name"
+  ],
+  "1800623": [
+   "item",
+   "Best_Objetivo_SupplyKit",
+   "name"
+  ],
+  "1800625": [
+   "item",
+   "Cerberus_Shotgun_Gacha",
+   "name"
+  ],
+  "1800626": [
+   "item",
+   "Super_Mini_Gacha",
+   "name"
+  ],
+  "1800627": [
+   "item",
+   "Knife_Random_Box",
+   "name"
+  ],
+  "1800628": [
+   "item",
+   "Cheytac_M200_1D_Box",
+   "name"
+  ],
+  "1800629": [
+   "item",
+   "Summer_RandomBox_Pre",
+   "name"
+  ],
+  "1800632": [
+   "item",
+   "Cheytac_M200_30D_Box",
+   "name"
+  ],
+  "1800636": [
+   "item",
+   "Sniper_Lucky_Box",
+   "name"
+  ],
+  "1800637": [
+   "item",
+   "AUG_A3_Cangaceiro_Gacha",
+   "name"
+  ],
+  "1800638": [
+   "item",
+   "Gold_Box_Premium_RU",
+   "name"
+  ],
+  "1800639": [
+   "item",
+   "Newborn2015_Supply_Kit",
+   "name"
+  ],
+  "1800640": [
+   "item",
+   "1Day_Gacha2",
+   "name"
+  ],
+  "1800641": [
+   "item",
+   "AUG_A3_30D_Box",
+   "name"
+  ],
+  "1800642": [
+   "item",
+   "FAMAS_RandomBox",
+   "name"
+  ],
+  "1800643": [
+   "item",
+   "PBNC5_SupplyKit_Normal_LAM",
+   "name"
+  ],
+  "1800645": [
+   "item",
+   "GSL2015_SupplyKit_LAM",
+   "name"
+  ],
+  "1800646": [
+   "item",
+   "Troops_Elite_Gacha_Pro_BR",
+   "name"
+  ],
+  "1800647": [
+   "item",
+   "Troops_AK_Elite_BR",
+   "name"
+  ],
+  "1800648": [
+   "item",
+   "Troops_Dragunov_Elite_BR",
+   "name"
+  ],
+  "1800649": [
+   "item",
+   "Troops_G36C_Elite_BR",
+   "name"
+  ],
+  "1800650": [
+   "item",
+   "Troops_M4A1_Elite_BR",
+   "name"
+  ],
+  "1800651": [
+   "item",
+   "Troops_PSG1_Elite_BR",
+   "name"
+  ],
+  "1800652": [
+   "item",
+   "Troops_SPAS15_Elite_BR",
+   "name"
+  ],
+  "1800653": [
+   "item",
+   "Troops_SVU_Elite_BR",
+   "name"
+  ],
+  "1800654": [
+   "item",
+   "Troops_VSK94_Elite_BR",
+   "name"
+  ],
+  "1800655": [
+   "item",
+   "AUG_A3_SuperStar_Gacha",
+   "name"
+  ],
+  "1800656": [
+   "item",
+   "Bloody_Lucky_Box",
+   "name"
+  ],
+  "1800657": [
+   "item",
+   "P90_Ext_SuperStar_Gacha",
+   "name"
+  ],
+  "1800658": [
+   "item",
+   "Pointbomb_Special+",
+   "name"
+  ],
+  "1800659": [
+   "item",
+   "PointBomb+",
+   "name"
+  ],
+  "1800660": [
+   "item",
+   "Super_Mini_Gacha2",
+   "name"
+  ],
+  "1800661": [
+   "item",
+   "ID_Gift_Box",
+   "name"
+  ],
+  "1800662": [
+   "item",
+   "ID_Gift_Box_Pre",
+   "name"
+  ],
+  "1800663": [
+   "item",
+   "Every_Login_Box",
+   "name"
+  ],
+  "1800664": [
+   "item",
+   "Every_Login_Box_Pre",
+   "name"
+  ],
+  "1800666": [
+   "item",
+   "Chain_Gold_BR",
+   "name"
+  ],
+  "1800667": [
+   "item",
+   "Chain_Black_BR",
+   "name"
+  ],
+  "1800668": [
+   "item",
+   "Chain_Red_BR",
+   "name"
+  ],
+  "1800669": [
+   "item",
+   "Rose_Handgun_SupplyKit",
+   "name"
+  ],
+  "1800670": [
+   "item",
+   "Rose_Knife_SupplyKit",
+   "name"
+  ],
+  "1800671": [
+   "item",
+   "GRS_Gacha",
+   "name"
+  ],
+  "1800672": [
+   "item",
+   "SMG_Value_Gacha",
+   "name"
+  ],
+  "1800673": [
+   "item",
+   "4Game_CheytacM200_Randombox",
+   "name"
+  ],
+  "1800674": [
+   "item",
+   "4Game_GH5007_K413_Randombox",
+   "name"
+  ],
+  "1800675": [
+   "item",
+   "KrissSuperV_Red_Gacha",
+   "name"
+  ],
+  "1800677": [
+   "item",
+   "Assault_Value_Gacha",
+   "name"
+  ],
+  "1800678": [
+   "item",
+   "GSL2015_Super_Gacha_PH",
+   "name"
+  ],
+  "1800679": [
+   "item",
+   "GSL2015_Mini_Gacha_PH",
+   "name"
+  ],
+  "1800680": [
+   "item",
+   "Mask_Randombox",
+   "name"
+  ],
+  "1800681": [
+   "item",
+   "AUG_A3_Newborn2015_Gacha",
+   "name"
+  ],
+  "1800682": [
+   "item",
+   "Kriss_Newborn2015_Gacha",
+   "name"
+  ],
+  "1800683": [
+   "item",
+   "Bloody_Premium_Gacha_ID",
+   "name"
+  ],
+  "1800684": [
+   "item",
+   "Bloody_Gacha_ID",
+   "name"
+  ],
+  "1800685": [
+   "item",
+   "4game_New_Randombox",
+   "name"
+  ],
+  "1800686": [
+   "item",
+   "Redemption_SupplyKit",
+   "name"
+  ],
+  "1800687": [
+   "item",
+   "GRS2_SupplyKit",
+   "name"
+  ],
+  "1800688": [
+   "item",
+   "WOE_SupplyKit",
+   "name"
+  ],
+  "1800689": [
+   "item",
+   "G_E_Sports_SupplyKit_1",
+   "name"
+  ],
+  "1800690": [
+   "item",
+   "G_E_Sports_SupplyKit_2",
+   "name"
+  ],
+  "1800691": [
+   "item",
+   "Sheep_RandomBox",
+   "name"
+  ],
+  "1800693": [
+   "item",
+   "PBIC15_Premium_Gachapon",
+   "name"
+  ],
+  "1800694": [
+   "item",
+   "PBIC2015_RandomBox",
+   "name"
+  ],
+  "1800697": [
+   "item",
+   "PBIC2015_Premium_Gacha_RU",
+   "name"
+  ],
+  "1800698": [
+   "item",
+   "PBIC2015_Basic_Gacha_RU",
+   "name"
+  ],
+  "1800699": [
+   "item",
+   "4Game_Playtime_Gacha_RU",
+   "name"
+  ],
+  "1800700": [
+   "item",
+   "Harimau_Gachapon",
+   "name"
+  ],
+  "1800701": [
+   "item",
+   "Lion_Flame_Gachapon",
+   "name"
+  ],
+  "1800702": [
+   "item",
+   "Mini_Gachapon_3.0",
+   "name"
+  ],
+  "1800703": [
+   "item",
+   "Special_Gachapon_3.0",
+   "name"
+  ],
+  "1800704": [
+   "item",
+   "PBIC2015_Randombox_TR",
+   "name"
+  ],
+  "1800705": [
+   "item",
+   "PBIC2013_Gacha_ID",
+   "name"
+  ],
+  "1800706": [
+   "item",
+   "PBIC2014_Gacha_ID",
+   "name"
+  ],
+  "1800707": [
+   "item",
+   "PBIC2015_Gacha_ID",
+   "name"
+  ],
+  "1800708": [
+   "item",
+   "PBIC2015_Gacha_TH",
+   "name"
+  ],
+  "1800710": [
+   "item",
+   "Kriss_S_V_PBSC2014_Gacha_SAM",
+   "name"
+  ],
+  "1800711": [
+   "item",
+   "Chareacter_RandomBox_TAM",
+   "name"
+  ],
+  "1800712": [
+   "item",
+   "CheytacM200_Bloody_Box",
+   "name"
+  ],
+  "1800713": [
+   "item",
+   "AUG_A3_Esport_Box",
+   "name"
+  ],
+  "1800714": [
+   "item",
+   "Halloween_RandomBox_RU",
+   "name"
+  ],
+  "1800715": [
+   "item",
+   "Redemption_Gacha_Pre_PH",
+   "name"
+  ],
+  "1800716": [
+   "item",
+   "Redemption_Gacha_Mini_PH",
+   "name"
+  ],
+  "1800717": [
+   "item",
+   "Kriss_S_V_Red_Gacha_PH",
+   "name"
+  ],
+  "1800718": [
+   "item",
+   "Kriss_S_V_Red_Gacha_SAM",
+   "name"
+  ],
+  "1800719": [
+   "item",
+   "Mech_Supplykit_LAM",
+   "name"
+  ],
+  "1800721": [
+   "item",
+   "Halloween_SupplyKit_Mini_LAM",
+   "name"
+  ],
+  "1800722": [
+   "item",
+   "Halloween_SupplyKit_Premium_LAM",
+   "name"
+  ],
+  "1800725": [
+   "item",
+   "PBST_Ticket_TAM",
+   "name"
+  ],
+  "1800726": [
+   "item",
+   "PBOT_Ticket_TAM",
+   "name"
+  ],
+  "1800727": [
+   "item",
+   "Parts_Randombox_PH",
+   "name"
+  ],
+  "1800728": [
+   "item",
+   "SMG_Randombox_TAM",
+   "name"
+  ],
+  "1800729": [
+   "item",
+   "Platinum_Gacha_I_TH",
+   "name"
+  ],
+  "1800730": [
+   "item",
+   "Roar_of_the_King_Gacha_TH",
+   "name"
+  ],
+  "1800731": [
+   "item",
+   "Spy_Login_RandomBox",
+   "name"
+  ],
+  "1800732": [
+   "item",
+   "Spy_Basic_RandomBox",
+   "name"
+  ],
+  "1800733": [
+   "item",
+   "Spy_Plus_RandomBox_RU",
+   "name"
+  ],
+  "1800734": [
+   "item",
+   "Kriss_Silence_Gacha_SAM",
+   "name"
+  ],
+  "1800735": [
+   "item",
+   "CheytacM200_GRS2_RandomBox_SAM",
+   "name"
+  ],
+  "1800736": [
+   "item",
+   "AUG_A3_Dimension_RandomBox_SAM",
+   "name"
+  ],
+  "1800737": [
+   "item",
+   "Quick_Change_Magazine_Box_ID",
+   "name"
+  ],
+  "1800738": [
+   "item",
+   "Quick_Change_Weapon_Box_ID",
+   "name"
+  ],
+  "1800739": [
+   "item",
+   "C4_SpeedKit_Box_ID",
+   "name"
+  ],
+  "1800740": [
+   "item",
+   "Latin5_SupplyKit_Pre",
+   "name"
+  ],
+  "1800741": [
+   "item",
+   "Latin5_SupplyKit_Mini",
+   "name"
+  ],
+  "1800742": [
+   "item",
+   "Cobra_SupplyKit_LAM",
+   "name"
+  ],
+  "1800743": [
+   "item",
+   "BoB_Premium_Gacha_2015_PH",
+   "name"
+  ],
+  "1800744": [
+   "item",
+   "BoB_Basic_Gacha_2015_PH",
+   "name"
+  ],
+  "1800747": [
+   "item",
+   "Basic_Newborn_Gacha",
+   "name"
+  ],
+  "1800750": [
+   "item",
+   "XMAS_Mission_Box",
+   "name"
+  ],
+  "1800754": [
+   "item",
+   "Camo_Randombox_BR",
+   "name"
+  ],
+  "1800755": [
+   "item",
+   "XMAS2015_Gacha_SAM",
+   "name"
+  ],
+  "1800756": [
+   "item",
+   "XMAS2015_Gacha_V1",
+   "name"
+  ],
+  "1800760": [
+   "item",
+   "BOB2015_Premium_Gacha_ID",
+   "name"
+  ],
+  "1800761": [
+   "item",
+   "BOB2015_Randombox_TR",
+   "name"
+  ],
+  "1800767": [
+   "item",
+   "XMas_Plus_Randombox_RU",
+   "name"
+  ],
+  "1800769": [
+   "item",
+   "XMas_First_Randombox_RU",
+   "name"
+  ],
+  "1800771": [
+   "item",
+   "NewYear_RandomBox_TAM",
+   "name"
+  ],
+  "1800774": [
+   "item",
+   "AUG_A3_Arena_Randombox_RU",
+   "name"
+  ],
+  "1800776": [
+   "item",
+   "2016_TS_Randombox_RU",
+   "name"
+  ],
+  "1800777": [
+   "item",
+   "Attend_EventRandombox_RU",
+   "name"
+  ],
+  "1800779": [
+   "item",
+   "Cheytac_Arena_Randombox_RU",
+   "name"
+  ],
+  "1800783": [
+   "item",
+   "Platinum_Randombox_II_TH",
+   "name"
+  ],
+  "1800784": [
+   "item",
+   "Gold_Gacha_ID",
+   "name"
+  ],
+  "1800785": [
+   "item",
+   "Barrett_Gacha_ID",
+   "name"
+  ],
+  "1800788": [
+   "item",
+   "Mega_HP_Gacha_ID",
+   "name"
+  ],
+  "1800789": [
+   "item",
+   "Obsidian_SupplyKit_LAM_JP",
+   "name"
+  ],
+  "1800790": [
+   "item",
+   "BOB2015_Basic_Gacha_ID",
+   "name"
+  ],
+  "1800791": [
+   "item",
+   "Spy_Deluxe_Randombox_ID",
+   "name"
+  ],
+  "1800792": [
+   "item",
+   "Super_Headgear_Gacha_ID",
+   "name"
+  ],
+  "1800793": [
+   "item",
+   "Monkey_Randombox_TH",
+   "name"
+  ],
+  "1800794": [
+   "item",
+   "Gold_Gacha_TH",
+   "name"
+  ],
+  "1800795": [
+   "item",
+   "Arena_Deluxe_Randombox_ID",
+   "name"
+  ],
+  "1800796": [
+   "item",
+   "Arena_Deluxe_Randombox_P_ID",
+   "name"
+  ],
+  "1800799": [
+   "item",
+   "Horror_Randombox_BR",
+   "name"
+  ],
+  "1800800": [
+   "item",
+   "Lionflame_AUG_Gacha_LAM",
+   "name"
+  ],
+  "1800801": [
+   "item",
+   "Lionflame_Cheytac_Gacha_LAM",
+   "name"
+  ],
+  "1800803": [
+   "item",
+   "RA_Tactilite_T2_TH",
+   "name"
+  ],
+  "1800804": [
+   "item",
+   "Dark_Days_SupplyKit_LAM",
+   "name"
+  ],
+  "1800805": [
+   "item",
+   "Cupid_Randombox_LAM",
+   "name"
+  ],
+  "1800806": [
+   "item",
+   "AssaultRifle_Gacha_ID_v1",
+   "name"
+  ],
+  "1800807": [
+   "item",
+   "AUGA3_Randombox_ID",
+   "name"
+  ],
+  "1800808": [
+   "item",
+   "M1887_Randombox_ID",
+   "name"
+  ],
+  "1800809": [
+   "item",
+   "Dual_Kunai_Gacha_TH",
+   "name"
+  ],
+  "1800810": [
+   "item",
+   "RA_Cheytac_Gold_RU",
+   "name"
+  ],
+  "1800811": [
+   "item",
+   "RA_Achievement_RU",
+   "name"
+  ],
+  "1800812": [
+   "item",
+   "BattlefieldMove",
+   "name"
+  ],
+  "1800814": [
+   "item",
+   "RA_Camo_Soldier_LAM",
+   "name"
+  ],
+  "1800817": [
+   "item",
+   "RA_Platinum3_TH",
+   "name"
+  ],
+  "1800825": [
+   "item",
+   "RA_SpyDeluxe_TH",
+   "name"
+  ],
+  "1800826": [
+   "item",
+   "RA_ScorpionVz61_TH",
+   "name"
+  ],
+  "1800827": [
+   "item",
+   "RA_M18A1Claymore_ID",
+   "name"
+  ],
+  "1800828": [
+   "item",
+   "RA_SakuraBasic_ID",
+   "name"
+  ],
+  "1800829": [
+   "item",
+   "RA_SakuraPrem_ID",
+   "name"
+  ],
+  "1800830": [
+   "item",
+   "RA_Sakura_LAM",
+   "name"
+  ],
+  "1800831": [
+   "item",
+   "RA_Serpent_LAM",
+   "name"
+  ],
+  "1800832": [
+   "item",
+   "RA_AUG_A3_7D_TAM",
+   "name"
+  ],
+  "1800836": [
+   "item",
+   "RA_PCCafe2016_Attend_TAM",
+   "name"
+  ],
+  "1800837": [
+   "item",
+   "RA_Beast_BR",
+   "name"
+  ],
+  "1800838": [
+   "item",
+   "RA_Sakura_BR",
+   "name"
+  ],
+  "1800839": [
+   "item",
+   "RA_Serpent_BR",
+   "name"
+  ],
+  "1800840": [
+   "item",
+   "RA_2016_Attend_Mar_RU",
+   "name"
+  ],
+  "1800841": [
+   "item",
+   "RA_PBGC_Basic_ID",
+   "name"
+  ],
+  "1800842": [
+   "item",
+   "RA_PBGC_Prem_ID",
+   "name"
+  ],
+  "1800845": [
+   "item",
+   "RA_2016_TS_Mar_RU",
+   "name"
+  ],
+  "1800846": [
+   "item",
+   "RA_Monkey_RU",
+   "name"
+  ],
+  "1800847": [
+   "item",
+   "RA_Beast_LAM",
+   "name"
+  ],
+  "1800848": [
+   "item",
+   "RA_VeraCruz2016_LAM",
+   "name"
+  ],
+  "1800849": [
+   "item",
+   "RA_Esports2_LAM",
+   "name"
+  ],
+  "1800850": [
+   "item",
+   "RA_Medical_LAM",
+   "name"
+  ],
+  "1800851": [
+   "item",
+   "RA_MidnightBlue2_LAM",
+   "name"
+  ],
+  "1800852": [
+   "item",
+   "RA_Skeleton_LAM",
+   "name"
+  ],
+  "1800853": [
+   "item",
+   "RA_Sniper_7D_TAM",
+   "name"
+  ],
+  "1800854": [
+   "item",
+   "RA_Obsidian_RU",
+   "name"
+  ],
+  "1800858": [
+   "item",
+   "RA_Rose_RU",
+   "name"
+  ],
+  "1800859": [
+   "item",
+   "RA_PremGold_TH",
+   "name"
+  ],
+  "1800860": [
+   "item",
+   "RA_MidnightBlue2_TH",
+   "name"
+  ],
+  "1800861": [
+   "item",
+   "RA_Butterfly_TH",
+   "name"
+  ],
+  "1800865": [
+   "item",
+   "RA_Silence_BR",
+   "name"
+  ],
+  "1800866": [
+   "item",
+   "RA_Esports2_BR",
+   "name"
+  ],
+  "1800867": [
+   "item",
+   "RA_Platinum_TAM",
+   "name"
+  ],
+  "1800868": [
+   "item",
+   "RA_Character_7D_TAM",
+   "name"
+  ],
+  "1800869": [
+   "item",
+   "RA_Lime_RU",
+   "name"
+  ],
+  "1800870": [
+   "item",
+   "RA_Mech_RU",
+   "name"
+  ],
+  "1800872": [
+   "item",
+   "RA_PBWC2016_RU",
+   "name"
+  ],
+  "1800873": [
+   "item",
+   "RA_PBWC2016_BR",
+   "name"
+  ],
+  "1800874": [
+   "item",
+   "RA_Mummy_BR",
+   "name"
+  ],
+  "1800875": [
+   "item",
+   "RA_Dragon_BR",
+   "name"
+  ],
+  "1800876": [
+   "item",
+   "RA_PlatinumPre40_TH",
+   "name"
+  ],
+  "1800877": [
+   "item",
+   "RA_PlatinumBasic40_TH",
+   "name"
+  ],
+  "1800878": [
+   "item",
+   "RA_PBWC2016_LAM",
+   "name"
+  ],
+  "1800879": [
+   "item",
+   "RA_Mummy_LAM",
+   "name"
+  ],
+  "1800880": [
+   "item",
+   "RA_Dragon_LAM",
+   "name"
+  ],
+  "1800881": [
+   "item",
+   "RA_BestEmerald_ID",
+   "name"
+  ],
+  "1800882": [
+   "item",
+   "RA_BestEmeraldPre_ID",
+   "name"
+  ],
+  "1800883": [
+   "item",
+   "RA_DualKunai_ID",
+   "name"
+  ],
+  "1800884": [
+   "item",
+   "RA_PBWC2016_ID",
+   "name"
+  ],
+  "1800885": [
+   "item",
+   "RA_GoldPre_ID",
+   "name"
+  ],
+  "1800886": [
+   "item",
+   "RA_Argentina_LAM",
+   "name"
+  ],
+  "1800887": [
+   "item",
+   "RA_Bolivia_LAM",
+   "name"
+  ],
+  "1800888": [
+   "item",
+   "RA_Chile_LAM",
+   "name"
+  ],
+  "1800889": [
+   "item",
+   "RA_Colombia_LAM",
+   "name"
+  ],
+  "1800890": [
+   "item",
+   "RA_Ecuador_LAM",
+   "name"
+  ],
+  "1800891": [
+   "item",
+   "RA_Mexico_LAM",
+   "name"
+  ],
+  "1800892": [
+   "item",
+   "RA_Peru_LAM",
+   "name"
+  ],
+  "1800893": [
+   "item",
+   "RA_Venezuela_LAM",
+   "name"
+  ],
+  "1800894": [
+   "item",
+   "RA_PBWC2016Basic",
+   "name"
+  ],
+  "1800895": [
+   "item",
+   "RA_PBWC2016Pre",
+   "name"
+  ],
+  "1800896": [
+   "item",
+   "PBWC_Coupon",
+   "name"
+  ],
+  "1800897": [
+   "item",
+   "RA_PBWC2016BasicChain",
+   "name"
+  ],
+  "1800898": [
+   "item",
+   "RA_PBWC2016PreChain",
+   "name"
+  ],
+  "1800900": [
+   "item",
+   "PointItem",
+   "name"
+  ],
+  "1800903": [
+   "item",
+   "RA_Cupido_BR",
+   "name"
+  ],
+  "1800904": [
+   "item",
+   "RA_Demonic_BR",
+   "name"
+  ],
+  "1800905": [
+   "item",
+   "RA_Wayang_A_LAM",
+   "name"
+  ],
+  "1800906": [
+   "item",
+   "RA_Wayang_B_LAM",
+   "name"
+  ],
+  "1800907": [
+   "item",
+   "RA_AUGA3Sil_ID",
+   "name"
+  ],
+  "1800908": [
+   "item",
+   "RA_Medical_ID",
+   "name"
+  ],
+  "1800909": [
+   "item",
+   "RA_Explosive_ID",
+   "name"
+  ],
+  "1800910": [
+   "item",
+   "RA_KrissSVD_ID",
+   "name"
+  ],
+  "1800911": [
+   "item",
+   "RA_Superhead_ID",
+   "name"
+  ],
+  "1800912": [
+   "item",
+   "RA_PremiumAUG_TAM",
+   "name"
+  ],
+  "1800913": [
+   "item",
+   "RA_Turkey_TAM",
+   "name"
+  ],
+  "1800914": [
+   "item",
+   "RA_Demonic_TH",
+   "name"
+  ],
+  "1800915": [
+   "item",
+   "RA_Summer_RU",
+   "name"
+  ],
+  "1800916": [
+   "item",
+   "RA_Tiger_AUG_RU",
+   "name"
+  ],
+  "1800917": [
+   "item",
+   "RA_Hecate2_RU",
+   "name"
+  ],
+  "1800918": [
+   "item",
+   "RA_Demonic_LAM",
+   "name"
+  ],
+  "1800920": [
+   "item",
+   "RA_Tiger_Sniper_RU",
+   "name"
+  ],
+  "1800922": [
+   "item",
+   "RA_Character_ID",
+   "name"
+  ],
+  "1800923": [
+   "item",
+   "RA_Silencer_ID",
+   "name"
+  ],
+  "1800924": [
+   "item",
+   "RA_P90Ext_ID",
+   "name"
+  ],
+  "1800925": [
+   "item",
+   "RA_KrissSVRed_ID",
+   "name"
+  ],
+  "1800926": [
+   "item",
+   "RA_LimitedEdPre_ID",
+   "name"
+  ],
+  "1800927": [
+   "item",
+   "RA_ItemPre_ID",
+   "name"
+  ],
+  "1800928": [
+   "item",
+   "RA_Mummy_TAM",
+   "name"
+  ],
+  "1800930": [
+   "item",
+   "RA_PlatinumIV_Basic_TH",
+   "name"
+  ],
+  "1800931": [
+   "item",
+   "RA_PlatinumIV_Premium_TH",
+   "name"
+  ],
+  "1800932": [
+   "item",
+   "RA_WelcomeBack_Package_BR",
+   "name"
+  ],
+  "1800933": [
+   "item",
+   "RA_Starters_Package_BR",
+   "name"
+  ],
+  "1800934": [
+   "item",
+   "Rank8_Coupon",
+   "name"
+  ],
+  "1800935": [
+   "item",
+   "Rank12_Coupon",
+   "name"
+  ],
+  "1800936": [
+   "item",
+   "Rank14_Coupon",
+   "name"
+  ],
+  "1800937": [
+   "item",
+   "Rank17_Coupon",
+   "name"
+  ],
+  "1800938": [
+   "item",
+   "RA_Ballistic_ID",
+   "name"
+  ],
+  "1800939": [
+   "item",
+   "RA_BOBRuby_ID",
+   "name"
+  ],
+  "1800940": [
+   "item",
+   "RA_BOBRubyPre_ID",
+   "name"
+  ],
+  "1800941": [
+   "item",
+   "RA_Cerberus_ID",
+   "name"
+  ],
+  "1800942": [
+   "item",
+   "RA_Dolphin_ID",
+   "name"
+  ],
+  "1800943": [
+   "item",
+   "RA_DolphinPre_ID",
+   "name"
+  ],
+  "1800944": [
+   "item",
+   "RA_QuickChange_ID",
+   "name"
+  ],
+  "1800945": [
+   "item",
+   "RA_Ultimate_ID",
+   "name"
+  ],
+  "1800946": [
+   "item",
+   "RA_RankupReward5_BR",
+   "name"
+  ],
+  "1800947": [
+   "item",
+   "RA_RankupReward8_BR",
+   "name"
+  ],
+  "1800948": [
+   "item",
+   "RA_RankupReward12_BR",
+   "name"
+  ],
+  "1800949": [
+   "item",
+   "RA_RankupReward14_BR",
+   "name"
+  ],
+  "1800950": [
+   "item",
+   "RA_RankupReward17_BR",
+   "name"
+  ],
+  "1800951": [
+   "item",
+   "RA_Alien_LAM",
+   "name"
+  ],
+  "1800952": [
+   "item",
+   "RA_Dolphin_LAM",
+   "name"
+  ],
+  "1800953": [
+   "item",
+   "RA_BlueDia_LAM",
+   "name"
+  ],
+  "1800954": [
+   "item",
+   "RA_RankupReward5_RU",
+   "name"
+  ],
+  "1800955": [
+   "item",
+   "RA_RankupReward8_RU",
+   "name"
+  ],
+  "1800956": [
+   "item",
+   "RA_RankupReward12_RU",
+   "name"
+  ],
+  "1800957": [
+   "item",
+   "RA_RankupReward14_RU",
+   "name"
+  ],
+  "1800958": [
+   "item",
+   "RA_RankupReward17_RU",
+   "name"
+  ],
+  "1800959": [
+   "item",
+   "RA_StarterPack_RU",
+   "name"
+  ],
+  "1800960": [
+   "item",
+   "RA_Alien_BR",
+   "name"
+  ],
+  "1800961": [
+   "item",
+   "RA_BlueDia_BR",
+   "name"
+  ],
+  "1800962": [
+   "item",
+   "RA_Dolphin_BR",
+   "name"
+  ],
+  "1800963": [
+   "item",
+   "RA_Serpent_RU",
+   "name"
+  ],
+  "1800964": [
+   "item",
+   "RA_Skeleton_RU",
+   "name"
+  ],
+  "1800966": [
+   "item",
+   "New_Coin_RU",
+   "name"
+  ],
+  "1800967": [
+   "item",
+   "RA_GSL2016_BR",
+   "name"
+  ],
+  "1800968": [
+   "item",
+   "RA_Newborn2016_BR",
+   "name"
+  ],
+  "1800969": [
+   "item",
+   "RA_MetalBulletVest_ID",
+   "name"
+  ],
+  "1800970": [
+   "item",
+   "RA_HollowPlus_ID",
+   "name"
+  ],
+  "1800971": [
+   "item",
+   "RA_DemonicPre_ID",
+   "name"
+  ],
+  "1800972": [
+   "item",
+   "RA_WeaponID_ID",
+   "name"
+  ],
+  "1800973": [
+   "item",
+   "RA_C4Speed_ID",
+   "name"
+  ],
+  "1800974": [
+   "item",
+   "RA_KemerPre_ID",
+   "name"
+  ],
+  "1800975": [
+   "item",
+   "RA_KemerBasic_ID",
+   "name"
+  ],
+  "1800976": [
+   "item",
+   "RA_SpyNormalA_LAM",
+   "name"
+  ],
+  "1800977": [
+   "item",
+   "RA_SpyNormalB_LAM",
+   "name"
+  ],
+  "1800978": [
+   "item",
+   "RA_SpyNormalC_LAM",
+   "name"
+  ],
+  "1800979": [
+   "item",
+   "RA_SpyDeluxe_LAM",
+   "name"
+  ],
+  "1800980": [
+   "item",
+   "RA_Woody_LAM",
+   "name"
+  ],
+  "1800981": [
+   "item",
+   "RA_AS50G_TH",
+   "name"
+  ],
+  "1800982": [
+   "item",
+   "RA_PlatinumVBasic_TH",
+   "name"
+  ],
+  "1800983": [
+   "item",
+   "RA_PlatinumVPre_TH",
+   "name"
+  ],
+  "1800984": [
+   "item",
+   "RA_PBIC2016Box_TAM",
+   "name"
+  ],
+  "1800985": [
+   "item",
+   "RA_PBIC2016Pre_TAM",
+   "name"
+  ],
+  "1800986": [
+   "item",
+   "RA_KnifeBoxPre_TAM",
+   "name"
+  ],
+  "1800987": [
+   "item",
+   "RA_PBST2017_TAM",
+   "name"
+  ],
+  "1800988": [
+   "item",
+   "RA_DarkSteel_BR",
+   "name"
+  ],
+  "1800989": [
+   "item",
+   "RA_Beast_RU",
+   "name"
+  ],
+  "1800990": [
+   "item",
+   "RA_Crazy_RU",
+   "name"
+  ],
+  "1800991": [
+   "item",
+   "RA_Elite_RU",
+   "name"
+  ],
+  "1800992": [
+   "item",
+   "RA_PBIC2016_RU",
+   "name"
+  ],
+  "1800993": [
+   "item",
+   "RA_DarkSteel_LAM",
+   "name"
+  ],
+  "1800994": [
+   "item",
+   "RA_Supreme_LAM",
+   "name"
+  ],
+  "1800995": [
+   "item",
+   "RA_PBIC2016Norm_LAM",
+   "name"
+  ],
+  "1800996": [
+   "item",
+   "RA_PBIC2016Pre_LAM",
+   "name"
+  ],
+  "1800997": [
+   "item",
+   "RA_Supreme_BR",
+   "name"
+  ],
+  "1800998": [
+   "item",
+   "RA_OldPBIC_BR",
+   "name"
+  ],
+  "1800999": [
+   "item",
+   "RA_Karambit_TH",
+   "name"
+  ],
+  "1801001": [
+   "item",
+   "RA_Demonic_ID",
+   "name"
+  ],
+  "1801002": [
+   "item",
+   "RA_PBTC2016_Basic_TH",
+   "name"
+  ],
+  "1801003": [
+   "item",
+   "RA_PBTC2016_Pre_TH",
+   "name"
+  ],
+  "1801004": [
+   "item",
+   "RA_AUGA3G_ID",
+   "name"
+  ],
+  "1801005": [
+   "item",
+   "RA_SkullMask_ID",
+   "name"
+  ],
+  "1801006": [
+   "item",
+   "RA_PierrotMask_ID",
+   "name"
+  ],
+  "1801007": [
+   "item",
+   "RA_BOBTopazBasic_ID",
+   "name"
+  ],
+  "1801008": [
+   "item",
+   "RA_BOBTopazPre_ID",
+   "name"
+  ],
+  "1801009": [
+   "item",
+   "RA_SupremePre_ID",
+   "name"
+  ],
+  "1801010": [
+   "item",
+   "RA_Supreme_ID",
+   "name"
+  ],
+  "1801011": [
+   "item",
+   "RA_CPython_TAM",
+   "name"
+  ],
+  "1801012": [
+   "item",
+   "RA_Secondary_TAM",
+   "name"
+  ],
+  "1801015": [
+   "item",
+   "RA_Woody_A_BR",
+   "name"
+  ],
+  "1801016": [
+   "item",
+   "RA_Woody_B_BR",
+   "name"
+  ],
+  "1801017": [
+   "item",
+   "RA_Halloween2016_BR",
+   "name"
+  ],
+  "1801018": [
+   "item",
+   "RA_Russian_Groza_RU",
+   "name"
+  ],
+  "1801019": [
+   "item",
+   "RA_Dragunov_Russian_RU",
+   "name"
+  ],
+  "1801020": [
+   "item",
+   "RA_Halloween2016_RU",
+   "name"
+  ],
+  "1801021": [
+   "item",
+   "RA_Halloween2016_TH",
+   "name"
+  ],
+  "1801022": [
+   "item",
+   "RA_Gorgeous_LAM",
+   "name"
+  ],
+  "2700001": [
+   "beret",
+   "BeretBlack",
+   "name [INFERIDO]"
+  ],
+  "2700002": [
+   "beret",
+   "BeretBrazil",
+   "name [INFERIDO]"
+  ],
+  "2700003": [
+   "beret",
+   "BeretBlack_PB",
+   "name [INFERIDO]"
+  ],
+  "2700004": [
+   "beret",
+   "BeretBope",
+   "name [INFERIDO]"
+  ],
+  "2700006": [
+   "beret",
+   "BeretKopassus",
+   "name [INFERIDO]"
+  ],
+  "2700008": [
+   "beret",
+   "BeretSGeneral",
+   "name [INFERIDO]"
+  ],
+  "2700010": [
+   "beret",
+   "BeretTurkey",
+   "name [INFERIDO]"
+  ],
+  "2700012": [
+   "beret",
+   "BeretPBNC5",
+   "name [INFERIDO]"
+  ],
+  "2700013": [
+   "beret",
+   "BeretPBTN",
+   "name [INFERIDO]"
+  ],
+  "2700019": [
+   "beret",
+   "BeretVeraCruz2016",
+   "name [INFERIDO]"
+  ],
+  "2700020": [
+   "beret",
+   "BeretID1stAnni",
+   "name [INFERIDO]"
+  ],
+  "2700021": [
+   "beret",
+   "BeretStrike",
+   "name [INFERIDO]"
+  ],
+  "2700022": [
+   "beret",
+   "BeretRussianNormal",
+   "name [INFERIDO]"
+  ],
+  "2700023": [
+   "beret",
+   "BeretRussianDeluxe",
+   "name [INFERIDO]"
+  ],
+  "2700024": [
+   "beret",
+   "BeretPBNC2016",
+   "name [INFERIDO]"
+  ],
+  "5009010": [
+   "weapon",
+   "SentryGun_Lv2",
+   "name"
+  ]
+ },
+ "goods": {
+  "0": "Cheguevara_SniperPlus_LAM",
+  "311": "Leopard_7D+",
+  "312": "D-Fox_7D+",
+  "313": "ShortRespawn_7D+",
+  "110034700": "SET_Assault_Camo_TAM",
+  "990000100": "FreeMove_7D+",
+  "990000200": "DoubleUp130",
+  "990000300": "InitPackA",
+  "990000400": "InitPackB",
+  "990000500": "InitPackC",
+  "990000600": "ChangeNick+",
+  "990000700": "XpPlusX2_12PM+4000p",
+  "990000800": "XpPlusX2_15PM+4000p",
+  "990000900": "XpPlusX2_18PM+4000p",
+  "990001000": "XpPlusX2_21PM+4000p",
+  "990001100": "DoubleUp200",
+  "990001200": "MegaBomb+Pt_5500",
+  "990001300": "Hide7D+Pt30000",
+  "990001400": "ViperRed7D+Pt30000",
+  "990001500": "MegaBomb+Pt_12000",
+  "990001600": "MBPVest+HPAPlus",
+  "990001700": "MiniBomb+30000",
+  "990001800": "Red Bulls R. + Mask Black",
+  "990001900": "Tarantula R. + Mask Black",
+  "990002000": "Acid Pol R. + Mask White",
+  "990002100": "Keen Eyes R. + Mask White",
+  "990002200": "XpPlusX2_12PM+12000p",
+  "990002300": "XpPlusX2_15PM+12000p",
+  "990002400": "XpPlusX2_18PM+12000p",
+  "990002500": "XpPlusX2_21PM+12000p",
+  "990002600": "GigaBomb+Pt_20000",
+  "990002700": "GigaBomb+Pt_45000",
+  "990002800": "GigaBomb+Pt_100000",
+  "990002900": "ViperRed R.C. + Hide R.C.",
+  "990003000": "XpPlus200+_1D",
+  "990003100": "XpPlus200+_3D",
+  "990003200": "Cheguevara_Assault_LAM",
+  "990003300": "Cheguevara_Revolution",
+  "990003400": "Cheguevara_Sniper",
+  "990003500": "Cheguevara_Assault",
+  "990003600": "Cheguevara_Revolution_LAM",
+  "990003700": "Cheguevara_Sniper_LAM",
+  "990003800": "Brazil_AUG-A3_Package",
+  "990003900": "Brazil_L115A1_Package",
+  "990004000": "Brazil_KrissSuperV_Package",
+  "990004100": "AUG-A3_Black_Set",
+  "990004107": "Hide_7D+",
+  "990004200": "UserTitleSet_Rifle_Type4",
+  "990004207": "Viperred_7D+",
+  "990004300": "R_Kriss_S.V_Set",
+  "990004400": "Panda_MASK_3D+",
+  "990004500": "Panda_MASK_7D+",
+  "990004600": "Panda_MASK_30D+",
+  "990004700": "R.Tarantula7D+Pt85000",
+  "990004707": "C-5 D + Double Grenade",
+  "990004800": "R.KeenEyes3D+Pt55000",
+  "990005000": "Kids_Set",
+  "990005100": "CombatKit_Special",
+  "990005200": "Ramadan_Cheytac_Set",
+  "990005300": "Azerbaijan_AUG_Set",
+  "990005400": "Bope_Package",
+  "990005500": "Bomb_Elite_Package",
+  "990005600": "Pro_Player_Package",
+  "990005700": "Starter_Package",
+  "990005800": "PBNC5_Assault_set",
+  "990005900": "Skull Leopard + Beret Set",
+  "990006000": "BR_Sniper_Package",
+  "990006100": "BR_Assault_Package",
+  "990006200": "BR_SMG_Package",
+  "990006300": "BR_ShotGun_Package",
+  "990006400": "TopWeaponSet(A)",
+  "990006500": "TopWeaponSet(B)",
+  "990006600": "TopWeaponSet(C)",
+  "990006700": "CombatKit(A)",
+  "990006800": "CombatKit(B)",
+  "990006900": "MiniBomb+10000",
+  "990007000": "Leopard R. + Mask White",
+  "990007100": "Hide R. + Mask White",
+  "990007200": "D-Fox R.C. + Mask Black",
+  "990007300": "Viper Red R.C. + Mask Black",
+  "990007400": "Leopard R.C. + Mask White",
+  "990007500": "Hide R.C. + Mask White",
+  "990007600": "BattlePackA",
+  "990007700": "BattlePackB",
+  "990007800": "UserTitleSet_Assult_Type1",
+  "990007900": "UserTitleSet_Rifle_Type1",
+  "990008000": "UserTitleSet_SMG_Type1",
+  "990008100": "UserTitleSet_Melee_Type1",
+  "990008200": "UserTitleSet_ShotGun_Type1",
+  "990008300": "UserTitleSet_Rifle_Type2",
+  "990008400": "PtPlus130_7D+",
+  "990008500": "UserTitleSet_Assult_Type2",
+  "990008600": "UserTitleSet_SMG_Type2",
+  "990008700": "UserTitleSet_Melee_Type2",
+  "990008800": "UserTitleSet_ShotGun_Type2",
+  "990008900": "UserTitleSet_Rifle_Type3",
+  "990009000": "UserTitleSet_Assult_Type3",
+  "990009100": "UserTitleSet_SMG_Type3",
+  "990009200": "UserTitleSet_Melee_Type3",
+  "990009300": "Leopard R.C. + D-Fox R.C.",
+  "990009400": "Cheguevara_AssaultPlus_LAM",
+  "990009500": "D-Fox R. + Mask Black",
+  "990009600": "Viper Red R. + Mask Black",
+  "990009700": "KrissSuperV_Black_Set",
+  "990009800": "L115A1_Black_Set",
+  "990009900": "UserTitleSet_Assult_Type4",
+  "990010000": "UserTitleSet_SMG_Type4",
+  "990010100": "Vacation_Set_1",
+  "990010200": "Vacation_Set_2",
+  "990010300": "RM338_Set",
+  "990010400": "FamasG2_M203_Set",
+  "990010500": "KrissSuperV_D_Set",
+  "990010600": "SNIPER_SET_1",
+  "990010700": "SNIPER_SET_2",
+  "990010800": "SNIPER_SET_3",
+  "990010900": "EGG_MASK_7D+",
+  "990011000": "EGG_MASK_30D+",
+  "990011100": "R_AUG_A3_Set",
+  "990011200": "R_Cheytac_M200_Set",
+  "990011300": "Gato_Gold_MASK_3D+",
+  "990011400": "Gato_Gold_MASK_7D+",
+  "990011500": "Gato_Gold_MASK_30D+",
+  "990011600": "PB_Nesian_Set",
+  "990011700": "Fest_Of_Sacrifice_Set",
+  "990011800": "GM_Spoon_SET",
+  "990011900": "GM_Kurosaki_SET",
+  "990012000": "G-Series_Aug_A3_pack",
+  "990012100": "G-Series_Kriss_SV_pack",
+  "990012200": "G-Series_Famas_pack",
+  "990012300": "G-Series_P90_pack",
+  "990012400": "G-Series_Cheytac_pack",
+  "990012500": "G-Series_M1887_pack",
+  "990012600": "GSL_Gold_Mask_pack",
+  "990012700": "GSL_Red_Mask_Pack",
+  "990012800": "GSL_White_Mask_Pack",
+  "990012900": "Aug_A3_GRS_pack",
+  "990013000": "Kriss_GRS_Pack",
+  "990013100": "Cheytac_GRS_Pack",
+  "990013200": "Italy_package",
+  "990013300": "PBNC4_Assult_Set",
+  "990013400": "PBNC4_Assist_Set",
+  "990013500": "PBNC4_ShotGun_Set",
+  "990013600": "PBNC4_Sniper_Set",
+  "990013700": "Rica_Chou_Pack",
+  "990013800": "Sharpshooter_Set",
+  "990013900": "Set_Tournament",
+  "990014000": "Strong_Package",
+  "990014100": "Latin3_Assault_Package",
+  "990014200": "Latin3_SMG_Package",
+  "990014300": "Latin3_Sniper_Package",
+  "990014400": "Latin3_Premium_Package",
+  "990014500": "Esport_AUG_A3_Set",
+  "990014600": "Esport_Famas_Set",
+  "990014700": "Esport_KrissSV_Set",
+  "990014800": "Esport_L115A1_Set",
+  "990014900": "GSL2014_AUG_REDMASK_Set",
+  "990015000": "GSL2014_KRISS_REDMASK_Set",
+  "990015100": "GSL2014_L115_FANG_Set",
+  "990015200": "GSL2014_KELTEC_FANG_Set",
+  "990015300": "GSL2014_KRISS_MASK_Set",
+  "990015400": "GSL2014_AUG_MASK_Set",
+  "990015500": "1Day_AR_Set",
+  "990015600": "1Day_SMG_Set",
+  "990015700": "1Day_SR_Set",
+  "990015800": "Ghost_Package",
+  "990015900": "Ignis_Package",
+  "990016000": "PBNC5_Sniper_set",
+  "990016100": "PBNC5_Assist_set",
+  "990016200": "PBNC5_Shotgun_set",
+  "990016300": "BR_Camo_AUGA3_set",
+  "990016400": "BR_Camo_L115A1_set",
+  "990016500": "BR_Camo_P90_set",
+  "990016600": "Brazuca_AR",
+  "990016700": "Brazuca_SR",
+  "990016800": "Brazuca_SMG",
+  "990016900": "WCChaSet",
+  "990017000": "GSL2013_Super_Pack",
+  "990017100": "GRS_FAMAS_Pack",
+  "990017200": "GRS_P90_MC_Pack",
+  "990017300": "WOE_AUG_A3_Set",
+  "990017400": "WOE_CheytacM200_Set",
+  "990017500": "WOE_Kriss_SV_Set",
+  "990017600": "Midnight_Kriss_Package",
+  "990017700": "Midnight_TAR21_Package",
+  "990017800": "PBIC2014_Set",
+  "990017900": "Kriss_Super_V_Inferno_Set",
+  "990018000": "AUG_A3_Inferno_Set",
+  "990018100": "Cheytac_M200_Inferno_Set",
+  "990018200": "FangBlade&P90_Ext_Inferno_Set",
+  "990018300": "OA93_Gold_Set",
+  "990018400": "Gift_box_red",
+  "990018500": "Gift_box_gold",
+  "990023000": "FangBlade+AUG_A3_Inferno_Set",
+  "990023100": "FangBlade+KrissSV_Inferno_Set",
+  "990023200": "FangBlade+CheytacM200_Inferno_Set",
+  "990023300": "FangBlade+P90_Inferno_Set",
+  "990024700": "PH_NewbiePackage_1",
+  "990024800": "PH_NewbiePackage_2",
+  "990024900": "CNY2015_AUG_A3_Set",
+  "990025000": "CNY2015_Kriss_SV_Set",
+  "990025700": "GRS2 AUG A3 Super Pack",
+  "990025800": "GRS2 Cheytac M200 Super Pack",
+  "990025900": "GRS2 Kriss S.V Super Pack",
+  "990026000": "GRS2 Mask Battle Pack V1",
+  "990026200": "GRS2 Mask Super Pack",
+  "990026300": "Set_Assault Advence",
+  "990026400": "Set_Sniper Advence",
+  "990026500": "Set_Assault V1",
+  "990026700": "Set_Duelist",
+  "990027100": "Midnight_Set",
+  "990027500": "OA-93 Package",
+  "990027600": "GRS2 Kriss S.V Pack",
+  "990027700": "GRS2 AUG A3 Pack",
+  "990027800": "GRS2 Cheytac M200 Pack",
+  "990027900": "2015_Ramadan_Set_TR",
+  "990028000": "Skull_Female_Set_PH",
+  "990028100": "Skull_Male_Set_PH",
+  "990028200": "Midnight_Kriss_SV_Set_PH",
+  "990028300": "Midnight_Tar-21_Set_PH",
+  "990028400": "Gold_AUG_Set_PH",
+  "990028500": "Gold_Kriss_SV_Set_PH",
+  "990028800": "Set_Rifle_B_LAM",
+  "990029000": "Set_Sniper_A_LAM",
+  "990029200": "Set_Sniper_B_LAM",
+  "990029800": "SMGSET",
+  "990029900": "BoomSET",
+  "990030000": "HunterSET",
+  "990030100": "Newborn_AUG_A3_Set_V1",
+  "990030300": "Newborn_Kriss_SV_Set_V1",
+  "990030500": "Newborn_P90_Set",
+  "990030600": "G_Esport_AUG_A3_Set",
+  "990030700": "G_Esport_Kriss_SV_Set",
+  "990030800": "G_Esport_Cheytac_M200_Set",
+  "990030904": "P90_Gold_Package",
+  "990031700": "Kurban_Bayram_Set",
+  "990031800": "PBIC2015_Set",
+  "990031900": "PBIC2015_Fan_Set",
+  "990032000": "DeathMask_Set",
+  "990032100": "BombMission_Set",
+  "990032200": "LevelUp_Set",
+  "990032300": "Pilot_Set",
+  "990032400": "Sheriff_Set",
+  "990032500": "PBIC2015_Collection_Set_LAM",
+  "990032600": "PBIC2015_Battle_Set_LAM",
+  "990032700": "AUG_A3_Mech_Set_TAM",
+  "990032800": "Cheytac_M200_Gold_Set",
+  "990032900": "Exp_Point_Boost_Set",
+  "990033000": "Exp_Boost_Set",
+  "990033200": "Black_Widow_Set",
+  "990033300": "Point_Boost_Set_RU",
+  "990033400": "Paket_M1887_Set",
+  "990033500": "Paket_Cheytac_Set",
+  "990033600": "Paket_Kriss_Set",
+  "990033700": "Paket_AUG_Set",
+  "990033800": "Paket_Vest_Set",
+  "990033900": "Kriss_Horror_Set",
+  "990034300": "Kit_Pro_A_BR",
+  "990034600": "SET_SMG_Camo_TAM",
+  "990034900": "SET_Military_Set_CTF_ID",
+  "990035000": "SET_MilitarySpecial_FR_ID",
+  "990035100": "SET_Madness_Set_RU",
+  "990035200": "SET_Madness_Set_Pre_RU",
+  "990035300": "SET_Sniper_Camo_TAM",
+  "990035700": "SET_AUGA3Emperor_TH",
+  "990035800": "SET_M1887Emperor_TH",
+  "990035900": "SET_TactiliteEmperor_TH",
+  "990036000": "SET_KrissEmperor_TH",
+  "990036100": "SET_AUGA3GRS2_ID",
+  "990036200": "SET_AUGA3GRS2Pre_ID",
+  "990036300": "SET_Pirate_ID",
+  "990036400": "SET_BombMission_ID",
+  "990036600": "SET_Level_Up_TAM",
+  "990036800": "SET_Kopassus_30D_TAM",
+  "990036900": "SET_Hide_Strike_3D_TAM",
+  "990037100": "SET_Viper_Kopassus_7D_TAM",
+  "990037200": "SET_New_Kriss_Gold_TAM",
+  "990037300": "SET_KrissMidnight_TH",
+  "990037400": "SET_MaskPBIC2013_TH",
+  "990037500": "SET_KrissRedDawn_TH",
+  "990037600": "SET_Pro_B_Mega5_BR",
+  "990037700": "SET_KrissSilencer_ID",
+  "990037800": "SET_CheytacSilencer_ID",
+  "990037900": "SET_AUGSilencer_ID",
+  "990038000": "SET_KrissSilencerPre_ID",
+  "990038100": "SET_New_AZE_TAM",
+  "990038300": "SET_AUGA3Skeleton_TH",
+  "990038400": "SET_KrissSVSkeleton_TH",
+  "990038500": "SET_M1887Skeleton_TH",
+  "990038800": "SET_AUGA3GRS3_ID",
+  "990038900": "SET_KrissSVGRS3_ID",
+  "990039000": "SET_TactiliteT2GRS3_ID",
+  "990039100": "SET_M1887GRS3_ID",
+  "990039200": "SET_AUGA3MidBlue2_ID",
+  "990039300": "SET_KrissSVMidBlue2_ID",
+  "990039400": "SET_CheytacMidBlue2_ID",
+  "990039500": "SET_AUGA3PBWC2016",
+  "990039600": "SET_CheytacM200PBWC2016",
+  "990039700": "SET_KrissSVPBWC2016",
+  "990039800": "SET_P90MCPBWC2016",
+  "990039900": "SET_OA93PBWC2016",
+  "990040000": "SET_Nightfall_TAM",
+  "990040100": "SET_AUGA3GRSP2_TH",
+  "990040200": "SET_KrissSVGRSP2_TH",
+  "990040300": "SET_CheytacM200GRS_TH",
+  "990040400": "SET_AKSOPMODGRS_TH",
+  "990040500": "SET_M4A1GRS_TH",
+  "990040900": "SET_Spy_TAM",
+  "990041200": "SET_M1887_GRS_TH",
+  "990041300": "SET_QuickChange_ID",
+  "990041400": "SET_PBNC2016Basic_ID",
+  "990041500": "SET_CheytacAlien_ID",
+  "990041600": "SET_P90Alien_ID",
+  "990041700": "SET_KrissSVAlien_ID",
+  "990041800": "SET_AUGA3Alien_ID",
+  "990041900": "SET_TactiliteT2_ID",
+  "990042000": "SET_PBNC2016Pre_ID",
+  "990042400": "SET_M1887Kemer_ID",
+  "990042500": "SET_TactiliteKemer_ID",
+  "990042600": "SET_P90Kemer_ID",
+  "990042700": "SET_OA93Kemer_ID",
+  "990042800": "SET_AUGA3Kemer_ID",
+  "990042900": "SET_PBIC2016Basic_ID",
+  "990043000": "SET_PBIC2016Pre_ID",
+  "990043100": "SET_M1887_Newborn2016_TH",
+  "990043200": "SET_OA93_Newborn2016_TH",
+  "990043300": "SET_Tactil_Newborn2016_TH",
+  "990044000": "SET_CheytacAdha_TAM",
+  "990044300": "SET_Kit_Pro_C_BR",
+  "990044500": "SET_AUGA3Demonic_ID",
+  "990044600": "SET_CheytacDemonic_ID",
+  "990044700": "SET_P90Demonic_ID",
+  "990044800": "SET_KrissDemonic_ID",
+  "990044900": "SET_ElementAir_ID",
+  "990045000": "SET_ElementEarth_ID",
+  "990045100": "SET_ElementFire_ID",
+  "990045200": "SET_ElementWater_ID",
+  "990045300": "SET_AUG_A3_DarkSteel_TH",
+  "990045400": "SET_Cheytac_DarkSteel_TH",
+  "990045500": "SET_Kriss_SV_DarkSteel_TH",
+  "990045600": "SET_M1887_DarkSteel_TH",
+  "990045700": "SET_P90_DarkSteel_TH",
+  "990045800": "SET_Famas_G2_Newborn16_TH",
+  "990046500": "SET_CheytacM200Apoc_TAM",
+  "990046700": "SET_AugA3Apoc_TAM",
+  "990046800": "SET_AUG_A3_Supreme_TH",
+  "990046900": "SET_Kriss_SV_Supreme_TH",
+  "990047000": "SET_Cheytac_Supreme_TH",
+  "990047100": "SET_M1887_Supreme_TH",
+  "990047200": "SET_P90_Ext_Supreme_TH",
+  "990080800": "Set_Rifle_A_LAM"
+ }
+}

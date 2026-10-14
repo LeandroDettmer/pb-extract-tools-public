@@ -9,14 +9,10 @@
 // drips of 'drip' splats run to -Y (image bottom).
 'use strict';
 import { assetPath } from '../lib/paths.mjs';
-import { createRequire } from 'node:module';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
-// sharp is not a dependency of this repo: SHARP_FROM = a package.json whose node_modules resolve it.
-if (!process.env.SHARP_FROM) { console.error('pbx: bloodtex needs sharp: set SHARP_FROM to a package.json that resolves it'); process.exit(2); }
-const sharp = createRequire(process.env.SHARP_FROM)('sharp');
+import sharp from 'sharp';
 
 const args = process.argv.slice(2);
 const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : d; };

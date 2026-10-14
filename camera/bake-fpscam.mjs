@@ -1,4 +1,5 @@
 // Bakes the real 1PV camera pivot (the Neck bone) for src/gameplay/pbFpsCam.generated.ts.
+// Assets: PBCross chars only (arms_1pv.glb, anim1pv, anim3pv/Common.glb); the 2017 exe gives the formula.
 //
 // PB 2017 exe, CGameCamera_FPS update (0x689980): the FPS camera is
 //     M = T(FPSCamPos) * RotY(yaw + pi) * RotAxis(charRight, -pitch) * boneCtx.flinch,  M.pos += Neck.worldPos
@@ -49,7 +50,7 @@ const part = (c, lower) => new THREE.AnimationClip(`${c.name}#${lower ? "L" : "U
   c.tracks.filter((t) => LOWER.has(t.name.split(".")[0]) === lower));
 
 const lowClips = (await load(path.join(CHARS, "swat_male/anim3pv/Common.glb"))).animations;
-const low = (n) => lowClips.find((c) => c.name === `Common/${n}`);
+const low = (n) => lowClips.find((c) => c.name === `common/${n}`);
 const r4 = (v) => Math.round(v * 1e4) / 1e4;
 
 async function bake(char) {
@@ -57,7 +58,10 @@ async function bake(char) {
   const model = arms.scene;
   const neck = model.getObjectByName("Neck");
   const ik = model.getObjectByName("IK");
-  const idle = arms.animations.find((c) => c.name === "assault/AttackIdle");
+  // PBCross arms_1pv has the assault upper clip only on the female rig; the male rig takes the same assault idle from its
+  // assault rifle 1PV set (anim1pv/assultrifle_Common.glb, same rig)
+  const idle = arms.animations.find((c) => c.name === "assault/AttackIdle")
+    ?? (await load(path.join(CHARS, char, "anim1pv", "assultrifle_Common.glb"))).animations.find((c) => c.name === "assultrifle/Common/AttackIdle");
   const mixer = new THREE.AnimationMixer(model);
   const local = (o) => model.worldToLocal(o.getWorldPosition(new THREE.Vector3()));
   let chain = null; // Neck - IK with the upper clip only

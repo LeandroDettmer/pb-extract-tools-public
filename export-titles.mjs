@@ -1,16 +1,16 @@
-// Title (designation) table of the Perfil / Títulos phase -> src/lobby/screens2017/titleData.ts
+// Title (designation) table of the Perfil / Títulos phase -> src/lobby/core/titleData.ts
 //   node export-titles.mjs
-// Sources: extracted/pef2017/br/DesignationValue.json (tools/pef/extract-config.mjs; DesignationSet = the client's own
-// title table, DesignationValue effect keys), old/runtime/db-init/022_migration_system_titles_20260725.sql (requirements the
-// server-ts handleTitleChange checks: system_titles), and the node layout of PointBlankRe_MyInfomation_Designation.
-import { TOOLS, assetPath, extractedPath, generatedPath, oldServerPath } from './lib/paths.mjs';
+// Sources: extracted/pef-cross/br/DesignationValue.json (pef/export-cross.mjs; DesignationSet = the PBCross title table,
+// DesignationValue effect values), old/runtime/db-init/022_migration_system_titles_20260725.sql (requirements the
+// server-ts handleTitleChange checks: system_titles). Tree: PBCross UI_Project_Profile Designation_Tree_Slot<N>; the Cross exe
+// links slot N to the DesignationSet whose _Type-set index is N (profile.ts nodeTitle), so TREE_NODES needs no layout file.
+import { TOOLS, extractedPath, generatedPath, oldServerPath } from './lib/paths.mjs';
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-const pef = JSON.parse(readFileSync(extractedPath('pef2017', 'br', 'DesignationValue.json'), "utf8"));
+const pef = JSON.parse(readFileSync(extractedPath('pef-cross', 'br', 'DesignationValue.json'), "utf8"));
 const sql = readFileSync(oldServerPath("runtime", "db-init", "022_migration_system_titles_20260725.sql"), "utf8");
-const scene = JSON.parse(readFileSync(assetPath('ui', 'scenes', 'kaybo', 'PointBlankRe_MyInfomation_Designation.json'), "utf8"));
 
 // effect ids (DESIGNATION_ID) decoded from the exe (tools/designation-effects.json): id = family base + level - 1, value = pef key
 const fx = JSON.parse(readFileSync(join(TOOLS, "designation-effects.json"), "utf8"));
@@ -44,17 +44,8 @@ for (const [key, s] of Object.entries(pef.DesignationSet)) {
 titles.sort((a, b) => a.id - b.id);
 if (titles.some((t, i) => t.id !== i + 1 || !t.classId)) throw new Error("title ids are not 1..44");
 
-// tree: ButtonImageSet00..06 = titles 1..7; the other 37 sit in 7 rows (one per class chain) by y, ordered by x
-const nodes = scene.controls.filter((c) => /^i3UIButtonImageSet\d\d$/.test(c.name)).map((c) => ({ n: Number(c.name.slice(-2)), x: c.x, y: c.y }));
-const ROWS = [[320, 2], [271, 3], [209, 4], [158, 5], [100, 6], [54, 8], [8, 7]]; // y -> classId (A1 assault, knife, sniper, handgun, SMG, shotgun, explosive)
-const tree = new Array(44).fill(0);
-for (const nd of nodes) if (nd.n < 7) tree[nd.n] = nd.n + 1;
-for (const [y, cls] of ROWS) {
-  const chain = titles.filter((t) => t.classId === cls && t.id > 7).map((t) => t.id);
-  const row = nodes.filter((nd) => nd.n >= 7 && Math.abs(nd.y - y) < 40 && ROWS.reduce((a, r) => (Math.abs(r[0] - nd.y) < Math.abs(a[0] - nd.y) ? r : a))[1] === cls).sort((a, b) => a.x - b.x);
-  if (row.length !== chain.length) throw new Error(`class ${cls}: ${row.length} nodes for ${chain.length} titles`);
-  row.forEach((nd, i) => { tree[nd.n] = chain[i]; });
-}
+// tree[k] = title of Designation_Tree_Slot<k+1> = the DesignationSet with set index k+1 (exe: slot N -> set N, profile.ts nodeTitle)
+const tree = Array.from({ length: 44 }, (_, k) => titles.find((t) => t.set === k + 1)?.id ?? 0);
 if (tree.some((t) => !t) || new Set(tree).size !== 44) throw new Error("tree is not a permutation of 1..44");
 
 const num = (n) => String(n);
@@ -69,7 +60,7 @@ export interface TitleDef {
 export const TITLES: readonly TitleDef[] = [
 ${titles.map((t) => `  { id: ${t.id}, set: ${t.set}, apply: ${t.apply}, plus: [${t.plus}], minus: [${t.minus}], add: [${t.add}], weapon: ${JSON.stringify(t.weapon)}, classId: ${t.classId}, ribbon: ${t.ribbon}, ensign: ${t.ensign}, medal: ${t.medal}, master: ${t.master}, rank: ${t.rank}, slot: ${t.slot}, req1: ${t.req1}, req2: ${t.req2} },`).join("\n")}
 ];
-/** ButtonImageSet<NN> of the tree (i3UIButtonImageSet00..43) -> title id */
+/** tree index NN = Designation_Tree_Slot<NN+1> (PBCross UI_Project_Profile) -> title id */
 export const TREE_NODES: readonly number[] = [${tree.join(", ")}];
 /** effect id -> [STR_HEADER_<key> text, DesignationValue.pef key ("" = no value)] (exe CDesignationValueSet 0x4d1a20 / 0x4d29d0) */
 export const EFFECTS: Readonly<Record<number, readonly [string, string]>> = ${JSON.stringify(effects)};
@@ -78,5 +69,5 @@ export const AUTHORITY_EFFECTS: readonly number[] = ${JSON.stringify(fx.authorit
 /** DesignationValue.pef values by key (only the keys the effect ids use) */
 export const EFFECT_VALUES: Readonly<Record<string, number>> = ${JSON.stringify(Object.fromEntries(Object.values(effects).map((e) => e[1]).filter(Boolean).map((k) => [k, pef[k]])))};
 `;
-writeFileSync(generatedPath("lobby/screens2017/titleData.ts"), out);
+writeFileSync(generatedPath("lobby/core/titleData.ts"), out);
 console.log(`titleData.ts: ${titles.length} titles, ${Object.keys(effects).length} effects, tree ${tree.join(",")}`);

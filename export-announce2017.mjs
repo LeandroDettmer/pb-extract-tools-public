@@ -1,7 +1,9 @@
 #!/usr/bin/env node
-// Kill-mark announce voice lines of the 2017 client (Sound_voice_Announce.i3Pack, named WAVs, PFN3 index decodes).
+// Announce voice lines (kill marks, match flow, bomb) of the base client PBCross (Pack/Sound_voice_Announce.i3Pack, named
+// WAVs, index decodes; Cross voice = PT-BR). Output keeps the 2017/ folder name: announce.json and pbSound.ts point at it.
+// Cross ships all 25 clips below. Only in the 2017 pack, not exported: WM_Convoy_Drop/FirstGet/Get/Point (no client use).
 //
-//   node export-announce2017.mjs   # -> out/sfx/announce/2017/*.wav + announce.json
+//   node export-announce2017.mjs   # -> assets/sfx/announce/2017/*.wav + announce.json
 //
 // Names come straight off the exe string table (bb6e24.. block, CGameSoundManager::StartAnnounceMessage): only the
 // kill/streak-related clips are kept (round start/end, mission, holiday clips stay out of scope for kill marks).

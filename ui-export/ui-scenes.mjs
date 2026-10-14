@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 // Scenes (.i3UIs layouts) -> out/ui/scenes/<ver>/<Scene>.json + scenes/index.json
 //
-//   node ui-export/ui-scenes.mjs [v12 v11 kaybo]
+//   node ui-export/ui-scenes.mjs [v12 v11 kaybo cross]
 //
 // v12  : PointBlank 3.123 Pack/UI_V12.i3Pack (237 scenes, real names via tools/i3pack/unpack.mjs)
 // v11  : Pack/UI_V11.i3Pack is empty in 3.123 (313 bytes) -> no scenes, only templates/atlases
 // kaybo: PBKaybo Pack/UI_Re2.i3Pack (187) + loose UI_Temp/*.i3UIs (12)
+// cross: PBCross loose UI_Temp/*.i3UIs (13: PBRe_ForceExitVote, _Result, GhostMode, PopUp_Report...), templates UI_Temp/PBRe.i3Uil
 //
 // Each scene JSON (format "pb-ui-scene/1") carries the controls in object order plus the templates it
 // uses (resolved by MD5(UPPER(name)) against the same version's template set), so a screen needs a single

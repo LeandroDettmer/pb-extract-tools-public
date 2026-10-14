@@ -16,7 +16,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { exportWeapon } from './export-model.mjs';
 
-const PACKS = clientPath(baseClient(['cross']), 'Pack'); // Cross only: other clients fail with a message
+const PACKS = clientPath(baseClient('cross'), 'Pack'); // Cross only by default (--client <key> for a diagnostic run)
 const MODELS = assetPath('weapons', 'models');
 const IDX = path.join(MODELS, 'index.json');
 const log = console.log;

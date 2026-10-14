@@ -29,6 +29,7 @@ export { rel };
 
 const P123 = clientPath('br3123');
 const KAYBO = clientPath('kaybo');
+const CROSS = clientPath('cross');
 
 // Where each UI version lives. vtex: lookup order (locale first, then _Common).
 export const VERSIONS = {
@@ -49,6 +50,14 @@ export const VERSIONS = {
     scenePacks: [path.join(KAYBO, 'Pack', 'UI_Re2.i3Pack')],
     sceneDirs: [path.join(KAYBO, 'UI_Temp')],
     templateLibs: [path.join(KAYBO, 'UIRe', 'PointBlankRe.i3Uil'), path.join(KAYBO, 'UI_Temp', 'PBRe.i3Uil')],
+    vtex: [],
+  },
+  // Cross keeps only the UI_Temp scenes loose (vote, ghost mode, report...): same VTV2 virtual texture as Kaybo UI_Temp
+  cross: {
+    label: 'Point Blank Cross UI_Temp',
+    scenePacks: [],
+    sceneDirs: [path.join(CROSS, 'UI_Temp')],
+    templateLibs: [path.join(CROSS, 'UI_Temp', 'PBRe.i3Uil')],
     vtex: [],
   },
 };

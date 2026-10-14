@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // 3rd-person animation library straight from the PBCross character AI (Chara/<Name>/<Name>.I3CHR), pure Node ESM.
 //
-//   node export-anim3pv.mjs [SWAT_Male]         # -> <out>/chars/<name>/anim3pv/
-//   node export-anim3pv.mjs --list [SWAT_Male]  # itemId -> resolved 3PV AI (Cross | substitute), no write
+//   node web-poc/tools/export-anim3pv.mjs [SWAT_Male]         # -> public/assets/chars/<name>/anim3pv/
+//   node web-poc/tools/export-anim3pv.mjs --list [SWAT_Male]  # itemId -> resolved 3PV AI (Cross | substitute), no write
 //
 // The I3CHR AI tree says which .i3a each state plays (tools/i3r2/charai-i3r2.mjs):
 //   Lower  Stand|Sit x {Idle, Front, FrontLeft, FrontRight, Left, Right, Back, BackLeft, BackRight, Walk<8 dirs>,
@@ -11,9 +11,8 @@
 // with the state's blend-in time and clip duration. weapon.pef LinkedToCharaAI (the 2017 pef when the weapon exists
 // there, tools/pef-cross.mjs) links each weapon to its AI, so the upper body plays the weapon's own reload/change/attack clips.
 //
-// Source: Cross only (Clients/PBCross/Chara/<Name>/<Name>.I3CHR + Chara_<Name>_*.i3AnimPack). Upper and lower trees come
+// Source: PBCross only (Clients/PBCross/Chara/<Name>/<Name>.I3CHR + Chara_<Name>_*.i3AnimPack). Upper and lower trees come
 // from the same I3CHR, read with readCharAI2017 (the 3.123 reader finds 1 upper tree in Cross, this one 159). No fallback client.
-// The 2017 (Kaybo) I3CHR is not wired here: its weapon blocks and weapon list are not per client yet.
 //
 // Output (loaded lazily by src/game/charAnimLib.ts):
 //   index.json   { lower: {Stand, Sit}, ai: {<AI>: {driver, stances: {AttackIdle, Zoom}}}, weapons: {<itemId>: <AI>},
@@ -21,7 +20,7 @@
 //   <dir>.glb    one animation-only GLB per clip folder (e.g. AssultRifle_AK47.glb): nodes = skeleton bone names,
 //                clips named by key "<Folder>/<Sub>/<Clip>" (path under Chara/<Name>/3PV/, no extension).
 // Tracks are the same bone-local TRS as model.glb (tools/export-anim.mjs addClips), so the clips bind to its bones.
-import { assetPath, clientPath, baseClient } from './lib/paths.mjs';
+import { assetPath, clientPath } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -31,8 +30,7 @@ import { GLB, readGLB } from './i3r2/skin-glb.mjs';
 import { addClips } from './export-anim.mjs';
 import { pefById } from './pef-cross.mjs';
 
-// Cross only: the I3CHR AI tree, pef-cross weapon blocks and cross/weapons catalog are Cross data. Other clients fail with a message (lib/paths.mjs baseClient)
-const GAME = clientPath(baseClient(['cross']));
+const GAME = clientPath('cross'); // PBCross only: several clients were read before, now none (no fallback)
 const ASSETS = assetPath();
 
 /**
@@ -41,7 +39,7 @@ const ASSETS = assetPath();
  * arms. src/game/charAnimLib.ts dualTables merges the pairs (same as the 1PV side, tools/export-anim1pv.mjs).
  */
 const DUAL_STATES = ['LeftIdle', 'RightIdle', 'LeftMove', 'RightMove', 'LeftAttack', 'RightAttack'];
-/** states exported per upper stance (the rest - Extension*, Grenade/Knife/ShotGun/AttackIdle_Left/CrossIdle* stances - are not driven by the web app; *Master is exported only, [INFERIDO] 0x613710) */
+/** states exported per upper stance (the rest - Extension*, Grenade/Knife/ShotGun/AttackIdle_Left/CrossIdle* stances - are not driven by the web client; *Master is exported only, [INFERIDO] 0x613710) */
 const JUMP_DAMAGE = ['JumpStart', 'JumpEnd', 'DamageFrontLeftA', 'DamageFrontLeftB', 'DamageFrontRightA', 'DamageFrontRightB', 'DamageBackA', 'DamageBackB'];
 const UPPER_STATES = {
   AttackIdle: ['Idle', 'Move', 'Attack', 'AttackReady', 'AttackBurst', 'SecondaryAttack', 'LoadMagazine', 'LoadBullet', 'LoadMagazineReady', 'Change',
@@ -87,7 +85,7 @@ export function resolve3pv(name = 'SWAT_Male') {
     if (!byAiName.has(n)) byAiName.set(n, []);
     if (!byAiName.get(n).includes(k)) byAiName.get(n).push(k);
   }
-  // a dual tree (RightIdle / LeftIdle, no Idle) only for the dual-wield guns the web app mounts twice (weapons.json
+  // a dual tree (RightIdle / LeftIdle, no Idle) only for the dual-wield guns the web client mounts twice (weapons.json
   // className DualHandGun / DualSMG / DualShotgun, WeaponSystem dualFire); others (202025 HK45 Dual, a HandGun) keep
   // the single-weapon AI of the same name or the class fallback
   const DUAL_CLASSES = ['DualHandGun', 'DualSMG', 'DualShotgun'];
@@ -202,7 +200,7 @@ export function buildAnim3pv(name = 'SWAT_Male', { log = console.log } = {}) {
   Object.values(lower).forEach(ok);
   for (const a of Object.values(ai)) Object.values(a.stances).forEach(ok);
   const index = {
-    generated: new Date().toISOString(), tool: 'export-anim3pv.mjs',
+    generated: new Date().toISOString(), tool: 'web-poc/tools/export-anim3pv.mjs',
     source: `PBCross Chara/${name}/${name}.I3CHR (upper + lower); + Chara_${name}_*.i3AnimPack`,
     note: 'state = { clip, blend (s, i3AIState blend-in), dur (s, i3AIState duration), loop }; zoomType = weapon.pef _ZoomType (2|3 -> Zoom AI); fallback = [RECRIADO] AI substitutions; aiSource = client of each AI tree',
     lower, ai, weapons, names, zoomType, fallback, aiSource: Object.fromEntries(Object.keys(ai).map((k) => [k, aiSource[k]])), bundles,

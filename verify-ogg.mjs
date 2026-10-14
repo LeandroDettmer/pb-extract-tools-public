@@ -1,7 +1,10 @@
-// Checks every out x.wav against its x.ogg twin (tools/wav-to-ogg.mjs): duration diff < 5 ms (Ogg length = last page granule
-// position, what a decoder trims to; ffmpeg's raw decode keeps the padded last Vorbis block, trimmed here the same way), RMS within 1 dB,
+// Checks every out x.wav against its x.ogg twin (tools/wav-to-ogg.mjs): duration diff <= 256 samples (Ogg length = last page granule
+// position, what a decoder trims to; ffmpeg's raw decode keeps the padded last Vorbis block, trimmed here the same way). The 256 is
+// [INFERIDO] the ffmpeg Vorbis decode shortfall on some 22050 Hz streams (8 of 145, granule exact, decode 256 short, same at q3-q10 and at
+// 44.1 kHz with 128); a ms limit would be 5 ms = 110 samples at 22050 Hz and fails them. Loops keep the exact granule check. RMS within 1 dB,
 // head cross-correlation lag within 1 ms. Decodes with ffmpeg (same ffmpeg as wav-to-ogg), the decoder family Chrome uses.
-// Usage: node tools/verify-ogg.mjs [dir=out] [--sample=N] [--loops (ambient loops only)]
+// Usage: node tools/verify-ogg.mjs [dir=out] [--sample=N] [--loops (ambient loops only, skips the wav/ogg pairs)]
+// Default: every wav pair + the ambient loops. The ALL pipeline (pbx export all) runs the default; --loops was its old default and checked 0 pairs.
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
@@ -58,7 +61,7 @@ for (const wav of list) {
   const dDb = ra > 1e-6 ? Math.abs(20 * Math.log10((rb + 1e-9) / ra)) : 0;
   const dOn = Math.abs(onset(a, b)) * 1000;
   maxDur = Math.max(maxDur, dDur); maxDb = Math.max(maxDb, dDb); maxOn = Math.max(maxOn, dOn);
-  if (a.rate !== b.rate || a.nch !== b.nch || dDur >= 5 || dDb > 1 || dOn > 1) { console.log("BAD", rel, { rate: [a.rate, b.rate], nch: [a.nch, b.nch], dDurMs: +dDur.toFixed(2), dDb: +dDb.toFixed(2), dOnMs: +dOn.toFixed(2) }); bad++; }
+  if (a.rate !== b.rate || a.nch !== b.nch || Math.abs(a.frames - b.frames) > 256 || dDb > 1 || dOn > 1) { console.log("BAD", rel, { rate: [a.rate, b.rate], nch: [a.nch, b.nch], dDurMs: +dDur.toFixed(2), dDb: +dDb.toFixed(2), dOnMs: +dOn.toFixed(2) }); bad++; }
 }
 // ambient loops (maps/*/ambient.json "loop": true): the seam must not gap. Exact sample count (granule == wav frames, decoder output trimmed
 // to it) and the wrap-around window (last 10 ms + first 10 ms) must match the wav: RMS within 1 dB, and the jump across the seam (last -> first sample)

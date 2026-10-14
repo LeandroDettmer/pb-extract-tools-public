@@ -19,15 +19,17 @@
 // kaybo: step 1 is the 2017 virtual texture (tools/ui-export/vtex-kaybo.mjs: VTV2 + .i3RefTex + .i3VTexSub),
 // looked up by the shape's path (UIRe/... or UI_Temp/...: the two sets reuse image names at other sizes);
 // index key kaybo/<img> for UIRe, kaybo/UI_Temp/<img> for UI_Temp.
+// cross: the same reader on PBCross UI_Temp/PBRe.i3VTex (`ui-atlas.mjs cross --all` after `ui-scenes.mjs cross`), no fallback.
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { OUT, rel, vtexIndex, decodeVTexPlain, encodePNG, writeJSON } from './lib.mjs';
 import { loadKayboImage, rootOf } from './vtex-kaybo.mjs';
+import { clientPath } from '../lib/paths.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const FALLBACK = { v12: ['v11'], kaybo: ['v11'], v11: [] };
+const FALLBACK = { v12: ['v11'], kaybo: ['v11'], v11: [], cross: [] };
 const PAD = 1; // extruded border so stretched slices do not bleed
 
 // Scenes of docs/LOBBY_PLAN.md §2.2 (and the Kaybo counterparts that exist).
@@ -65,8 +67,9 @@ async function resolveImage(ver, key, shapePath) {
   const ck = imageKey(ver, key, shapePath);
   if (pixCache.has(ck)) return pixCache.get(ck);
   let r = null;
-  if (ver === 'kaybo') {
-    const k = loadKayboImage(key, shapePath);
+  if (ver === 'kaybo' || ver === 'cross') {
+    // cross: the Cross UI_Temp virtual texture (same VTV2 format), no fallback to another client
+    const k = loadKayboImage(key, shapePath, ver === 'cross' ? clientPath('cross') : undefined);
     if (k) r = { status: 'original', w: k.w, h: k.h, rgba: k.rgba, src: k.src, encrypted: false,
       ...(k.path.toLowerCase() !== String(shapePath).toLowerCase() ? { note: `shape path ${shapePath}, found as ${k.path}` } : {}) };
   }

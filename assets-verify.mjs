@@ -14,6 +14,8 @@ const bi = process.argv.indexOf('--base');
 let base = bi >= 0 ? path.resolve(process.argv[bi + 1]) : null;
 if (!base) {
   const l = fs.existsSync(SNAPS) ? fs.readdirSync(SNAPS).filter((n) => /^\d{4}-\d\d-\d\dT/.test(n)).sort() : [];
+  // --if-baseline (export all): a first export into an empty folder has no snapshot, so nothing can regress
+  if (!l.length && process.argv.includes('--if-baseline')) { console.log('sem baseline (snapshot vazio): nada a comparar'); process.exit(0); }
   if (!l.length) { console.error('sem baseline: rode assets:snapshot ou passe --base'); process.exit(1); }
   base = path.join(SNAPS, l.at(-1));
 }

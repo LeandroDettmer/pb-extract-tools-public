@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// Which characters/equip parts are COMPLETE in the 2017 client, i.e. equippable with 2017 assets only.
-// Mirrors tools/audit-weapons-2017.mjs. Pure Node ESM, reads exported assets + the system_shop name snapshot.
+// Which characters/equip parts are COMPLETE in the PBCross client, i.e. equippable with the Cross export only.
+// Mirrors audit-weapons-cross.mjs. Pure Node ESM, reads exported assets + the system_shop name snapshot.
 //
-//   node audit-charas-2017.mjs                 # -> out/chars/complete-2017.json
-//   node audit-charas-2017.mjs --list [ids..]  # per item: complete | missing parts (no write)
+//   node audit-charas-cross.mjs                 # -> out/chars/complete-cross.json
+//   node audit-charas-cross.mjs --list [ids..]  # per item: complete | missing parts (no write)
 //
 // Universe of "sold" itemIds = src/lobby/state/data/itemNames.json (system_shop.item_name snapshot), classes
 // 6 (Character) and 7-14/27 (Head/Face/Jacket/Pocket/Glove/Belt/Holster/Skin/Beret parts).
@@ -15,7 +15,7 @@
 //   Parts (class 7-14, 27): no export pipeline exists yet (no chars/<x>/parts/* and no attachment support in
 //     src/game/charModel.ts) -> always incomplete today. Re-enable a class once export-batch.mjs grows a
 //     `parts`/`equip` mode and charModel.ts gains an attachment point for it.
-// Items missing any part are hidden by the web app;
+// Items missing any part are hidden by the web client (src/lobby/state/charaSupport.ts: shop, inventory);
 // the DB and the server keep them. Re-enable one by exporting what it lacks and re-running this tool.
 import { assetPath, webPath } from './lib/paths.mjs';
 import fs from 'node:fs';
@@ -23,7 +23,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ASSETS = assetPath();
-const OUT = path.join(ASSETS, 'chars/complete-2017.json');
+const OUT = path.join(ASSETS, 'chars/complete-cross.json');
 const json = (p) => JSON.parse(fs.readFileSync(path.join(ASSETS, p), 'utf8'));
 const jsonAbs = (p) => JSON.parse(fs.readFileSync(p, 'utf8'));
 
@@ -66,15 +66,15 @@ function write(rows) {
     c[r.miss.length ? 'incomplete' : 'complete']++;
   }
   const out = {
-    generated: new Date().toISOString(), tool: 'tools/audit-charas-2017.mjs',
-    note: 'complete = system_shop-sold Character itemId with an exported out/chars/index.json model (skeleton + hitboxes + a swat_male/female clip source). Part items (head/face/jacket/pocket/glove/belt/holster/skin/beret) have no 2017 export or attachment pipeline yet and are always incomplete. Any itemId NOT in `complete` is hidden by src/lobby/state/charaSupport.ts.',
+    generated: new Date().toISOString(), tool: 'tools/audit-charas-cross.mjs',
+    note: 'complete = system_shop-sold Character itemId with an exported Cross chars/index.json model (skeleton + hitboxes + a swat_male/female clip source). Part items (head/face/jacket/pocket/glove/belt/holster/skin/beret) have no 2017 export or attachment pipeline yet and are always incomplete. Any itemId NOT in `complete` is hidden by src/lobby/state/charaSupport.ts.',
     counts,
     complete: rows.filter((r) => !r.miss.length).map((r) => r.id).sort((a, b) => a - b),
     incomplete: Object.fromEntries(rows.filter((r) => r.miss.length).map((r) => [r.id, `${r.name}: ${r.miss.join('; ')}`])),
   };
   fs.writeFileSync(OUT, JSON.stringify(out, null, 1));
   const tot = rows.length, ok = out.complete.length;
-  console.log(`${ok}/${tot} chara/equip items complete in 2017 -> ${path.relative(process.cwd(), OUT)}`);
+  console.log(`${ok}/${tot} chara/equip items complete in Cross -> ${path.relative(process.cwd(), OUT)}`);
   for (const [k, c] of Object.entries(counts).sort()) console.log(`  ${k.padEnd(12)} complete ${String(c.complete).padStart(4)}  incomplete ${String(c.incomplete).padStart(4)}`);
 }
 

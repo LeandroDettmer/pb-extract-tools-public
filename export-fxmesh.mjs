@@ -16,7 +16,7 @@ import { scanI3R2 } from './i3r2/i3r2.mjs';
 import { collectMeshes, meshIndices, readAttr } from './i3r2/scene.mjs';
 import { GLB, readI3IB, decodeI3IB, encodePNG, stem, checkGLB } from './i3r2/skin-glb.mjs';
 
-const PACKS = clientPath(baseClient(['cross']), 'Pack'); // Cross only: other clients fail with a message
+const PACKS = clientPath(baseClient('cross'), 'Pack'); // Cross only by default (--client <key> for a diagnostic run)
 const OUT = assetPath('weapons', 'fx', 'mesh');
 const MODELS = ['Assult_Vol.i3s', '870MCS_Vol.i3s', 'Mesh_glow_01.I3S', 'Mesh_VL_BG01.i3s', 'Mesh_VL_BG02.I3S', 'Mesh_VL_BG03.i3s', 'Mesh_VL_BG05.i3s'];
 

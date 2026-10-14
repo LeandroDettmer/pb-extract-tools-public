@@ -2,10 +2,10 @@
 // PB 2017 head accessories (masks, berets, hats, helmets) -> glTF, one GLB per 2017 equipment x character family.
 // Pure Node ESM; geometry/material code is tools/export-model.mjs (materialFactory / buildPrimitive / addSkeletonNodes).
 //
-//   node export-headgear.mjs            # sold head/face/beret items + default helmets -> <out>/equip
-//   node export-headgear.mjs --all      # every 3.123 ITEMID that maps to a 2017 entry (not only sold ones)
-//   node export-headgear.mjs --list     # mapping only (no write)
-//   node export-headgear.mjs --charas   # only re-apply the costume rule to index.json charas (no GLB export)
+//   node web-poc/tools/export-headgear.mjs            # sold head/face/beret items + default helmets -> public/assets/equip
+//   node web-poc/tools/export-headgear.mjs --all      # every 3.123 ITEMID that maps to a 2017 entry (not only sold ones)
+//   node web-poc/tools/export-headgear.mjs --list     # mapping only (no write)
+//   node web-poc/tools/export-headgear.mjs --charas   # only re-apply the costume rule to index.json charas (no GLB export)
 //
 // Source (PBCross Pack, Equip_*.i3Pack; no fallback client):
 //   extracted/pef-cross/br/Equipment.json  Equipment.{Mask,Beret,Event,Head}.<key> = { ResLocalPath, ResPostName,
@@ -19,24 +19,24 @@
 //   (berets, Event hats) = the accessory IS the helmet: it replaces the default helmet; masks ("*Defense_Mask*",
 //   full-head masks too) are worn under the helmet. Default helmet: HelmetDefault (Head _Type 1, ResPostName Helmet),
 //   or the character's own Equip_Helmet_<Chara> variant (Hide_Black, Leopard_Bope, *_GRS, *_Madness, ...).
-//   Costume characters get none (charas[id].helmet = null): their Character.PartsList.ResDftPartSkin (<out>/cross/config/character.json) is a
+//   Costume characters get none (charas[id].helmet = null): their Character.PartsList.ResDftPartSkin (public/assets/cross/config/character.json) is a
 //   full-body Skin (Equipment.Skin F_S_*, e.g. 1403019 NBgirl, 1403046 P1000) whose mesh carries its own head (afro +
 //   bandana, hair, cap). [INFERIDO]: the 2017 Character.pef has no entry for these packs and the client has no
 //   Equip_Helmet_<costume> pack; the family HelmetDefault on them pokes through the head (Gangster ViperRed's cap brim
 //   out of the afro, Android Tarantula under the Tarantula beanie), and every 3.123 Skin says _Equipment.Headgear 0.
-// Server itemId -> PBCross entry: the ids are the server's (<out>/config/equipment.json Facegear/Head/Beret
+// Server itemId -> PBCross entry: the ids are the server's (system_shop item_name, see serverItemKeys: Facegear/Head/Beret
 //   ITEMID + key "A_F_Jason_Latin_Bahamas", "A_H_BF_CowboyHat-CTF+CowboyHat-FR", "A_E_Beret_Black"). The PBCross pef has no
 //   ITEMID; the id is only identity, the geometry comes from PBCross. Matched by normalised name to the Cross key / ResLocalPath
 //   leaf (class 8 -> Mask, class 27 -> Beret, class 7 -> Mask/Event/Head). Items PBCross does not have match nothing (dropped).
 //   [INFERIDO] name match: no id table links the two clients.
 //
-// Output: <out>/equip/<key>/<Family>.glb (+ <key>/tex/*.png shared by the families) and equip/index.json
+// Output: public/assets/equip/<key>/<Family>.glb (+ <key>/tex/*.png shared by the families) and equip/index.json
 //   { charas: { <chars id>: { family, helmet } }, entries: { <key>: { cat, pef, replacesHelmet, files: {Family: path} } },
 //     items: { <itemId>: { key, slot: head|face|beret, name3 } } }.
 // GLB layout = weapons: AxisRotate (i3 -> three) > HelmetDummy (origin) > meshes; the runtime strips AxisRotate and
-// parents HelmetDummy's content to HelmetPointDummy (src/game/charEquip.ts). Never deletes <out> folders:
+// parents HelmetDummy's content to HelmetPointDummy (src/game/charEquip.ts). Never deletes public/assets folders:
 // files are overwritten in place.
-import { assetPath, clientPath, baseClient, extractedPath, rel, webPath } from './lib/paths.mjs';
+import { assetPath, clientPath, extractedPath, oldServerPathOpt, rel, webPath } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -47,7 +47,7 @@ import { GLB, checkGLB, stem } from './i3r2/skin-glb.mjs';
 import { parsePack, decodeContent } from './i3pack/unpack.mjs';
 import { packTextures, materialFactory, buildPrimitive, addSkeletonNodes } from './export-model.mjs';
 
-const PACKS = clientPath(baseClient(['cross']), 'Pack'); // Cross only: Equipment.json (pef-cross) and Equip_*.i3Pack of Cross
+const PACKS = clientPath('cross', 'Pack');
 const ASSETS = assetPath();
 const OUT = path.join(ASSETS, 'equip');
 const MAX_TEX = 512;
@@ -68,7 +68,7 @@ export function familyOf(c) {
 
 /**
  * chars/index.json ids of costume characters (header: own head, no default helmet): one of the entry's item ids is a
- * pef-3.123 Character whose PartsList.ResDftPartSkin is set. `character3` = <out>/config/character.json.
+ * pef-3.123 Character whose PartsList.ResDftPartSkin is set. `character3` = public/assets/config/character.json.
  */
 export function costumeCharas(chars, character3) {
   const skin = new Map();
@@ -189,22 +189,32 @@ const nn = (s) => String(s).toLowerCase().replace(/^mask_/, '').replace(/_mask$/
 const SLOT = { 7: 'head', 8: 'face', 27: 'beret' };
 const CATS = { 7: ['Event', 'Head', 'Mask'], 8: ['Mask'], 27: ['Beret'] };
 
+// Server item key per id: the system_shop rows of the server DB seed (--server: old/runtime/db-init/*.sql, item_name =
+// the equipment key "A_F_Jason_Latin_Trinidad" where the seed kept it), then itemNames.json (the same table's snapshot,
+// keys or display names). Keys first: a display name ("Skull Mask") can match another Cross entry than the key.
+function serverItemKeys() {
+  const pairs = [];
+  const dir = oldServerPathOpt('runtime', 'db-init');
+  if (dir && fs.existsSync(dir)) for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.sql')).sort())
+    for (const m of fs.readFileSync(path.join(dir, f), 'utf8').matchAll(/\((\d{6,7}), '(A_[FHE]_[^']+)'/g)) pairs.push([+m[1], m[2]]);
+  for (const [id, [n]] of Object.entries(rj(webPath('src/lobby/state/data/itemNames.json')).names)) pairs.push([+id, n]);
+  return pairs;
+}
+
 export function mapItems(e17) {
-  const e3 = rj(path.join(ASSETS, 'config/equipment.json')).Equipment;
   const idx = {};
   for (const [cat, o] of Object.entries(e17)) {
     const m = (idx[cat] = new Map());
     for (const [k, v] of Object.entries(o)) for (const n of [k, (v.ResLocalPath || '').split('/').pop()]) { const x = nn(n); if (x && !m.has(x)) m.set(x, k); }
   }
   const items = {};
-  for (const cat3 of ['Facegear', 'Head', 'Beret']) for (const [k3, v] of Object.entries(e3[cat3] ?? {})) {
-    if (!v?.ITEMID) continue;
-    const cls = Math.floor(v.ITEMID / 100000);
-    if (!SLOT[cls]) continue;
+  for (const [id, k3] of serverItemKeys()) {
+    const cls = Math.floor(id / 100000);
+    if (!SLOT[cls] || items[id]) continue;
     const want = nn(n3(k3));
     for (const cat of CATS[cls]) {
       const k17 = idx[cat]?.get(want);
-      if (k17) { items[v.ITEMID] = { cat, k17, slot: SLOT[cls], name3: k3 }; break; }
+      if (k17) { items[id] = { cat, k17, slot: SLOT[cls], name3: k3 }; break; }
     }
   }
   return items;
@@ -305,7 +315,7 @@ function main() {
     if (Object.keys(e.files).length) items[id] = { key, slot: m.slot, name3: m.name3 };
   }
   const index = {
-    generated: new Date().toISOString(), tool: 'export-headgear.mjs', sold: sold.source,
+    generated: new Date().toISOString(), tool: 'web-poc/tools/export-headgear.mjs', sold: sold.source,
     note: 'Head accessories of the PB 2017 client per character family. entries[key].files[family] = GLB (AxisRotate > HelmetDummy > meshes), attached at the chara HelmetPointDummy. replacesHelmet = beret / hat / helmet (drawn instead of the default helmet); masks are worn under it. charas[id].helmet = the default helmet entry, null = costume with its own head (none). items = server itemId -> entry ([INFERIDO] 3.123 key <-> 2017 name match).',
     attach: 'HelmetPointDummy', charas, entries, items,
   };

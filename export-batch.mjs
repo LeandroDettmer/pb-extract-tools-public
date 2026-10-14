@@ -1,34 +1,30 @@
 #!/usr/bin/env node
-// Batch export of every playable character and every plain weapon model (+ texture skins) of one client
-// to the web app, reusing export-model.mjs / export-anim.mjs. Pure Node ESM, builtins only.
-// Client: PBCross (Cross) or PBKaybo (2017). `--client <key>` / PB_BASE_CLIENT picks one; without it, the configured one (lib/paths.mjs baseClient).
+// Batch export of every playable character and every plain weapon model (+ texture skins) of the PBCross client
+// to the web client, reusing export-model.mjs / export-anim.mjs. Pure Node ESM, builtins only.
 //
-//   node export-batch.mjs [chars] [weapons] [--skins] [--only <regex>] [--max-tex 1024] [--embed-clips] [--dry]
-//   node export-model.mjs --check        # re-validate every GLB of both index files
+//   node web-poc/tools/export-batch.mjs [chars] [weapons] [--skins] [--only <regex>] [--max-tex 1024] [--embed-clips] [--dry]
+//   node web-poc/tools/export-model.mjs --check        # re-validate every GLB of both index files
 //
-// Source: one client's 'Pack' folder only, no fallback to another client's packs (sourceVersion 'Cross' or '2017').
-// A character or weapon the client does not ship is not exported (it is listed in the report as skipped or absent).
-// A texture missing from the pack is looked up in the other packs of the same client, then in the base model pack (_ResName)
-// and shorter name prefixes (Weapon_AUG_A3_Carnaval -> Weapon_AUG_A3).
-// Output of two clients: one out folder per client (chars/<id> and weapons/models/<id> would overwrite each other, and
-// each run replaces chars/index.json and weapons/models/index.json).
+// Source: PBCross 'Clients/PBCross/Pack' only (sourceVersion 'Cross'). No fallback to the 2017, 3.123, RU or portable
+// packs: a character or weapon PBCross does not ship is not exported (it is listed in the report as skipped or absent).
+// A texture missing from the pack is looked up in the other Cross packs, then in the base model pack (_ResName) and
+// shorter name prefixes (Weapon_AUG_A3_Carnaval -> Weapon_AUG_A3).
 //
-// Characters -> <out>/chars/<id>/model.glb (+ arms_1pv.glb, tex/), chars/index.json
-//   itemId / hp: server/binary/Debug/Data/Match/CharaHealth.xml (601xxx = red team, 602xxx = blue team),
-//   charaResId: server/Server.Match/Data/Enums/CharaResId.cs. The client ships the animation sets Chara/SWAT_Male and
+// Characters -> public/assets/chars/<id>/model.glb (+ arms_1pv.glb, tex/), chars/index.json
+//   itemId / hp: old/runtime/Data/Match/CharaHealth.xml (tracked; old/binary/Debug is a local build) (601xxx = red team, 602xxx = blue team),
+//   charaResId: server/Server.Match/Data/Enums/CharaResId.cs. Cross ships the animation sets Chara/SWAT_Male and
 //   Chara/SWAT_Female; every character shares the bone names of one of the two skeletons
 //   ("family", picked by the bind pose), so the clips are embedded once, in swat_male / swat_female, and the
 //   other entries carry clipsFrom: '<id>' (three.js: play that GLB's AnimationClips on this model's mixer).
 //   --embed-clips embeds the family clips into every character instead (~1.5 MB each).
-// Weapons -> <out>/weapons/models/<id>.glb (+ tex/<id>/), weapons/models/index.json
-//   itemId: this client's Weapon.pef (extracted/pef-cross/br/Weapon.json for Cross, extracted/pef2017/br/Weapon.json for
-//   Kaybo): (_UsageType + 1) S, _ClassType CC, _Number NNN
+// Weapons -> public/assets/weapons/models/<id>.glb (+ tex/<id>/), weapons/models/index.json
+//   itemId: extracted/pef-cross/br/Weapon.json (PBCross Weapon.pef): (_UsageType + 1) S, _ClassType CC, _Number NNN
 //   (same layout as ItemStatistics.xml ids; inServer = present in ItemStatistics.xml); family = LinkedToCharaAI
 //   (the character animation set the weapon uses, slugged: ak47_elite, aug_a3, m4a1 ...), used to inherit 1PV/3PV
 //   animations. Items whose _ResName_I3S is a texture-only pack are skins: listed in items[] of the base model and,
 //   with --skins, exported as <skin id>.glb = base geometry + the skin maps (texture_change_Weapon.json mapping).
 
-import { assetPath, clientPath, clientStatus, baseClient, extractedPath, rel, oldServerPathOpt } from './lib/paths.mjs';
+import { assetPath, clientPath, extractedPath, rel, oldServerPathOpt } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -41,16 +37,14 @@ import { createHash } from 'node:crypto';
 import { exportChara, exportWeapon, packTextures } from './export-model.mjs';
 
 const OUT = process.env.PB_OUT_ROOT || assetPath(); // PB_OUT_ROOT: tools/export-model-dds.mjs
-// the one client this export reads (no fallback chain): a missing folder stops the run in main
-const VERSION = { cross: 'Cross', kaybo: '2017' };
-const SRC_KEY = baseClient(['cross', 'kaybo']);
-const SRC = { key: SRC_KEY, version: VERSION[SRC_KEY], root: clientPath(SRC_KEY) };
-const CLIENTS = [{ ...SRC, pack: path.join(SRC.root, 'Pack'), chara: path.join(SRC.root, 'Chara') }];
+// the one client this export reads (no fallback chain): a missing PBCross folder stops the run in main
+const CROSS = { key: 'cross', version: 'Cross', root: clientPath('cross') };
+const CLIENTS = [{ ...CROSS, pack: path.join(CROSS.root, 'Pack'), chara: path.join(CROSS.root, 'Chara') }];
 // server/ only keeps runtime data; the C# sources + binary/Debug live in old/ (the .NET server no longer runs)
 // Server data (hp, charaResId, inServer) is optional: read from <server>/old when --server is given, else left empty.
 const SERVER = oldServerPathOpt() ?? '(none)';
 const readOpt = (f) => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : '');
-const PEF = extractedPath(SRC.key === 'cross' ? 'pef-cross' : 'pef2017', 'br'); // Weapon.pef of this client: `pbx re cross-pef` / `pbx re pef-config`
+const PEF = extractedPath('pef-cross', 'br');
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 const sharedPrefix = (a, b) => { let i = 0; while (i < a.length && a[i] === b[i]) i++; return i; };
 const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -94,7 +88,7 @@ function pickClient(fileName, opts) {
 // ---- server tables ------------------------------------------------------------------------
 function charaTables() {
   const health = new Map();
-  const xml = readOpt(path.join(SERVER, 'binary/Debug/Data/Match/CharaHealth.xml'));
+  const xml = readOpt(path.join(SERVER, 'runtime/Data/Match/CharaHealth.xml'));
   for (const m of xml.matchAll(/<Chara Id="(\d+)" HP="(\d+)"\/>\s*;([^\s<]+)/g)) health.set(norm(m[3]), { itemId: +m[1], hp: +m[2], itemName: m[3] });
   const res = new Map();
   const cs = readOpt(path.join(SERVER, 'Server.Match/Data/Enums/CharaResId.cs'));
@@ -125,8 +119,8 @@ const CHARA_RES = { 'D-Fox': 'DFox', 'REBEL_Female(Tarantula_P1000)': 'REBEL_Fem
 const NOT_PLAYABLE = /^Chara(_Clan.*|_Equip|_NPC|_Dino.*)?$/;
 // animation families: the model that embeds the clips + the 3.123 anim folder
 const FAMILIES = {
-  male: { id: 'swat_male', name: 'SWAT_Male', animDir: path.join(SRC.root, 'Chara', 'SWAT_Male') },
-  female: { id: 'swat_female', name: 'SWAT_Female', animDir: path.join(SRC.root, 'Chara', 'SWAT_Female') },
+  male: { id: 'swat_male', name: 'SWAT_Male', animDir: clientPath('cross', 'Chara', 'SWAT_Male') },
+  female: { id: 'swat_female', name: 'SWAT_Female', animDir: clientPath('cross', 'Chara', 'SWAT_Female') },
 };
 
 function familyOf(bones, refs) {
@@ -196,7 +190,7 @@ function exportChars({ only, maxTex, embedClips, dry, log }) {
 // ---- weapons ------------------------------------------------------------------------------
 const KIND = { 1: 'knife', 2: 'pistol', 3: 'rifle', 4: 'smg', 5: 'sniper', 6: 'shotgun', 7: 'grenade', 8: 'grenade', 9: 'mission', 10: 'mg', 11: 'grenade_shell',
   12: 'bomb', 13: 'pistol', 14: 'dual_pistol', 15: 'dual_knife', 16: 'launcher', 17: 'object', 18: 'dual_smg', 19: 'dino', 23: 'knuckle', 26: 'bow', 27: 'grenade', 28: 'grenade', 34: 'shield', 35: 'dual_shotgun' };
-// ids kept from the first hand-picked export (<web>/src may reference them)
+// ids kept from the first hand-picked export (web-poc/src may reference them)
 const LEGACY_IDS = { 'Weapon_AK-47_PBIC2013': 'ak47_pbic2013', Weapon_SPAS_15_PBSC2013_NonLogo: 'spas15_pbsc2013', 'Weapon_AK-47_SOPMOD_R': 'ak47_sopmod_r', Weapon_870MCS_SL: '870mcs_sl' };
 
 function weaponTables() {
@@ -209,7 +203,7 @@ function weaponTables() {
   };
   walk(W.WeaponList, '');
   const stats = new Map();
-  const xml = readOpt(path.join(SERVER, 'binary/Debug/Data/Match/ItemStatistics.xml'));
+  const xml = readOpt(path.join(SERVER, 'runtime/Data/Match/ItemStatistics.xml'));
   for (const m of xml.matchAll(/<Statistic Id="(\d+)"\s+Name="([^"]*)"/g)) stats.set(+m[1], m[2]);
   const items = list.filter((w) => w._ResName && w._ClassType !== undefined && w._Number !== undefined).map((w) => {
     const S = (w._UsageType ?? 0) + 1, C = w._ClassType, N = w._Number;
@@ -227,7 +221,7 @@ function weaponTables() {
 function weaponTextureIndex(log) {
   const files = CLIENTS.flatMap((c) => (fs.existsSync(c.pack) ? fs.readdirSync(c.pack) : []).filter((f) => /^Weapon_.*.i3Pack$/i.test(f)).map((f) => path.join(c.pack, f)));
   // the index stores absolute pack paths: key the cache on the repo root too (after the repo moved, a stale cache pointed at the old root)
-  const cache = path.join(os.tmpdir(), `pb-weapon-tex-index-${SRC.key}-${files.length}-${createHash('md5').update(OUT).digest('hex').slice(0, 8)}.json`);
+  const cache = path.join(os.tmpdir(), `pb-weapon-tex-index-${files.length}-${createHash('md5').update(OUT).digest('hex').slice(0, 8)}.json`);
   try { return new Map(Object.entries(JSON.parse(fs.readFileSync(cache, 'utf8')))); } catch { /* build */ }
   log(`indexing textures of ${files.length} weapon packs ...`);
   const idx = {};
@@ -265,6 +259,13 @@ function exportWeapons({ only, maxTex, skins, dry, log }) {
   }
   const byNorm = new Map([...names].map((n) => [norm(n), n]));
   const { items, tc, stats } = weaponTables();
+  // texture-change skins with no pack of their own: Medical_Kit_PBNC6 (_ResName MedicalKit_PBNC6, no _ResName_I3S) exists only
+  // as a skin key under Medical_Kit/Medical_Kit.I3S in texture_change_Weapon.pef, so its model is that base .I3S
+  for (const it of items) {
+    if (it.skin || byNorm.has(norm(it.res))) continue;
+    const base = Object.keys(tc).find((k) => Object.keys(tc[k]).some((x) => norm(x) === norm(it.res)));
+    if (base) { it.skin = it.res; it.res = base.split('/')[0]; it.packless = true; }
+  }
   // packs unknown to the 2017 Weapon.pef (newer weapons): match the ItemStatistics.xml display name
   const statsByName = new Map();
   for (const [id, nm] of stats) (statsByName.get(norm(nm)) || statsByName.set(norm(nm), []).get(norm(nm))).push(id);
@@ -302,7 +303,7 @@ function exportWeapons({ only, maxTex, skins, dry, log }) {
   const targets = [...names].filter((n) => !only || only.test(n) || only.test('Weapon_' + n)).sort();
   for (const n of targets) {
     const b = body(n);
-    if (!b.client) { if (!/no i3Body/.test(b.tried[SRC.key] || '') || Object.values(b.tried).some((r) => /keyed|parse/.test(r))) skipped.push({ pack: `Weapon_${n}`, why: b.tried }); continue; }
+    if (!b.client) { if (!/no i3Body/.test(b.tried.cross || '') || Object.values(b.tried).some((r) => /keyed|parse/.test(r))) skipped.push({ pack: `Weapon_${n}`, why: b.tried }); continue; }
     // items whose model is this pack: own res name, or a skin name that is this (bodied) pack
     const own = (resOf.get(norm(n)) || []).filter((it) => (it.skin && norm(it.skin) === norm(n)) || (!it.skin || it.skin === it.res || !body(it.skin)?.client) && norm(it.res) === norm(n));
     const main = own.find((it) => norm(it.key) === norm(n) && (!it.skin || norm(it.skin) === norm(n))) || own.find((it) => !it.skin || norm(it.skin) === norm(n)) || own[0];
@@ -351,10 +352,13 @@ function exportWeapons({ only, maxTex, skins, dry, log }) {
       const skinOf = (k) => tc[k] && Object.keys(tc[k]).find((x) => norm(x) === norm(s.skin));
       const baseKey = skinOf(tcKey) ? tcKey : Object.keys(tc).find(skinOf);
       const lod0 = baseKey && tc[baseKey][skinOf(baseKey)]?.['LOD 0'];
-      const lib = lod0 && skinTextures(s.skin, Object.values(lod0).filter((v) => v && v !== '(null)').map((v) => stem(v)));
+      const wanted = lod0 ? Object.values(lod0).filter((v) => v && v !== '(null)').map((v) => stem(v)) : [];
+      // a packless skin (s.packless): no client ships its maps (no MedicalKit_PBNC6_*.i3i in any Cross pack), so it is the base
+      // model with the base maps [INFERIDO: the engine keeps the base texture when the changed .i3i is missing]
+      const lib = lod0 && (skinTextures(s.skin, wanted) || (s.packless ? { map: new Map(), client: b.client.key, from: {} } : null));
       if (!lib) { skinStats.noTextures.push(s.skin); continue; }
       const swap = new Map(Object.entries(lod0).filter(([, v]) => v && v !== '(null)').map(([k, v]) => [stem(k), lib.map.get(stem(v))]).filter(([, t]) => t));
-      if (![...swap.keys()].length) { skinStats.noTextures.push(s.skin); continue; }
+      if (![...swap.keys()].length && !s.packless) { skinStats.noTextures.push(s.skin); continue; }
       const sid = slug(s.skin);
       // a bodied pack slugs to the same id (AUG-A3_Blue skin vs Weapon_AUG_A3_Blue model): the real model wins
       if (entries.some((x) => x.id === sid)) { skinStats.shadowed.push(s.skin); continue; }
@@ -362,7 +366,7 @@ function exportWeapons({ only, maxTex, skins, dry, log }) {
       try {
         const e = exportWeapon({ pack, id: sid, kind, packDir: b.client.pack, texFallback, texOverride: (p) => swap.get(stem(normPath(p))) || null,
           extra: { ...extra, itemId: sItems[0].itemId, itemIds: sItems.map((it) => it.itemId), inServer: sItems.some((it) => it.inServer), items: undefined,
-            skinOf: id, skin: s.skin, skinClient: lib.client, skinVersion: CLIENTS.find((c) => c.key === lib.client)?.version, skinMapsFrom: new Set(Object.values(lib.from)).size > 1 ? lib.from : undefined, skinMaps: [...swap.keys()] } }, { log: () => {}, maxTex });
+            skinOf: id, skin: s.skin, skinClient: lib.client, skinVersion: CLIENTS.find((c) => c.key === lib.client)?.version, skinMapsFrom: new Set(Object.values(lib.from)).size > 1 ? lib.from : undefined, skinMaps: [...swap.keys()], skinMapsMissing: s.packless ? wanted : undefined } }, { log: () => {}, maxTex });
         entries.push(e); skinStats.exported++;
       } catch (err) { skinStats.noTextures.push(`${s.skin} (${err.message})`); }
     }
@@ -379,7 +383,7 @@ function writeIndex(file, key, entries, replaceAll) {
   for (const e of entries) byId.set(e.id || e.name, e);
   const dir = path.dirname(file);
   const list = [...byId.values()].filter((e) => fs.existsSync(path.join(dir, e.file || e.model))).sort((a, b) => (a.id || a.name).localeCompare(b.id || b.name));
-  fs.writeFileSync(file, JSON.stringify({ generated: new Date().toISOString(), tool: 'export-batch.mjs', [key]: list }, null, 1));
+  fs.writeFileSync(file, JSON.stringify({ generated: new Date().toISOString(), tool: 'web-poc/tools/export-batch.mjs', [key]: list }, null, 1));
   return list;
 }
 const dirBytes = (p) => !fs.existsSync(p) ? 0 : fs.statSync(p).isDirectory() ? fs.readdirSync(p).reduce((s, f) => s + dirBytes(path.join(p, f)), 0) : fs.statSync(p).size;
@@ -394,7 +398,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   let doChars = args.includes('chars'), doWeapons = args.includes('weapons');
   if (!doChars && !doWeapons) doChars = doWeapons = true;
   const log = console.log;
-  if (!fs.existsSync(CLIENTS[0].pack)) { console.error(`pbx: ${clientStatus(SRC.key).label} Pack folder not found: ${SRC.root}`); process.exit(2); }
+  if (!fs.existsSync(CLIENTS[0].pack)) { console.error(`pbx: PBCross Pack folder not found: ${CROSS.root}`); process.exit(2); }
   const repFile = extractedPath('export-batch-report.json');
   let prevReport = {};
   try { prevReport = JSON.parse(fs.readFileSync(repFile, 'utf8')); } catch { /* first run */ }

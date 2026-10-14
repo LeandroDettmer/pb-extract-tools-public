@@ -1,4 +1,4 @@
-// PBCross weapon.pef joined per ITEMID, for the anim exporters and tools/audit-weapons-2017.mjs.
+// PBCross weapon.pef joined per ITEMID, for the anim exporters and tools/audit-weapons-cross.mjs.
 //
 // The ITEMID of each block comes from cross/weapons/weapons.json (lib/cross-weapons.mjs); extracted/pef-cross/br/Weapon.json
 // holds the values. Only PBCross blocks exist here: a weapon PBCross does not ship has no entry (in the 2017 / 3.123 pef

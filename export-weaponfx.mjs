@@ -14,8 +14,8 @@
 //   extracted/pef-cross/br/Weapon.json (PBCross Weapon.pef, joined by ITEMID via lib/cross-weapons.mjs) per-weapon
 //                       Extension1 (Type, ScopeType, SubScopeType, MaxScopeLevel, FovOnZoom/FovOnScope/FovOnScope2),
 //                       Effect._FireEffect, BulletTracer{}, TracerType; globals Tracer*. PBCross has no SubScopeHudInfo
-//                       (the 2017 / 3.123 pef had it): subScope[] = CROSS_SUB_HUD and the index per weapon from CROSS_SUB_OF_SCOPE.
-//   public/assets/weapons/weapons.json  (the runtime weapon ids: only those are written)
+//                       (the 2017 / 3.123 pef had it): the exe hardcodes it per ScopeType, subScope[] = CROSS_SUB_HUD indexed by the enum.
+//   public/assets/cross/weapons/weapons.json (the runtime weapon ids: only those are written)
 //
 // Output (<out>/):
 //   weaponfx.json   { globals, subScope[], weapons{id: {...}}, effects{name: {particles[]}}, fxList{name: {...}} }
@@ -24,7 +24,7 @@
 //
 // i3 particle layout: see the notes above parseEffect() (decoded from the i3MathDx / i3SceneDx 2017 DLLs).
 
-import { assetPath, clientPath, baseClient } from './lib/paths.mjs';
+import { assetPath, clientPath } from './lib/paths.mjs';
 import { crossWeaponPef, crossWeaponBlocks } from './lib/cross-weapons.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -35,9 +35,10 @@ import { readI3R2 } from './i3r2/i3r2.mjs';
 
 const args = process.argv.slice(2);
 const opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
-const PACK_DIR = opt('--pack-dir', clientPath(baseClient(['cross']), 'Pack')); // Cross only: pef-cross Weapon.pef joins the FX
+const PACK_DIR = opt('--pack-dir', clientPath('cross', 'Pack'));
 const OUT = opt('--out', assetPath('weapons', 'fx'));
-const WEAPONS = assetPath('weapons', 'weapons.json');
+const WEAPONS = assetPath('cross', 'weapons', 'weapons.json'); // export-weapons.mjs output (Cross pef)
+const MODELS = assetPath('weapons', 'models');
 
 // ---- packs ---------------------------------------------------------------------------------------------------
 /** lowercase path inside the pack -> decrypted bytes; files.names = lowercase path -> path in the pack's own case */
@@ -321,7 +322,7 @@ export async function main() {
 
   const cfg = crossWeaponPef();
   const runtime = JSON.parse(fs.readFileSync(WEAPONS, 'utf8')).weapons;
-  const models = JSON.parse(fs.readFileSync(path.join(path.dirname(WEAPONS), 'models', 'index.json'), 'utf8')).weapons ?? [];
+  const models = JSON.parse(fs.readFileSync(path.join(MODELS, 'index.json'), 'utf8')).weapons ?? [];
   const pef = crossWeaponBlocks(cfg);
 
   // effects: fire effects of the runtime weapons (+ _1st variants), terrain hits / bullet marks, shells, blood, laser dot
@@ -336,10 +337,9 @@ export async function main() {
     }
   } catch { /* no objects/index.json yet */ }
   for (const [s, e] of i3sByStem) if (/^(hit|hmk)_(ar|sg|m9)_|^bul_|^exphu01_[012]$|^bmk_(ar|sg|sr|smg|hg)_(wa|fl)$/.test(s)) want.add(e.name);
-  // PBCross ScopeType enum (0..28) -> Gui/Hud texture. [INFERIDO]: built from the Cross pef joined to the 2017 pef by Group/Key
-  // (the 2017 pef names the texture; 661 weapons, 0 enum values with two names). The 22 names are exactly the Gui/Hud/*.i3i
-  // strings of PointBlank.exe (rdata 0xbd1ce4..0xbd29dc, preloaded in .text 0x763e45..0x764683 into 0xd89380..0xd893e0).
-  // The code that picks the global per enum was not located. Enum 0 = scope.i3i, the 2017 default.
+  // PBCross ScopeType enum (0..28) -> Gui/Hud texture: CHUD_Scope::CreateScopeHUD 0x736067..0x73626e stores HUD texture slot
+  // [7,8,18,23,23,9,9,24,22,25,27,28,29,30,30,31,32,33,31,34,35,35,36,37,38,38,39,39,40][enum] at +0x6c + 4 * enum (getter 0x7647b0),
+  // and InitHudTexture 0x763aa0 loads each slot from Gui/Hud/<name>.i3i into 0xd89340[slot]: the 22 Gui/Hud files of UI_Hud.i3Pack.
   const CROSS_SCOPE_TEX = [
     'scope.i3i', 'scope_M4A1.i3i', 'Scope_F2000.i3i', 'Scope_G36C.i3i', 'Scope_G36C.i3i', 'scope_dotsight_sg550.i3i',
     'scope_dotsight_sg550.i3i', 'Scope_P90.i3i', 'Scope_RPG7.i3i', 'Scope_M197.i3i', 'scope_dotsight_PBTC2015.i3i', 'Scope_M14EBR.i3i',
@@ -348,23 +348,21 @@ export async function main() {
     'scope_G36C_dolphin.i3i', 'scope_P90_dolphin.i3i', 'scope_dotsight_GSL2016.i3i', 'scope_dotsight_GSL2016.i3i', 'scope_dotsight_MB2.i3i',
     'scope_dotsight_MB2.i3i', 'scope_dotsight_PBTC2016.i3i',
   ];
-  // ScopeType enum -> SubScopeHudInfo idx (dot sub-rect). Cross has no SubScopeType and no SubScopeHudInfo: the index is the majority
-  // 2017 SubScopeType of the same weapons (ties -> the dot one) [INFERIDO]. CROSS_SUB_HUD = the 2017 SubScopeHudInfo rows used here.
-  // The dot sprite is inside its rect in the Cross texture: scope_dotsight_sg550 dot at x 12..43, y 780..811 (rect 4,773 46x46);
-  // scope_g36c dot at x 11..21, y 778..788 (rect 0,768 32x32). Per-weapon exceptions (AUG DOTFREE, Kriss dot) are not in Cross data.
-  const CROSS_SUB_OF_SCOPE = [0, 1, 1, 2, 3, 4, 5, 7, 8, 9, 4, 10, 10, 5, 4, 5, 0, 7, 4, 0, 5, 4, 2, 7, 5, 4, 5, 4, 4];
-  const CROSS_SUB_HUD = [
-    { idx: 0, dot: null, offDotLaser: true, scopeSound: true },
-    { idx: 1, dot: null, offDotLaser: true, scopeSound: false },
-    { idx: 2, dot: [0, 768, 32, 32], offDotLaser: true, scopeSound: false },
-    { idx: 3, dot: null, offDotLaser: false, scopeSound: false },
-    { idx: 4, dot: [4, 773, 46, 46], offDotLaser: true, scopeSound: false },
-    { idx: 5, dot: null, offDotLaser: false, scopeSound: false },
-    { idx: 7, dot: null, offDotLaser: false, scopeSound: false },
-    { idx: 8, dot: null, offDotLaser: true, scopeSound: false },
-    { idx: 9, dot: null, offDotLaser: true, scopeSound: false },
-    { idx: 10, dot: [0, 768, 34, 34], offDotLaser: true, scopeSound: false },
-  ];
+  // Cross has no SubScopeHudInfo / SubScopeType: CHUD_Scope::SetSniperScope 0x736620 hardcodes it per ScopeType (weapon info vf+0x1c4).
+  //  - enums 0 / 0x10 / 0x13 set +0xe1 (0x7366e3), read by 0x736ca0 to play the scope sound (0xb): scopeSound
+  //  - switch (enum - 3) at 0x736834 (byte table 0x736c7c -> jump table 0x736c64) sets sprite 4, the red dot, to the texture rect
+  //    u0,v0,u1,v1 and centres it on the screen: 32x32 at 0,768 (0x736906) enums 3 / 22; 46x46 at 4,773 (0x73684f) 5 / 14 / 18 / 21 /
+  //    25 / 27; 34x34 at 0,768 (0x736b7b) 11 / 12; the same 32x32 (0x7369b7) for 7 / 17 / 23 and 46x46 (0x736a97) for 10 / 28 only when
+  //    the weapon is neither WeaponP90Ext (0x736f10, meta 0xd86cec) nor WeaponDotLaser (0x542bd0, meta 0xd86ce0); other enums: no dot.
+  //    The other classes on those enums (WeaponKrissSuperV 0x64d560, WeaponGrenadeLauncher 0x631430) derive from the base meta 0x5fc670,
+  //    not from these two, so the exact ClassMeta name decides
+  //  - WeaponDotLaser::OnUpdate 0x6457e0 hides the laser dot while zoomed only for ScopeType 0 (0x64582a): offDotLaser
+  const DOT32 = [0, 768, 32, 32], DOT46 = [4, 773, 46, 46], DOT34 = [0, 768, 34, 34];
+  const SCOPE_DOT = { 3: DOT32, 22: DOT32, 5: DOT46, 14: DOT46, 18: DOT46, 21: DOT46, 25: DOT46, 27: DOT46, 11: DOT34, 12: DOT34 };
+  const SCOPE_DOT_NO_LASER = { 7: DOT32, 17: DOT32, 23: DOT32, 10: DOT46, 28: DOT46 };
+  const CROSS_SUB_HUD = CROSS_SCOPE_TEX.map((_, idx) => ({
+    idx, dot: SCOPE_DOT[idx] ?? SCOPE_DOT_NO_LASER[idx] ?? null, offDotLaser: idx === 0, scopeSound: idx === 0 || idx === 0x10 || idx === 0x13,
+  }));
   const weapons = {};
   const laserModels = new Map();
   for (const rw of runtime) {
@@ -387,14 +385,17 @@ export async function main() {
       if (x[k] !== undefined) o[kk] = x[k];
     }
     // PBCross ScopeType is an enum number (0..28), see CROSS_SCOPE_TEX. A zoom-3 block without the key (the 67 KrissSuperV_*_Dummy
-    // blocks; the 2017 pef has no key there either) reads as the default 0 = scope.i3i, as the 2017 exe default [INFERIDO]
+    // blocks; the 2017 pef has no key there either) reads as the default 0 = scope.i3i, as the 2017 exe default [INFERIDO]. A weapon without
+    // subScope keeps its laser dot while zoomed (sights.ts): the base weapon info vf+0x1c4 returns -1 = no scope (0x5bede0, the -1 guard
+    // of SetSniperScope 0x7366ae) [INFERIDO: the gun class's own default for the field was not located]
     const scopeEnum = x.ScopeType ?? (w._ZoomType === 3 ? 0 : undefined);
     if (typeof scopeEnum === 'number' && CROSS_SCOPE_TEX[scopeEnum]) {
       o.scopeTex = CROSS_SCOPE_TEX[scopeEnum];
       const buf = hudByName.get(o.scopeTex.toLowerCase());
       if (buf) o.scopePng = writeTexture(buf, 'scope', stem(o.scopeTex).toLowerCase())?.file;
       else missingTex.add(`Gui/Hud/${o.scopeTex}`);
-      if (o.scopePng) o.subScope = CROSS_SUB_OF_SCOPE[scopeEnum];
+      o.subScope = scopeEnum;
+      if (SCOPE_DOT_NO_LASER[scopeEnum] && /^Weapon(P90Ext|DotLaser)$/.test(w.ClassMeta ?? '')) o.noScopeDot = true;
     }
     if (w.BulletTracer || w.BulletSmokeColor !== undefined) {
       const b = w.BulletTracer ?? w;
@@ -406,7 +407,7 @@ export async function main() {
     if (/^Weapon(DotLaser|GrenadeLauncherWithLaser|ShotGunLauncherWithLaser)$/.test(w.ClassMeta ?? '')) o.laser = w.ClassMeta;
     const m = models.find((mm) => (mm.itemIds ?? []).includes(rw.id));
     if (m) {
-      if (!laserModels.has(m.file)) laserModels.set(m.file, glbNodeNames(path.join(path.dirname(WEAPONS), 'models', m.file)).includes('FXLaserSightDummy'));
+      if (!laserModels.has(m.file)) laserModels.set(m.file, glbNodeNames(path.join(MODELS, m.file)).includes('FXLaserSightDummy'));
       if (laserModels.get(m.file)) o.laserDummy = true;
     }
     weapons[rw.id] = o;

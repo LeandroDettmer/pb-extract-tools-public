@@ -1,8 +1,8 @@
-// Mission card sets of the Perfil / Missão tab -> src/lobby/screens2017/missionData.ts
+// Mission card sets of the Perfil / Missão tab -> src/lobby/core/missionData.ts
 //   node export-missions.mjs
 // Sources:
-//  - extracted/pef2017/br/Quest.json (tools/pef/extract-config.mjs; Quest.pef CardSet: CardSetId, CardBuyPoint, TotalExp, Bonus*).
-//    The 2017 BR pef has no CardSetName / PrizeName strings (CQuestTextDictionary::Create 0x9bc8e0 reads them when present).
+//  - extracted/pef-cross/br/Quest.json (pef/export-cross.mjs; Quest.pef CardSet: CardSetId, CardBuyPoint, TotalExp, Bonus*).
+//  - Clients/PBCross/Pack/String.i3Pack Brazil/Quest_Brazil.txt: Quest\CardSet\<key>\CardSetName = the set's name.
 //  - server/runtime/Data/Missions/*.mqf: the files server-ts loads (shared/data.ts MISSION_FILES / loadMissionCards), so the
 //    tasks shown are the ones the server counts. Layout (= C# MissionCardRAW, chosen by u32@4 questType, not by file size):
 //      header 24 B: u32 'qf' (0x6671), i32 questType, 16 B
@@ -12,29 +12,24 @@
 //      questType 2: 12 B + 5 set items (16 B) [+ 92 B tail]; five questType-2 files are 1584 B (Commissioned_o, Company_o,
 //      DefconCard, Dino_Basic, Dino_Intensify): only the first 1356 B are read, like the C#.
 //    questType 1 stores exp / 10 (server-ts and the C# multiply by 10; Infiltration 16..25 x 10 sums to TotalExp 2050).
-//  - Clients/PointBlank 3.123/MissionCardFix.dat: u8 count + 2696 B records (UTF-16LE name at +0, again at +602, then 40 tasks of
-//    23 B from +1204 in the same field order as the .mqf). The records are not in CardSetId order: each one is matched to a set by
-//    its tasks (the 3.123 event record names another event than the 2017 EventCard, so set 13 keeps no name).
 //  - PointBlank.exe 2017: CQuestManager template table (_add_template_name_List calls, 0x58d080): set -> card row template
 //    (ButtonImageSet_Item_Card<N>_hs) and its shape in ButtonImageSet_Item_Card_hs (GetTemplateIndex 0x58d570, BuyNow image).
 //  - final prize items of the Info+ popup (UIPopupMissionCardInfo): CQuestTextDictionary::Create 0x9bc8e0 keeps Quest.pef
 //    BonusItemID + BonusItemID_2.._4 per set (count = the non-zero ones); the popup shows one at a time
 //    (GetCardSetBonusItemID 0x9bd150). The .mqf item blocks are not read by it. Each 2017 ItemID is resolved to
-//    the web item id (icon) and the 2017 client's name (Pack/String.i3Pack "<pef path>\_Name", what usf::GetItemName 0x809670
-//    shows): type = id / 100000000 (0x80a360: 1-9 weapon, 10-11 character / part); weapon class = id % 1000000 / 1000,
+//    the web item id (icon) and the client's name (PBCross Pack/String.i3Pack Weapon_Brazil / Equipment_Brazil "<pef path>\_Name",
+//    what usf::GetItemName 0x809670 shows): type = id / 100000000 (0x80a360: 1-9 weapon, 10-11 character / part); weapon class = id % 1000000 / 1000,
 //    number = id % 1000 (0x808f20); part kind = id % 100000000 / 1000000, number (pef _Type) = id % 1000
 //    (CharaInfoDataBase 0x69fbc0: 2 head, 3 beret, 4 / 5 the lists at +0x80 / +0x8c).
-import { assetPath, clientPath, extractedPath, generatedPath, serverPath, webPath } from './lib/paths.mjs';
+import { assetPath, extractedPath, generatedPath, serverPath, webPath } from './lib/paths.mjs';
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { parsePack, decodeContent } from "./i3pack/unpack.mjs";
+import { readStringTable } from "./ui-export/ui-strings.mjs";
 
-const quest = JSON.parse(readFileSync(extractedPath('pef2017', 'br', 'Quest.json'), "utf8")).Quest;
+const quest = JSON.parse(readFileSync(extractedPath('pef-cross', 'br', 'Quest.json'), "utf8")).Quest;
 const MQF_DIR = serverPath('runtime', 'Data', 'Missions');
-const FIX = clientPath('br3123', 'MissionCardFix.dat');
-const STRINGS = clientPath('kaybo', 'Pack', 'String.i3Pack');
-const equipPef = JSON.parse(readFileSync(extractedPath('pef2017', 'br', 'Equipment.json'), "utf8")).Equipment;
+const equipPef = JSON.parse(readFileSync(extractedPath('pef-cross', 'br', 'Equipment.json'), "utf8")).Equipment;
 const clientItems = JSON.parse(readFileSync(assetPath('ui', 'strings', 'items.pt-BR.json'), "utf8"));
 const equipIndex = JSON.parse(readFileSync(assetPath('equip', 'index.json'), "utf8"));
 const serverNames = JSON.parse(readFileSync(webPath("src/lobby/state/data/itemNames.json"), "utf8")).names;
@@ -77,58 +72,34 @@ function readMqf(file) {
   return { questType, tasks, cards, size: b.length };
 }
 
-// MissionCardFix.dat (3.123): name + tasks per record
-const fix = readFileSync(FIX);
-const FIX_REC = 2696, fixCount = fix[0];
-const fixRecs = [];
-for (let i = 0; i < fixCount; i++) {
-  const o = 1 + i * FIX_REC;
-  let e = o;
-  while (fix.readUInt16LE(e)) e += 2;
-  const tasks = [];
-  for (let k = 0; k < 40; k++) { const p = o + 1204 + k * 23; tasks.push([fix.readUInt16LE(p), fix[p + 2], fix[p + 3], fix[p + 4], fix[p + 5], fix.readUInt16LE(p + 6)].join("/")); }
-  fixRecs.push({ name: fix.toString("utf16le", o, e), tasks });
-}
-
-// 2017 client item names: String.i3Pack Weapon_ / Equipment_Latin_America.txt (UTF-16 "key<TAB>text" lines)
-const names2017 = new Map();
-{
-  const d = readFileSync(STRINGS);
-  for (const n of parsePack(d).nodes) for (const f of n.files) {
-    if (!/^(Weapon|Equipment)_Latin_America\.txt$/.test(f.name)) continue;
-    let buf = d.subarray(f.offset, f.offset + f.size);
-    if (f.attr) buf = decodeContent(buf, f.attr);
-    for (const line of buf.toString("utf16le").replace(/^﻿/, "").split(/\r?\n/)) {
-      const t = line.indexOf("\t");
-      if (t > 0) names2017.set(line.slice(0, t), line.slice(t + 1).trim());
-    }
-  }
-}
+// PBCross names: Weapon_Brazil / Equipment_Brazil ("<pef path>\_Name") and Quest_Brazil (Quest\CardSet\<key>\CardSetName)
+const names = new Map([...readStringTable("Weapon_Brazil.txt"), ...readStringTable("Equipment_Brazil.txt")]);
+const setNames = readStringTable("Quest_Brazil.txt");
 // part kind (0x69fbc0) -> Equipment.pef category. 4 / 5 are the CharaInfoDataBase lists after head / beret (+0x80, +0x8c),
 // taken as Mask / Event [INFERIDO: no name in the exe; Dino_Skull (Mask 71) / Bicorne_Hat (Event 12) are the dino / event sets' prizes]
 const PART_CAT = { 2: "Head", 3: "Beret", 4: "Mask", 5: "Event" };
 
-/** 2017 ItemID -> { id, webId (0 = none), name (2017 client) } */
+/** 2017 ItemID -> { id, webId (0 = none), name (PBCross String.i3Pack) } */
 function prizeItem(id) {
   const type = Math.floor(id / 1e8);
   if (type >= 1 && type <= 9) {
     const cn = id % 1e6, hits = Object.keys(clientItems).map(Number).filter((w) => w < 600000 && w % 100000 === cn);
     if (hits.length !== 1) throw new Error(`prize ${id}: weapon ${cn} -> ${hits.length} web ids`);
-    const webId = hits[0], name = names2017.get(`${clientItems[webId].key}\\_Name`) || clientItems[webId].name;
+    const webId = hits[0], name = names.get(`${clientItems[webId].key}\\_Name`) || clientItems[webId].name;
     return { id, webId, name };
   }
   const cat = type === 11 ? PART_CAT[Math.floor((id % 1e8) / 1e6)] : undefined;
   const pefKey = cat && Object.entries(equipPef[cat] ?? {}).find(([, e]) => e._Type === id % 1000)?.[0];
-  if (!pefKey) throw new Error(`prize ${id}: no 2017 part`);
-  const name = names2017.get(`Equipment\\${cat}\\${pefKey}\\_Name`) ?? "";
-  // web id: out/equip/index.json (3.123 key <-> 2017 pef name), else the one server part named A_*_<first word>
+  if (!pefKey) throw new Error(`prize ${id}: no PBCross part`);
+  const name = names.get(`Equipment\\${cat}\\${pefKey}\\_Name`) ?? "";
+  // web id: out/equip/index.json (Cross Equipment key <-> pef name), else the one server part named A_*_<first word>
   let webId = Number(Object.entries(equipIndex.items).find(([, v]) => equipIndex.entries[v.key]?.pef === pefKey && equipIndex.entries[v.key]?.cat === cat)?.[0] ?? 0);
   if (!webId) {
     const word = pefKey.split("_")[0], re = new RegExp(`^A_[A-Z]_(?:[A-Z]+_)?${word}$`, "i");
     const hits = Object.entries(serverNames).filter(([k, v]) => +k >= 700000 && +k < 900000 && re.test(v[0]));
     if (hits.length === 1) webId = Number(hits[0][0]);
   }
-  if (!name) throw new Error(`prize ${id}: ${cat}\\${pefKey} has no 2017 name`);
+  if (!name) throw new Error(`prize ${id}: ${cat}\\${pefKey} has no name`);
   return { id, webId, name };
 }
 
@@ -138,9 +109,7 @@ for (const [key, s] of Object.entries(quest.CardSet)) {
   const file = Object.keys(MISSION_FILES).find((f) => MISSION_FILES[f] === id);
   if (!file || !existsSync(join(MQF_DIR, `${file}.mqf`))) throw new Error(`set ${id} (${key}): no server .mqf`);
   const m = readMqf(join(MQF_DIR, `${file}.mqf`));
-  const tk = m.tasks.map((t) => t.join("/"));
-  const best = fixRecs.map((r) => ({ r, n: r.tasks.filter((t, j) => t === tk[j]).length })).sort((a, b) => b.n - a.n)[0];
-  const name = best && best.n >= 30 ? best.r.name : "";
+  const name = setNames.get(`Quest\\CardSet\\${key}\\CardSetName`) ?? "";
   const slots = [s.BonusItemID, s.BonusItemID_2, s.BonusItemID_3, s.BonusItemID_4].map((x) => x ?? 0);
   const bonusItems = slots.filter((x) => x > 0);
   // 0x9bc8e0: slot i keeps its own key, count = the non-zero ones; 0x9bd150 reads slots 0..count-1 (a 0 there hides the item box)
@@ -159,13 +128,13 @@ if (sets.length !== 16) throw new Error(`expected 16 card sets, got ${sets.lengt
 const card = (c) => `{ gold: ${c.gold}, exp: ${c.exp}, badge: ${c.badge}, tasks: [${c.tasks.map((t) => `[${t.join(", ")}]`).join(", ")}] }`;
 const out = `// GENERATED by tools/export-missions.mjs (do not edit). Mission card sets of the Perfil / Missão tab.
 // id = CardSetId (Quest.pef; the wire id of 2364 / the 89-byte questing block); price / totals / bonus = Quest.pef CardSet;
-// name = MissionCardFix.dat (3.123) record whose tasks match the set ("" = none: set 13, the 3.123 record is another event);
+// name = PBCross Quest_Brazil CardSetName ("" = none);
 // cards = the server's .mqf (server/runtime/Data/Missions, file = its name): tasks [reqType, missionType, map, limit, weaponClass,
 // weaponNumber] (reqType: 1 CQuestBase_Map_Count_Accm_Team, 2 _Weapon_Accm, 3 _Weapon_Cont, exe factory 0x589790), gold / exp of
 // the finished card (exp already x10 for questType 1, as the server pays it), badge 1-50 ribbon, 51-100 ensign, 101-116 medal;
 // tpl / cover = exe template table 0x58d080 (card row template, BuyNow shape of ButtonImageSet_Item_Card_hs);
 // prizes = the Info+ popup's final items (Quest.pef BonusItemID.._4, CQuestTextDictionary 0x9bc8e0): 2017 ItemID, web item id
-// (icon; 0 = none) and the 2017 client's name (String.i3Pack).
+// (icon; 0 = none) and the PBCross name (String.i3Pack).
 export type MissionTaskDef = readonly [req: number, type: number, map: number, limit: number, weaponClass: number, weaponNumber: number];
 export interface MissionCardDef { gold: number; exp: number; badge: number; tasks: readonly MissionTaskDef[] }
 export interface MissionPrizeDef { id: number; webId: number; name: string }
@@ -185,6 +154,6 @@ ${s.cards.map((c) => `      ${card(c)},`).join("\n")}
   },`).join("\n")}
 ];
 `;
-writeFileSync(generatedPath("lobby/screens2017/missionData.ts"), out);
+writeFileSync(generatedPath("lobby/core/missionData.ts"), out);
 console.log(`missionData.ts: ${sets.length} sets: ${sets.map((s) => `${s.id} ${s.key} q${s.questType} "${s.name}"`).join(", ")}`);
 console.log(`prizes: ${sets.filter((s) => s.prizes.length).map((s) => `${s.id} ${s.prizes.map((p) => `${p.id}->${p.webId} "${p.name}"`).join(" + ")}`).join(", ")}`);

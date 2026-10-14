@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // PBCross pef export: Clients/PBCross/Pack/Script.i3Pack Config/*.pef -> extracted/pef-cross/br/<File>.json, and the
-// Cross-primary character table out/cross/config/character.json (+ sources.json, the fallback record).
+// Cross character table out/cross/config/character.json (+ sources.json).
 //
 //   node pef/export-cross.mjs [Script.i3Pack] [--nation N] [--dry-run]
 //
@@ -9,15 +9,17 @@
 // and the nation resolve are the 2017 ones (extract-config parsePef / resolveNation), so a Cross block has the same
 // shape as extracted/pef2017/br/*.json (K-2 Gun block is identical in both).
 //
-// Source order (PRIMARY first): PBCross -> PBKaybo 2017 (extracted/pef2017/br) -> 3.123 (out/config). An item
-// takes the first source that has it. Only Character.json is merged here; Weapon.json is consumed by
-// tools/export-weapons.mjs with the same order (weapon items join by _ClassType/_Number + name, see that file).
+// character.json reads the PBCross Character.pef only: every value of a character block, plus a Movement group that
+// repeats the movement keys (the layout charaStats.ts reads: Movement.FrontMoveSpeed). ITEMID is not in any Cross pef
+// (Character, Goods and Equipment have no 60xxxx id); it comes from the server table the match server loads
+// (--server: server/runtime/Data/Match/CharaHealth.xml, `;Name` comment = the Character.pef key, case ignored).
+// Without --server the characters have no ITEMID, said in the log and in sources.json.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parsePack, decodeContent } from '../i3pack/unpack.mjs';
 import { parsePef, resolveNation } from './extract-config.mjs';
-import { assetPath, clientPath, extractedPath } from '../lib/paths.mjs';
+import { assetPath, clientPath, extractedPath, serverPathOpt } from '../lib/paths.mjs';
 
 const args = process.argv.slice(2);
 const ni = args.indexOf('--nation');
@@ -26,8 +28,7 @@ const dryRun = args.includes('--dry-run');
 const PACK = args.find(a => !a.startsWith('--')) || clientPath('cross', 'Pack', 'Script.i3Pack');
 const OUT = extractedPath('pef-cross', 'br');
 const CONFIG_OUT = assetPath('cross', 'config');
-const P3_CHARA = assetPath('config', 'character.json');
-const P17_CHARA = extractedPath('pef2017', 'br', 'Character.json');
+const CHARA_HEALTH = serverPathOpt('runtime', 'Data', 'Match', 'CharaHealth.xml');
 
 /** Config/*.pef of the Cross Script pack: { name, json } (json = nation-resolved, the same tree as pef2017/br). */
 export function readCrossPefs(packFile = PACK, nation = NATION) {
@@ -45,35 +46,30 @@ export function readCrossPefs(packFile = PACK, nation = NATION) {
   return out;
 }
 
-const MOVE_GROUP = 'Movement';
-/**
- * One character: the 3.123 entry with the Cross values laid over it. HP top-level, Movement keys that the 3.123
- * entry already has, DamageRate as a whole group (same keys: Arm Body Foot Hand Head Leg). Everything else (ITEMID,
- * PartsList, model) stays 3.123, so charaStats keeps its ITEMID join.
- */
-export function overlayChara(base, src) {
-  const out = structuredClone(base);
-  if (src?.HP !== undefined) out.HP = src.HP;
-  if (src && out[MOVE_GROUP] && typeof out[MOVE_GROUP] === 'object') {
-    for (const k of Object.keys(out[MOVE_GROUP])) if (src[k] !== undefined && typeof src[k] !== 'object') out[MOVE_GROUP][k] = src[k];
-  }
-  if (src?.DamageRate) out.DamageRate = structuredClone(src.DamageRate);
-  return out;
+// Keys of the Movement group (the pef-3.123 Character.<name>.Movement layout the web reads); the Cross block has them flat.
+const MOVE_KEYS = ['AccelRateFrontVsBack', 'AccelerationTime', 'BackMoveSpeed', 'ClunchJumpCheckTime', 'ClunchJumpHeight', 'DiagonalMoveSpeed',
+  'FrontMoveSpeed', 'JumpDelay', 'JumpHeight', 'JumpPenaltyRate', 'JumpPenaltyTime', 'JumpTime', 'SideMoveSpeed', 'WalkBackMove',
+  'WalkDiagonalMove', 'WalkFrontMove', 'WalkSideMove'];
+
+/** CharaHealth.xml -> lower-case name -> item id. */
+export function charaItemIds(xml) {
+  const ids = new Map();
+  for (const m of xml.matchAll(/<Chara Id="(\d+)"[^>]*\/>\s*;([^\s<]+)/g)) ids.set(m[2].toLowerCase(), +m[1]);
+  return ids;
 }
 
-/** Character table with the Cross > 2017 > 3.123 order. Returns { Character, fallback } (fallback = names per source). */
-export function buildCharaTable(cross, p17, p3) {
-  const fallback = { cross: [], pef2017: [], pef3: [] };
+/** Character table from the Cross pef. Character blocks only (an object with _ResPath); scalar globals stay out. */
+export function buildCharaTable(cross, ids) {
   const Character = {};
-  for (const [name, base] of Object.entries(p3.Character ?? {})) {
-    if (!base || typeof base !== 'object') { Character[name] = base; continue; }
-    const src = cross.Character?.[name] ?? p17.Character?.[name] ?? null;
-    if (cross.Character?.[name]) fallback.cross.push(name);
-    else if (src) fallback.pef2017.push(name);
-    else fallback.pef3.push(name);
-    Character[name] = overlayChara(base, src);
+  const withItemId = [];
+  for (const [name, src] of Object.entries(cross.Character ?? {})) {
+    if (!src || typeof src !== 'object' || !src._ResPath) continue;
+    const ITEMID = ids.get(name.toLowerCase());
+    if (ITEMID) withItemId.push(name);
+    const Movement = Object.fromEntries(MOVE_KEYS.filter(k => src[k] !== undefined).map(k => [k, src[k]]));
+    Character[name] = { ...(ITEMID ? { ITEMID } : {}), ...structuredClone(src), Movement };
   }
-  return { Character, fallback };
+  return { Character, withItemId };
 }
 
 function main() {
@@ -83,16 +79,16 @@ function main() {
   fs.mkdirSync(OUT, { recursive: true });
   for (const p of pefs) fs.writeFileSync(path.join(OUT, `${p.name}.json`), JSON.stringify(p.json));
   const cross = pefs.find(p => p.name === 'Character').json;
-  const p17 = JSON.parse(fs.readFileSync(P17_CHARA, 'utf8'));
-  const p3 = JSON.parse(fs.readFileSync(P3_CHARA, 'utf8'));
-  const { Character, fallback } = buildCharaTable(cross, p17, p3);
+  const ids = CHARA_HEALTH ? charaItemIds(fs.readFileSync(CHARA_HEALTH, 'utf8')) : new Map();
+  if (!CHARA_HEALTH) console.log('character.json: --server not set (or no runtime/Data/Match/CharaHealth.xml): no ITEMID');
+  const { Character, withItemId } = buildCharaTable(cross, ids);
   fs.mkdirSync(CONFIG_OUT, { recursive: true });
-  fs.writeFileSync(path.join(CONFIG_OUT, 'character.json'), JSON.stringify({ ...p3, Character }));
+  fs.writeFileSync(path.join(CONFIG_OUT, 'character.json'), JSON.stringify({ Mode: cross.Mode, Character }));
   fs.writeFileSync(path.join(CONFIG_OUT, 'sources.json'), JSON.stringify({
-    order: ['pef-cross (PBCross Script.i3Pack)', 'pef-2017 (PBKaybo, extracted/pef2017/br)', 'pef-3.123 (out/config)'],
-    character: { cross: fallback.cross.length, pef2017: fallback.pef2017.length, pef3: fallback.pef3.length, names: fallback },
+    order: ['pef-cross (PBCross Script.i3Pack): every value', `ITEMID: identity only, ${CHARA_HEALTH ? 'server runtime/Data/Match/CharaHealth.xml by name' : 'none (--server not set)'}`],
+    character: { cross: Object.keys(Character).length, withItemId: withItemId.length, names: Object.keys(Character) },
   }, null, 1));
-  console.log(`character.json: cross ${fallback.cross.length}, 2017 ${fallback.pef2017.length}, 3.123 ${fallback.pef3.length}`);
+  console.log(`character.json: ${Object.keys(Character).length} characters, ${withItemId.length} with ITEMID`);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

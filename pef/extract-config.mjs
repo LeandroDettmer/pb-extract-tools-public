@@ -31,8 +31,7 @@ import { fileURLToPath } from 'node:url';
 const args = process.argv.slice(2);
 const ni = args.indexOf('--nation');
 const NATION = ni >= 0 ? +args.splice(ni, 2)[1] : 1;
-// 2017 Script.i3Pack, read only by main (pef/export-cross.mjs imports this module and must not need the 2017 client)
-const packFile = () => args[0] || clientPath(baseClient(['kaybo']), 'Pack', 'Script.i3Pack');
+const PACK = args[0] || clientPath(baseClient('kaybo'), 'Pack', 'Script.i3Pack');
 const OUT = extractedPath('pef2017');
 
 function ror(e, k) {
@@ -138,7 +137,7 @@ export function resolveNation(o, idx) {
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const files = readScriptPack(fs.readFileSync(packFile()));
+  const files = readScriptPack(fs.readFileSync(PACK));
   for (const d of ['raw', 'br', 'files']) fs.mkdirSync(path.join(OUT, d), { recursive: true });
   for (const f of files) {
     if (!f.name.endsWith('.pef')) { fs.writeFileSync(path.join(OUT, 'files', f.name), f.data); console.log('file', f.name, f.size); continue; }

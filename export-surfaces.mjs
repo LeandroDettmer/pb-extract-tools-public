@@ -81,10 +81,10 @@ export function packShapeTerrain(pack) {
     if (buf && H.strings[buf.cls] === 'i3MemoryBuffer' && d.readUInt32LE(buf.off) >= 24) {
       terrain = [d.readUInt16LE(buf.off + 4), d.readInt32LE(buf.off + 12)];
     }
-    // the NXS mesh parts, counted like export-collision.mjs readNxsMeshes
+    // the NXS mesh / convex hull parts, counted like export-collision.mjs readNxsMeshes + readNxsHulls
     const end = o.size <= 32 ? nextOffAfter(o.off) : o.off + o.size;
     let parts = 0;
-    for (let i = o.off; (i = d.indexOf('NXS\x01MESH', i, 'latin1')) >= 0 && i < end; i += 8) parts++;
+    for (const tag of ['NXS\x01MESH', 'NXS\x01CVXM']) for (let i = o.off; (i = d.indexOf(tag, i, 'latin1')) >= 0 && i < end; i += 8) parts++;
     for (let k = 0; k < parts; k++) out.push({ name: parts > 1 ? `${name}_${k}` : name, terrain });
   }
   return out;

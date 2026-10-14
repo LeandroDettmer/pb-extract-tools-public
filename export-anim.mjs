@@ -20,8 +20,7 @@ import { readGLB } from './i3r2/skin-glb.mjs';
 import { compose, invert, xformPoint } from './i3r2/skin.mjs';
 import { mul } from './i3r2/scene.mjs';
 
-// 3.123 folder, read only by the CLI `list` (export-model passes its own animDir)
-const gameDir = () => clientPath(baseClient(['br3123']));
+const GAME = clientPath(baseClient('br3123'));
 
 // [clip name, pack suffix, path regex (lower-cased path, after 'chara/<name>/')]
 const RAW_3PV = [
@@ -219,7 +218,7 @@ export function poseReport(file, clipName, time) {
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const [cmd, a1, a2, a3] = process.argv.slice(2);
   if (cmd === 'list') {
-    const dir = path.join(gameDir(), 'Chara', a1);
+    const dir = path.join(GAME, 'Chara', a1);
     for (const f of fs.readdirSync(dir).filter((x) => /\.i3AnimPack$/i.test(x))) {
       let P; try { P = readAnimPack(path.join(dir, f)); } catch (e) { console.log(f, 'unsupported:', e.message); continue; }
       for (const e of P.entries) if (!a2 || new RegExp(a2, 'i').test(e.path)) console.log(f, e.type, e.tracks, e.path);

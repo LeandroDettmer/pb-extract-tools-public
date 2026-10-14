@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Batch export of every playable map of PBCross (Clients/PBCross/Pack, the only map client) + maps/index.json.
 //
-//   node export-maps-2017.mjs [Map ...] [--index-only] [--client cross]
+//   node web-poc/tools/export-maps-2017.mjs [Map ...] [--index-only] [--client cross]
 //
 // A map is "playable" when both <Map>.i3Pack (render scene) and <Map>_Col.i3Pack exist.
 // For each one: export-visual.mjs (visual.glb + tex/ + lightmaps) and export-collision.mjs

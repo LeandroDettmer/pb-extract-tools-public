@@ -42,24 +42,25 @@
 //            y = floor(k / 10) * 60 + 3 (0x7a7b6c..0x7a7c07)
 //   cardSet  56x59 at x 0x188 (392); set 13 = event_mission y 1, else item_card y = (set - 1) * 60 + 1 (0x7a7cbc..)
 //
-// Web ids (index.json `icons`, the server / V12 numbering):
-// The Cross renumbered part of the items (Goods _GroupIndex differs from 3.123 for 281 of 581 shared names, SetGoods
-// _GoodsId for 347 of 353, 79 weapons), so the web id comes from the 3.123 pef entry of the SAME NAME whenever it exists:
-//   weapon   3.123 Weapon.pef ITEMID of the same name; otherwise (_UsageType + 1) * 100000 + _ClassType * 1000 + _Number
-//            (rule of tools/ui-export/vtex-kaybo.mjs = the 2017 ids) when no 3.123 weapon owns that id
-//   chara    the 3.123 Character.pef ITEMID of the same name (letters/digits, case ignored); the four base characters
-//            have other names in 3.123: RedBulls = REBEL_Male, Tarantula = REBEL_Female, AcidPol = SWAT_Male,
-//            KeenEyes = SWAT_Female [INFERIDO] (CROSS_FIDELITY_AUDIT.md I-1 RISK)
-//   head/beret/mask  the 3.123 Equipment.pef ITEMID whose name, without the "A_X_" prefix, matches [INFERIDO]; the rest
-//            only in `byName` (no reliable link between the Cross _Type and the server number)
-//   item     3.123 Goods.pef ShopItem of the same name: _Type 0 -> 1600000 + _GroupIndex, _Type 1 -> 1800000 + _GroupIndex
-//            (rule verified on server data in tools/ui-export/ui-icons.mjs); other types / no 3.123 name only in `byName`
-//   goods    3.123 Goods.pef SetGoods _GoodsId of the same name (index.json `goods`); the rest only in `byName.goods`
+// Web ids (index.json `icons`, the server numbering): cross-icons-web-ids.json, the 3.123 name join frozen on 2026-10-13
+// (the 3.123 client is gone). The Cross renumbered part of the items (Goods _GroupIndex differs from 3.123 for 281 of 581
+// shared names, SetGoods _GoodsId for 347 of 353, 79 weapons), so the ids are not Cross numbers: never read a server id
+// as a Cross id. Each entry is [family, Cross name, match]; the cell is re-read from the Cross pef by name.
+//   weapon   3.123 Weapon.pef ITEMID of the same name, or the 2017 formula (_UsageType + 1) * 100000 + _ClassType * 1000 + _Number
+//   chara    3.123 Character.pef ITEMID; RedBulls = REBEL_Male, Tarantula = REBEL_Female, AcidPol = SWAT_Male,
+//            KeenEyes = SWAT_Female, ViperRed (601005) = REBEL_ViperRed [INFERIDO]. The Cross exe keys the list by its OWN
+//            number (SetCharacterShape 0x7a6e8a..0x7a6ee6), so the table is the only link server id -> cell
+//   head/beret/mask  equip/index.json items (export-headgear.mjs: server id -> Cross Equipment entry, the join that gives the
+//            model) win over the table; the table holds the 3.123 Equipment.pef name matches [INFERIDO]
+//   item     3.123 Goods.pef ShopItem: _Type 0 -> 1600000 + _GroupIndex, _Type 1 -> 1800000 + _GroupIndex
+//   goods    3.123 Goods.pef SetGoods _GoodsId (index.json `goods`)
+// Added after the 3.123 join: chara 601005 Viper Red = REBEL_ViperRed, 602006 = SWAT_Male (chars/index.json; names in itemNames.json) [INFERIDO];
+// the catalog fill (weapons.json) adds weapon ids the join left out.
 // Per-nation pef arrays are read at element 1 = Brazil (Script.i3Pack config/Nation.nlf of the Cross: _Default_, Brazil,
 // China, ...; the arrays carry 18/19 elements for 15 nlf lines); `nationDiff` lists the fields where Brazil differs from
 // _Default_. A ShopItem whose Brazil _GroupIndex is 0 is not sold there: no web id.
 // Cells with less than 2 % opaque pixels go to `missing` (transparent = no picture in the client either).
-import { assetPath, clientPath, rel, baseClient } from './lib/paths.mjs';
+import { assetPath, clientPath, rel } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -170,10 +171,11 @@ const opaque = (a, x, y, w, h) => {
   for (let j = y; j < y + h && j < a.h; j++) for (let i = x; i < x + w && i < a.w; i++) if (a.rgba[(j * a.w + i) * 4 + 3] > 16) n++;
   return n;
 };
-/** rect record or null (reason in `missing[key]`) */
-function cell(key, atlas, x, y, w, h, extra) {
+/** rect record or null (reason in `missing[key]`). clip: the bottom rows may run past the texture (weapon grid: 88 cells of 57 rows
+ *  on a 1024 texture, the last row ends at 1026; the exe samples the texture's bottom edge, the art sits above it) */
+function cell(key, atlas, x, y, w, h, extra, clip = false) {
   const a = atlases[atlas];
-  const why = !a ? `no texture for this list index` : x + w > a.w || y + h > a.h ? `cell ${x},${y},${w},${h} outside ${atlas} ${a.w}x${a.h}`
+  const why = !a ? `no texture for this list index` : x + w > a.w || (clip ? y >= a.h : y + h > a.h) ? `cell ${x},${y},${w},${h} outside ${atlas} ${a.w}x${a.h}`
     : opaque(a, x, y, w, h) < w * h * 0.02 ? `cell ${atlas}:${x},${y},${w},${h} is transparent` : null;
   if (why) { missing[key] = { ...extra, reason: why }; return null; }
   return { sheet: a.sheet, atlas, x, y, w, h, status: 'original', ...extra };
@@ -186,47 +188,33 @@ function listCell(key, list, perTex, idx, w, h, cols, extra) {
 }
 
 const P = loadPefs('Script.i3Pack', ['Weapon', 'Character', 'Equipment', 'Goods', 'Stage']);
-const V12 = loadPefs(clientPath(baseClient('br3123'), 'Pack', 'Script.i3Pack'), ['Weapon', 'Character', 'Equipment', 'Goods']);
 const icons = {}, goods = {}, byName = { weapon: {}, chara: {}, head: {}, beret: {}, mask: {}, item: {}, goods: {} };
 const count = { weapon: 0, chara: 0, head: 0, beret: 0, mask: 0, item: 0, goods: 0, map: 0, card: 0, cardSet: 0 };
 const put = (table, id, r, fam) => { if (r && !table[id]) { table[id] = r; count[fam]++; } };
+// web ids: the 3.123 name join, frozen (cross-icons-web-ids.json, 2026-10-13: the 3.123 client was deleted). Only the ids
+// come from it; the cell is always the Cross one of the same name.
+const WEB = JSON.parse(fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), 'cross-icons-web-ids.json'), 'utf8'));
 
 // weapons
 const weaponList = (J) => { const m = {}; (function walk(o) { for (const [k, v] of entries(o)) if ('_Number' in v || 'ITEMID' in v) m[k] = v; else walk(v); })(J.WeaponList.Weapon); return m; };
-const v12Weapon = weaponList(V12.Weapon), v12WeaponIds = new Set(Object.values(v12Weapon).map((v) => one(v.ITEMID, 'ITEMID')));
 for (const [name, v] of Object.entries(weaponList(P.Weapon))) {
   const cls = one(v._ClassType, '_ClassType'), num = one(v._Number, '_Number'), ui = one(v._UIShapeIndex, '_UIShapeIndex');
   if (ui == null || ui < 0) continue;
-  const formula = (one(v._UsageType, '_UsageType') + 1) * 100000 + cls * 1000 + num;
   const atlas = lists.WeaponSelect[Math.floor(ui / 88)], c = ui % 88;
-  const r = cell(`weapon:${name}`, atlas, (c % 5) * 204, Math.floor(c / 5) * 57, 204, 57, { family: 'weapon', name, list: 'WeaponSelect', index: ui, classType: cls, number: num });
+  const r = cell(`weapon:${name}`, atlas, (c % 5) * 204, Math.floor(c / 5) * 57, 204, 57, { family: 'weapon', name, list: 'WeaponSelect', index: ui, classType: cls, number: num }, true);
   if (!r) continue;
   byName.weapon[name] = r;
-  const v12 = v12Weapon[name]?.ITEMID;
-  if (v12 != null) put(icons, one(v12, 'ITEMID'), { ...r, match: 'name' }, 'weapon');
-  if (!v12WeaponIds.has(formula) || one(v12, 'ITEMID') === formula) put(icons, formula, { ...r, match: 'formula' }, 'weapon');
 }
 
-// characters: Cross name -> cell, web id by 3.123 name
-const ALIAS = { RedBulls: 'REBEL_Male', Tarantula: 'REBEL_Female', AcidPol: 'SWAT_Male', KeenEyes: 'SWAT_Female' }; // [INFERIDO]
+// characters: Cross name -> cell
 for (const [name, v] of entries(P.Character.Character)) {
   const ui = one(v.UIShapeIndex, 'UIShapeIndex');
   if (ui == null) continue;
   const r = listCell(`chara:${name}`, 'Chara', 18, ui, 134, 78, 3, { family: 'chara', name, idNumber: one(v._IDNumber, '_IDNumber') });
   if (r) byName.chara[name] = r;
 }
-const crossChara = Object.fromEntries(Object.keys(byName.chara).map((k) => [norm(k), k]));
-for (const [name, v] of entries(V12.Character.Character)) {
-  if (v.ITEMID == null) continue;
-  const alias = ALIAS[name], cross = alias ?? crossChara[norm(name)];
-  if (cross && byName.chara[cross]) put(icons, one(v.ITEMID, 'ITEMID'), { ...byName.chara[cross], match: alias ? 'alias [INFERIDO]' : 'name', v12: name }, 'chara');
-}
 
 // head / beret / mask (+ Event hats on the Head list)
-const v12Equip = {};
-for (const c of ['Head', 'Beret', 'Facegear']) for (const [name, v] of entries(V12.Equipment.Equipment[c])) {
-  if (v.ITEMID != null) (v12Equip[norm(name.replace(/^[A-Z]_[A-Z]_/, ''))] ??= []).push({ name, id: one(v.ITEMID, 'ITEMID') });
-}
 for (const [group, list, fam] of [['Head', 'Head', 'head'], ['Event', 'Head', 'head'], ['Beret', 'Beret', 'beret'], ['Mask', 'Mask', 'mask']]) {
   for (const [name, v] of entries(P.Equipment.Equipment[group])) {
     const ui = one(v.UIShapeIndex, 'UIShapeIndex');
@@ -234,9 +222,15 @@ for (const [group, list, fam] of [['Head', 'Head', 'head'], ['Event', 'Head', 'h
     const r = listCell(`${fam}:${name}`, list, 18, ui, 135, 78, 3, { family: fam, name, group, type: one(v._Type, '_Type') });
     if (!r) continue;
     byName[fam][name] = r;
-    const m = v12Equip[norm(name)];
-    if (m?.length === 1) put(icons, m[0].id, { ...r, match: 'name [INFERIDO]', v12: m[0].name }, fam);
   }
+}
+const equipFam = { Head: 'head', Event: 'head', Beret: 'beret', Mask: 'mask' };
+const equipIdx = fs.existsSync(assetPath('equip', 'index.json')) ? JSON.parse(fs.readFileSync(assetPath('equip', 'index.json'), 'utf8')) : null;
+for (const [id, it] of Object.entries(equipIdx?.items ?? {})) {
+  const e = equipIdx.entries[it.key], fam = equipFam[e?.cat], r = fam && byName[fam][e.pef];
+  if (!r) continue;
+  if (!icons[id]) count[fam]++;
+  icons[id] = { ...r, match: 'equip [INFERIDO]', v12: it.name3 };
 }
 
 // cash items and packages
@@ -248,8 +242,6 @@ for (const [name, v] of entries(P.Goods.ShopItem)) {
   const r = cell(`item:${name}`, lists[list][tex], x, y, 90, 65, { family: 'item', name, list, tex, index: ui, type, group: one(v._GroupIndex, '_GroupIndex') });
   if (!r) continue;
   byName.item[name] = r;
-  const w = V12.Goods.ShopItem[name], wt = w && one(w._Type, '_Type'), wg = w && one(w._GroupIndex, '_GroupIndex');
-  if ((wt === 0 || wt === 1) && wg) put(icons, (wt === 0 ? 1600000 : 1800000) + wg, { ...r, match: 'name', v12Group: wg }, 'item');
 }
 for (const [name, v] of entries(P.Goods.SetGoods)) {
   const list = one(v._UITexType, '_UITexType'), tex = one(v._UITexIndex, '_UITexIndex'), ui = one(v._UIShapeIndex, '_UIShapeIndex');
@@ -261,8 +253,6 @@ for (const [name, v] of entries(P.Goods.SetGoods)) {
   const r = cell(`goods:${name}`, lists[list]?.[tex], x, y, w, h, { family: 'goods', name, list, tex, index: ui, goodsId });
   if (!r) continue;
   byName.goods[name] = r;
-  const v12 = V12.Goods.SetGoods[name]?._GoodsId;
-  if (v12 != null) put(goods, one(v12, '_GoodsId'), { ...r, match: 'name' }, 'goods');
 }
 
 // maps: keyed by STAGE_ID & 0xff (web mapId); "random" = SetRandomMapShape
@@ -273,6 +263,25 @@ const mapCell = (key, v, extra) => {
   const [x, y] = grid(idx, 166, 88, 3);
   return cell(key, lists.Map[tex], x, y, 166, 88, { ...extra, list: 'Map', tex, index: v });
 };
+// web ids of the frozen join: the cell of each name; ids the equip join above already gave keep their entry (put skips them)
+for (const [id, [fam, name, match]] of Object.entries(WEB.icons)) {
+  const r = byName[fam]?.[name];
+  if (r) put(icons, id, { ...r, match }, fam); else missing[`web:${id}`] = { family: fam, name, reason: 'no Cross cell of this name' };
+}
+for (const [id, name] of Object.entries(WEB.goods)) {
+  const r = byName.goods[name];
+  if (r) put(goods, id, { ...r, match: 'name' }, 'goods'); else missing[`web:goods:${id}`] = { family: 'goods', name, reason: 'no Cross cell of this name' };
+}
+// the catalog (cross/weapons/weapons.json, written by export-weapons) names the pef block of every server id: a server id
+// the rules above left without a cell (Cheytac 105071 = pef Cheytac_M200_TH_1year) takes the cell of its own block,
+// the same one the model and the audit use. Only fills ids the join above left out.
+if (fs.existsSync(assetPath('cross', 'weapons', 'weapons.json'))) {
+  for (const w of JSON.parse(fs.readFileSync(assetPath('cross', 'weapons', 'weapons.json'), 'utf8')).weapons) {
+    const r = byName.weapon[/^pef-cross:[^/]+\/(.+)$/.exec(w.pb?.src ?? '')?.[1]];
+    if (r) put(icons, w.id, { ...r, match: 'catalog' }, 'weapon');
+  }
+}
+
 const maps = {};
 for (const [ord, s] of Object.entries(stageTable())) {
   const v = stageUI[s.name.toLowerCase()];

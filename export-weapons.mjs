@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// Weapon data + SFX exporter for the web app.
+// Weapon data + SFX exporter for the web client.
 //
-//   node export-weapons.mjs [--all-sfx] [--no-sfx]
-//   node export-weapons.mjs --anim-only   (only re-attach changeTime to the existing weapons.json)
+//   node web-poc/tools/export-weapons.mjs [--all-sfx] [--no-sfx]
+//   node web-poc/tools/export-weapons.mjs --anim-only   (only re-attach changeTime to the existing weapons.json)
 //
-// 1) server/binary/Debug/Data/Match/ItemStatistics.xml  ->  <out>/weapons/weapons.json
+// 1) server/binary/Debug/Data/Match/ItemStatistics.xml  ->  public/assets/weapons/weapons.json
 //    Id layout (Plugin.Core ComDiv.GetIdStatics): 6 digits = S CC NNN (slot, ClassType, number),
 //    7 digits = S CCC NNN. Slot 1 primary, 2 secondary, 3 melee, 4 explosive, 5 special.
 //    Units, as the server reads them (Server.Match AllUtils.ValidateHitData / ValidateGrenadeHit):
@@ -15,7 +15,7 @@
 //    Recoil / spread / reload / zoom / move-speed values come per weapon from the Cross Weapon.pef only, see pbBlock.
 //    What is still a placeholder is listed in docs/FIDELITY.md.
 //
-// 2) Sound_Weapon_*.i3Pack (RIFF payloads in clear) -> <out>/weapons/sfx/<key>/NNN.wav + index.json
+// 2) Sound_Weapon_*.i3Pack (RIFF payloads in clear) -> public/assets/weapons/sfx/<key>/NNN.wav + index.json
 //    File names inside the pack are encrypted (see tools/i3pack/unpack.mjs RISK), so the role of each
 //    clip is guessed: fire = first clip 0.6-4s with a sharp attack (<25ms) and high RMS; reload = the
 //    remaining short clips in pack order; explosion (throw packs) = longest clip.
@@ -28,7 +28,7 @@ import { carve, decodeContent, parsePack } from './i3pack/unpack.mjs';
 const XML = serverPath('runtime', 'Data', 'Match', 'ItemStatistics.xml'); // server/binary/Debug was removed by the reorganisation (d593df83)
 const PACK_DIR = clientPath(baseClient('br3123'), 'Pack');
 const SFX_PACK_DIR = clientPath(baseClient('cross'), 'Pack'); // sounds: PBCross packs only (no 3.123 clip)
-const OUT = assetPath('cross', 'weapons'); // new subfolder: <out>/weapons/weapons.json stays the 3.123 output
+const OUT = assetPath('cross', 'weapons'); // new subfolder: public/assets/weapons/weapons.json stays the 3.123 output
 const args = process.argv.slice(2);
 
 const CLASS_NAMES = {
@@ -47,7 +47,7 @@ const FAMILY = {
 const SLOT_NAMES = { 1: 'primary', 2: 'secondary', 3: 'melee', 4: 'explosive', 5: 'special' };
 
 // Per-weapon handling comes from the Cross Weapon.pef only (extracted/pef-cross/br/Weapon.json, tools/pef/export-cross.mjs),
-// Cross only ("Cross or nothing"): no 2017 and no 3.123 value. An item the Cross pef
+// Cross only (docs/SINGLE_CLIENT_PLAN.md section 4, "Cross or nothing"): no 2017 and no 3.123 value. An item the Cross pef
 // does not have is not written (the shop hides it, W5). Its match is by _ClassType/_Number + name check (ids were reused
 // between builds). A key the Cross entry lacks stays absent: the runtime uses the exe default for it.
 // ItemStatistics.xml stays the source of the top-level damage/range/ammo because the server validates hits against it;
@@ -152,6 +152,8 @@ function pbBlock(get, src, family) {
     autoFireCount: n('AutoFireCount'), autoFireDelay: n('AutoFireDelay'),
     triggerType: n('_TriggerType'), fireType: n('_FireType'), zoomType: n('_ZoomType'),
     extType: typeof get('ExtType') === 'string' ? get('ExtType') : undefined,
+    // grenade-warning badge of CHud 0x7443c0: 'DefaultGrenade' (slots 0-7) or 'C5' (slots 8-15); empty = no warning
+    indicatorType: typeof get('IndicatorType') === 'string' && get('IndicatorType') ? get('IndicatorType') : undefined,
     swapSound: typeof get('_SwapSound') === 'string' ? get('_SwapSound') : undefined, // Common/change/<name>.wav
     fireSound: typeof get('_FireSound') === 'string' ? get('_FireSound') : undefined, // <name>.wav (export-sfx2017.mjs)
     reloadTime: n('ReloadTime'), reloadBulletCount: n('ReloadBulletCount'),

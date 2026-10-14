@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Which shop items of the ITEM tab (coupons, function items, cards, ...) and which head/face/beret parts are COMPLETE in
-// the PB 2017 web lobby. Mirrors tools/audit-charas-2017.mjs. Pure Node ESM.
+// the PB 2017 web lobby. Mirrors audit-charas-cross.mjs. Pure Node ESM.
 //
 //   node audit-items-2017.mjs                 # -> out/ui/complete-items-2017.json
 //   node audit-items-2017.mjs --list [ids..]  # per item: complete | missing parts (no write)
@@ -15,7 +15,7 @@
 //            _Type 0 for classes 16/17 (period items; a 17 DD GGG coupon activates the 16 00 GGG item), _Type 1 for 18.
 //            Other classes (mission cards, accessories 30, sprays, name cards, passes, boxes...) have no 2017 entry.
 //            parts: exported 2017 accessory (out/equip/index.json, tools/export-headgear.mjs) with a GLB for
-//            every family of the complete characters (chars/complete-2017.json).
+//            every family of the complete characters (chars/complete-cross.json).
 //   icon     out/ui/icons-kaybo or icons (V12) index.json record; a 17 DD GGG coupon uses the 16 00 GGG icon
 //            (the V12 index itself maps 1701017 -> icons/items/1600017.png).
 //   name     a shown name that is not a placeholder: items.pt-BR.json, else the server name (itemNames.json; coupons:
@@ -112,7 +112,7 @@ export function audit() {
   const goods = rj(extractedPath('pef2017', 'br', 'Goods.json')).ShopItem;
   const equip = tryJson(path.join(ASSETS, 'equip/index.json'));
   const chars = rj(path.join(ASSETS, 'chars/index.json')).chars;
-  const charaOk = new Set(tryJson(path.join(ASSETS, 'chars/complete-2017.json'))?.complete ?? []);
+  const charaOk = new Set(tryJson(path.join(ASSETS, 'chars/complete-cross.json'))?.complete ?? []);
   const fams = new Set(chars.filter((c) => (c.itemIds ?? []).some((i) => charaOk.has(i))).map((c) => equip?.charas?.[c.id]?.family).filter(Boolean));
   const pef = new Map();
   for (const [k, v] of Object.entries(goods)) pef.set(`${v._Type}:${v._GroupIndex}`, k);

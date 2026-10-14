@@ -203,7 +203,11 @@ export function exportLighting(mapId, { outRoot = assetPath('maps'), log = conso
   const stageAll = JSON.parse(fs.readFileSync(extractedPath('pef-cross', 'br', 'Stage.json'), 'utf8')).Stage;
   const m = resolveMap(mapId, stageAll);
   const st = m.stage && stageAll[m.stage];
-  if (!st) throw new Error(`Stage.pef has no entry for ${m.pack}`);
+  // DeadTown has a map pack but no Cross Stage.pef entry. Cross exe (PointBlank.exe, CStageBattle::LoadProperties 0x759920):
+  // FindKey("Stage") -> FindKey(stage name) returns NULL -> `je 0x759ca7` skips every Stage read (Ambient, DefaultDiffuse,
+  // TopViewCameraPos, BombPosition_*) and the setAmbient (0x759ab7) on the found path. So the client applies no Stage lighting here;
+  // the web skips the fetch (render/pbLighting.ts NO_LIGHTING). [INFERIDO] the scene ambient keeps its prior value, not reset by this code.
+  if (!st) { log(`${mapId}: skip (Stage.pef has no entry for ${m.pack}, no lighting.json)`); return null; }
   const P = (s) => path.join(m.dir, `${m.pack}${s}.i3Pack`);
   const sub = packFiles(P('_SubData')), scene = packFiles(P('_Scene')), world = packFiles(P(''));
 

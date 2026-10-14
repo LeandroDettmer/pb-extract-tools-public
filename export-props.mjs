@@ -2,7 +2,7 @@
 // Export the GINS object instances of Point Blank 2017 maps (vending machines, billboards, glass, crates...)
 // to out/objects/<id>.glb + out/maps/<map>/props.json. Pure Node ESM, builtins only.
 //
-//   node export-props.mjs [Map ...] [--all] [--pack-dir DIR]
+//   node web-poc/tools/export-props.mjs [Map ...] [--all] [--pack-dir DIR]
 //     Map = pack name (NStation, Luxville...); --all = every map of maps/index.json (source cross).
 //     Defaults to NStation Luxville. Pack dir defaults to Clients/PBCross/Pack (--client cross is the default).
 //
@@ -38,7 +38,7 @@
 //   Other shapes (type 38 convex = cooked CVXM, not decoded) -> collision.kind "visual" [RECRIADO]: the runtime
 //   uses the visual triangles as the collider.
 
-import { assetPath, clientPath, serverPath, baseClient } from './lib/paths.mjs';
+import { assetPath, clientPath, webPath, baseClient } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -51,9 +51,17 @@ import { readI3IB, decodeI3IB, encodePNG, stem, normPath, checkGLB } from './i3r
 const ASSETS = assetPath();
 const MAPS = path.join(ASSETS, 'maps');
 const OBJ_OUT = path.join(ASSETS, 'objects');
-const MAP_STRUCTURE = serverPath('binary', 'Debug', 'Data', 'Match', 'MapStructure.xml');
+// Server.Match map data: the matchData.json that src/host/matchCore.ts loads (match-data.mjs builds it from MapStructure.xml)
+const MATCH_DATA = webPath('src', 'host', 'data', 'matchData.json');
 
 const CLS = { object: 0xb713f4d9, box: 0x4cc77521, respawn: 0x4ce77b33, world: 0x5eab4a90, light: 0xd966c30d, path: 0xa4b2bf63 };
+// Destroy-mode objectives are not CLS.object instances: Breakdown Transformer (blue) 0x3f763d11, helicopter_uh60 (red) 0x94631b06;
+// Helispot Helispot_UH60_BLUE / _RED 0x1e32413f: GINS pose identity; the model is already at its start pose (see below).
+const OBJECTIVE_CLS = new Set([0x3f763d11, 0x94631b06, 0x1e32413f]);
+// Defence (Matches Mode 5, Black Panther 52): the two objectives are plain i3Object instances. normal_Tank = Animation 258 (UltraSync 3,
+// life 6000, bar1 = red colour), armerd_Tank = 259 (UltraSync 4, life 9000, bar2 = blue colour). See objectiveAnim.
+const DEFENCE_MAP_IDS = new Set([52]);
+const OBJECTIVE_ANIMS = new Set([256, 257, 258, 259]);
 const IDENT = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 const md5 = (s) => crypto.createHash('md5').update(s.toUpperCase(), 'latin1').digest('hex');
 const r4 = (v) => +v.toFixed(4);
@@ -463,7 +471,10 @@ function exportModel(id, ent, texFor, { log }) {
   const d = readEntry(ent);
   const scenes = scanI3R2(d).filter((b) => b.objects.some((o) => o.cls === 'i3Geometry'));
   if (!scenes.length) throw new Error(`${ent.path}: no i3Geometry scene`);
-  const file = scenes[0];
+  // a break file (vending, tank) holds the intact scene first, named after the intact file, then its own scene named after
+  // itself: the state's model is the self-named one, else the first [INFERIDO: exe not checked]
+  const own = baseName(ent.path);
+  const file = scenes.find((s) => s.strings.some((x) => /\.i3s$/i.test(x) && baseName(x) === own)) ?? scenes[0];
   const meshes = collectMeshes(d, file);
   // i3SceneGraphInfo 'SGI1' +8 = the scene's common i3AttrSet (glass: texture/blend state live only there, the set is
   // not a parent of any node), applied under every mesh's own state
@@ -625,18 +636,12 @@ function exportModel(id, ent, texFor, { log }) {
   };
 }
 
-// ---- MapStructure.xml (server): <Map Id="n"> <Objects> <Obj Id NeedSync Animation Life/> ------------------------
+// ---- server map objects (MapStructure.xml via matchData.json): Map Id -> [{ id, needSync, animation, life }] ----------
 function readMapStructure() {
-  if (!fs.existsSync(MAP_STRUCTURE)) return new Map();
-  const xml = fs.readFileSync(MAP_STRUCTURE, 'utf8');
+  if (!fs.existsSync(MATCH_DATA)) return new Map();
   const maps = new Map();
-  const re = /<Map\s+Id="(\d+)"\s*>([\s\S]*?)<\/Map>/g;
-  for (let m; (m = re.exec(xml));) {
-    const objs = [];
-    for (const o of m[2].matchAll(/<Obj\s+Id="(\d+)"\s+NeedSync="(\w+)"\s+Animation="(\d+)"\s+Life="(-?\d+)"/g))
-      objs.push({ id: +o[1], needSync: o[2] === 'true', animation: +o[3], life: +o[4] });
-    maps.set(+m[1], objs);
-  }
+  for (const [id, m] of Object.entries(JSON.parse(fs.readFileSync(MATCH_DATA, 'utf8')).maps))
+    maps.set(+id, m.objects.map((o) => ({ id: o.id, needSync: o.needSync, animation: o.animation, life: o.life })));
   return maps;
 }
 
@@ -648,12 +653,18 @@ function exportMapProps(pack, dir, mapId, IX, texFor, defs, serverMaps, log) {
   const props = [], unresolved = [], volumes = [];
   for (const r of records) {
     if (r.cls === CLS.box) { volumes.push({ name: r.name, pos: r.pos.map(r4), quat: r.quat.map(r4), size: r.scale.map(r4) }); continue; }
-    if (r.cls !== CLS.object) continue;
+    if (r.cls !== CLS.object && !OBJECTIVE_CLS.has(r.cls)) continue;
     const ent = IX.byMd5.get(r.md5);
     if (!ent) { unresolved.push({ name: r.name, md5: r.md5 }); continue; }
     const id = stem(ent.path).replace(/[^\w.-]+/g, '_');
+    // Destroy objectives: blue = Transformer / *_BLUE, red = helicopter_uh60 / *_RED (the server's Obj with Animation 257 / 256)
+    const defence = mapId != null && DEFENCE_MAP_IDS.has(mapId);
+    const team = OBJECTIVE_CLS.has(r.cls) ? (/transformer|_blue\.i3obj$/i.test(ent.path) ? 'blue' : /helicopter_uh60|_red\.i3obj$/i.test(ent.path) ? 'red' : null)
+      : defence ? (/normal_tank\.i3obj$/i.test(ent.path) ? 'red' : /armerd_tank\.i3obj$/i.test(ent.path) ? 'blue' : null) : null;
     if (!defs.has(id)) {
       const info = readI3Obj(readEntry(ent));
+      // Helispot_UH60_RED.i3Obj has no i3SceneGraphInfo ref (its model is an i3Animation 'Model_UH60'): the model is the sibling .i3s
+      if (!info.states.length && team) info.states = [ent.path.replace(/\.i3obj$/i, '.i3s')];
       const def = { id, i3Obj: `${ent.pack}:${ent.path}`, life: info.life, stateCount: info.stateCount, breakable: info.breakable && info.stateCount > 1, states: info.states, breakEffects: info.breakEffects, breakSounds: info.breakSounds, stateSounds: info.stateSounds, explosion: info.explosion };
       try { Object.assign(def, exportModelAny(id, info.states[0], IX, texFor, log)); } catch (e) { def.error = e.message; }
       // states 1.. = broken models (same GLB space): <id>_s1.glb. Objects with a single model just vanish when broken.
@@ -666,15 +677,31 @@ function exportMapProps(pack, dir, mapId, IX, texFor, defs, serverMaps, log) {
       defs.set(id, def);
       log(`  object ${id}: ${def.error ? 'ERROR ' + def.error : `tris=${def.tris} col=${def.collision.kind}${def.collision.boxes ? 'x' + def.collision.boxes.length : ''} life=${def.life} breakable=${def.breakable}${def.missingTextures?.length ? ' missingTex=' + def.missingTextures.join(',') : ''}`}`);
     }
-    props.push({ name: r.name, object: id, pos: r.pos.map(r4), quat: r.quat.map(r4), scale: r.scale.map(r4) });
+    const prop = { name: r.name, object: id, pos: r.pos.map(r4), quat: r.quat.map(r4), scale: r.scale.map(r4), ...(team ? { objective: team } : {}) };
+    // Helispot helicopters: GINS pos 0,0,0 identity. Their start pose is the animation's key 0 (Model_UH60 idle, Root 0), and that
+    // equals the i3s rest matrices (Root, Bone01-03, Model_ProF/B, WeaponPointDummy, Model_UH60, checked 2026-10-13): nothing to add.
+    props.push(prop);
   }
   // server objects (MapStructure.xml, by MapId): index them onto the i3Object instances only when the counts match
   // The server list = the i3Object instances with >= 2 states (intact + broken), in GINS order: NStation 5/5,
   // Luxville 28/28 (its 42 Glass_Building_02_Exp_01 have one state, the broken glass, and are not listed).
+  // Objectives (props.objective) are matched by their server Animation (blue 257, red 256) and left out of the order match.
   const server = mapId != null ? serverMaps.get(mapId) : undefined;
-  const netProps = props.filter((p) => defs.get(p.object).stateCount > 1);
-  const netMatch = !!server && server.length === netProps.length;
-  if (netMatch) netProps.forEach((p, i) => { const s = server[i]; p.net = { index: s.id, needSync: s.needSync, animation: s.animation, life: s.life }; });
+  const objectives = props.filter((p) => p.objective);
+  const defence = mapId != null && DEFENCE_MAP_IDS.has(mapId);
+  const objectiveAnim = (p) => (p.objective === 'blue' ? 257 : 256) + (defence ? 2 : 0);
+  const serverObjectives = (server ?? []).filter((o) => OBJECTIVE_ANIMS.has(o.animation));
+  const serverRest = (server ?? []).filter((o) => !OBJECTIVE_ANIMS.has(o.animation));
+  for (const p of objectives) {
+    const s = serverObjectives.find((o) => o.animation === objectiveAnim(p));
+    if (s) p.net = { index: s.id, needSync: s.needSync, animation: s.animation, life: s.life };
+  }
+  // multi-state props first (NStation, Luxville); when the server list has every non-objective prop (Breakdown: 2..21 = 20 props) use all of them
+  const nonObjective = props.filter((p) => !p.objective);
+  const multiState = nonObjective.filter((p) => defs.get(p.object).stateCount > 1);
+  const netProps = server && serverRest.length !== multiState.length && serverRest.length === nonObjective.length ? nonObjective : multiState;
+  const netMatch = !!server && serverRest.length === netProps.length;
+  if (netMatch) netProps.forEach((p, i) => { const s = serverRest[i]; p.net = { index: s.id, needSync: s.needSync, animation: s.animation, life: s.life }; });
   const used = [...new Set(props.map((p) => p.object))].map((id) => defs.get(id));
   const out = {
     source: `${pack}_Scene.i3Pack GINS v${ver}`,
@@ -684,7 +711,7 @@ function exportMapProps(pack, dir, mapId, IX, texFor, defs, serverMaps, log) {
     unresolved,
     volumes: { count: volumes.length, note: 'GINS box volumes (class 0x4cc77521: map sectors / trigger areas), no visual, not collision', list: volumes },
     server: server
-      ? { mapId, source: 'server/binary/Debug/Data/Match/MapStructure.xml', objects: server, matchedByOrder: netMatch, rule: 'i3Object instances with stateCount >= 2, GINS order', ...(netMatch ? {} : { note: `server lists ${server.length} objects, GINS has ${netProps.length} multi-state i3Object instances: not mapped` }) }
+      ? { mapId, source: 'web-poc/src/host/data/matchData.json (MapStructure.xml)', objects: server, matchedByOrder: netMatch, rule: 'i3Object instances with stateCount >= 2, GINS order', ...(netMatch ? {} : { note: `server lists ${server.length} objects, GINS has ${netProps.length} multi-state i3Object instances: not mapped` }) }
       : { mapId, note: 'no MapStructure entry' },
   };
   fs.writeFileSync(path.join(MAPS, dir, 'props.json'), JSON.stringify(out, null, 1));
@@ -740,3 +767,4 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   console.log(`done: ${report.length} maps, ${defs.size} objects, ${bad} errors, ${report.reduce((a, r) => a + (r.unresolved || 0), 0)} unresolved instances (${Date.now() - t0} ms)`);
   process.exitCode = bad ? 1 : 0;
 }
+export { buildIndex, readI3Obj, readEntry, readCollision };

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Battle HUD art from the Point Blank Cross client ONLY (Clients/PBCross) -> <out>/ui/cross-hud/ (docs/CROSS_UI.md).
+// Battle HUD art from the Point Blank Cross client ONLY (Clients/PBCross) -> public/assets/ui/cross-hud/ (docs/CROSS_UI.md).
 //   pbx ui cross-hud
 //
 // No other client is read: the HUD of Cross is code-drawn (CHud / CHUD_* / CBattleHUD_MiniMap in PointBlank.exe), so the
@@ -7,7 +7,7 @@
 //
 // Writes:
 //   hud/<Name>.png            every Gui/Ingame, Gui/Hud and Gui/Interface sheet of UI_Ingame-Hud, UI_Ingame, UI_Hud,
-//                             UI_Interface (help_observer) and UI_Interface-Map (the map picture of the map mode), decoded
+//                             UI_Interface (help, help_observer, level_icon) and UI_Interface-Map (the map picture of the map mode), decoded
 //                             I3IB -> PNG (alpha kept). Name = file name without .i3i (case kept).
 //   hud/blood.png             alphaBox recorded in index.json (the padded sheet's alpha stops at row 767, as in 2017)
 //   kill/Weapon_Kill<n>.png   UI_WeaponShape.i3Pack Weapon_Kill0..11 (kill feed weapon icons, 127x39 cells, 8 columns)
@@ -18,7 +18,7 @@
 // totalTexCnt). NOT the 2017 minfo (no RealMapScale / RealBakedSize): the world -> minimap transform must come from the
 // Cross exe (CBattleHUD_MiniMap, RE group), not from a value in this file. Airport and Kickpoint have 0 files in the
 // Cross packs: reported as missing.
-import { assetPath, clientPath, rel } from '../lib/paths.mjs';
+import { assetPath, clientPath, extractedPath, rel } from '../lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { parsePack, decodeContent } from '../i3pack/unpack.mjs';
@@ -33,7 +33,7 @@ const SHEET_PACKS = [
   ['UI_Ingame-Hud', /^Gui\/Ingame\/.*\.i3i$/i],
   ['UI_Ingame', /^Gui\/Ingame\/.*\.i3i$/i],
   ['UI_Hud', /^Gui\/Hud\/.*\.i3i$/i],
-  ['UI_Interface', /^Gui\/Interface\/help_observer\.i3i$/i],
+  ['UI_Interface', /^Gui\/Interface\/(help|help_observer|level_icon)\.i3i$/i],
   ['UI_Interface-Map', /^Gui\/Interface\/UI_Source_MapImage\d\.i3i$|^Gui\/Interface\/UI_Source_MapMode\.i3i$/i],
 ];
 
@@ -113,7 +113,15 @@ for (const [pack, re] of SHEET_PACKS) {
     pages[n] = `kill/Weapon_Kill${n}.png`;
     console.log(`kill Weapon_Kill${n}.png ${img.w}x${img.h}`);
   }
-  index.killIcons = { status: 'original', src: `${rel(file)}:Gui/WeaponShape/Weapon_Kill*.i3i`, cell: { w: 127, h: 39, columns: 8, perPage: 88 }, pages };
+  // ord = the weapon's _UIShapeIndex in the Cross Weapon.pef (CHud::SetKillText 0x741210 -> 0x7a8140 / 0x7a7f20 / 0x7a8240),
+  // key = classType * 1000 + number (item id without the slot digit). Dino class 19 (by name) and class 100 (no weapon: fall /
+  // other, table 0xd62d10) are not mapped yet.
+  const pef = JSON.parse(fs.readFileSync(extractedPath('pef-cross', 'br', 'Weapon.json'), 'utf8'));
+  const ord = {};
+  const walk = (o) => { for (const v of Object.values(o)) if (v && typeof v === 'object') { if ('_UIShapeIndex' in v && '_ClassType' in v) ord[v._ClassType * 1000 + v._Number] = v._UIShapeIndex; else walk(v); } };
+  walk(pef.WeaponList?.Weapon ?? pef);
+  index.killIcons = { status: 'original', src: `${rel(file)}:Gui/WeaponShape/Weapon_Kill*.i3i + Cross Weapon.pef _UIShapeIndex`, cell: { w: 127, h: 39, cols: 8, perPage: 88 }, pages, ord };
+  console.log(`kill icons: ${pages.filter(Boolean).length} pages, ${Object.keys(ord).length} weapons`);
 }
 
 // ---- minimaps: <Map>_TabMinimap.i3Pack holds tab_mini_<Map>.i3i + info_<Map>.txt (the Cross name; 2017 uses minfo_)
@@ -142,5 +150,42 @@ for (const f of fs.readdirSync(PACK).filter((n) => /_TabMinimap\.i3Pack$/i.test(
   console.log(`minimap ${map}: ${img.w}x${img.h} centre ${ini.CenterX},${ini.CenterY} ratio ${ini.RatioWidthBaked},${ini.RatioHeightBaked}`);
 }
 
+// ---- radar: CBattleHUD_MiniMap::Create 0x6fdc90 of the Cross exe reads World/<map>/Images/minfo_<map>.txt [Default]
+// (RealMapScale, RealBakedSize, CenterX, CenterY, AdditionalImgCnt) and mini_<map>.i3i (+ mini_<map>_text.i3i) from
+// <Map>_SubData.i3Pack. RealMapScale missing = _CalcMapScale 0x6fe3b0 (max X/Z extent of the world bound box): left null
+// here, the client has the level bounds. Extra floors (mini_<map>_%02d, AdditionalImgCnt) are not exported yet.
+fs.mkdirSync(path.join(OUT, 'radar'), { recursive: true });
+index.radar = {};
+for (const f of fs.readdirSync(PACK).filter((n) => /_SubData\.i3Pack$/i.test(n)).sort()) {
+  const map = f.replace(/_SubData\.i3Pack$/i, '');
+  const file = path.join(PACK, f);
+  let files;
+  try { files = unpackTo(file); } catch (e) { index.radar[map] = { status: 'missing', note: `${f}: ${e.message}` }; console.log(`radar ${map}: ${e.message}`); continue; }
+  const low = (p) => p.name.toLowerCase();
+  const minfo = files.find((p) => /^minfo_.*\.txt$/.test(low(p)));
+  const mini = files.find((p) => /^mini_.*\.i3i$/.test(low(p)) && !/_text\.i3i$/.test(low(p)) && !/_\d\d\.i3i$/.test(low(p)));
+  const text = files.find((p) => /^mini_.*_text\.i3i$/.test(low(p)) && !/_text_\d\d\.i3i$/.test(low(p)));
+  if (!minfo || !mini) { index.radar[map] = { status: 'missing', note: `${f} has no minfo_*.txt / mini_*.i3i` }; console.log(`radar ${map}: missing`); continue; }
+  const ini = parseIni(minfo.buf.toString('latin1'));
+  let img;
+  try { img = decodeI3i(mini); } catch (e) { index.radar[map] = { status: 'missing', note: e.message }; console.log(`radar ${map}: ${e.message}`); continue; }
+  fs.writeFileSync(path.join(OUT, 'radar', `${map}.png`), encodePNG(img.rgba, img.w, img.h, true));
+  const num = (v) => (typeof v === 'number' ? v : null);
+  const rec = {
+    status: 'original', png: `radar/${map}.png`, w: img.w, h: img.h,
+    minfo: { realMapScale: num(ini.RealMapScale), realBakedSize: num(ini.RealBakedSize), centerX: num(ini.CenterX), centerY: num(ini.CenterY), additionalImgCnt: num(ini.AdditionalImgCnt) ?? 0 },
+    src: `${rel(file)}:${mini.name} + ${minfo.name}`,
+  };
+  if (text) {
+    try {
+      const t = decodeI3i(text);
+      fs.writeFileSync(path.join(OUT, 'radar', `${map}_text.png`), encodePNG(t.rgba, t.w, t.h, true));
+      rec.text = `radar/${map}_text.png`;
+    } catch (e) { console.log(`radar ${map} text: ${e.message}`); }
+  }
+  index.radar[map] = rec;
+  console.log(`radar ${map}: ${img.w}x${img.h} scale ${rec.minfo.realMapScale} baked ${rec.minfo.realBakedSize} centre ${rec.minfo.centerX},${rec.minfo.centerY}`);
+}
+
 fs.writeFileSync(path.join(OUT, 'index.json'), JSON.stringify(index, null, 1));
-console.log(`cross-hud: ${Object.keys(index.textures).length} sheets, ${Object.keys(index.minimaps).length} minimaps -> ${rel(OUT)}`);
+console.log(`cross-hud: ${Object.keys(index.textures).length} sheets, ${Object.keys(index.minimaps).length} minimaps, ${Object.values(index.radar).filter((r) => r.status === 'original').length} radar maps -> ${rel(OUT)}`);

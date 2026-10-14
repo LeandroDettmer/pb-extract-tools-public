@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // The weapon's OWN animation (magazine out/in, slide / bolt, pistol hammer, shotgun pump), PBCross client only.
 //
-//   node export-weapon-anim.mjs            # -> <out>/weapons/anim/{index.json, lib/*.json}
-//   node export-weapon-anim.mjs --list colt45 870mcs aug_a3_gold   # model id -> states / clips (no write)
+//   node web-poc/tools/export-weapon-anim.mjs            # -> public/assets/weapons/anim/{index.json, lib/*.json}
+//   node web-poc/tools/export-weapon-anim.mjs --list colt45 870mcs aug_a3_gold   # model id -> states / clips (no write)
 //
 // Source (Clients/PBCross/Pack/Weapon_*.i3Pack): a weapon pack is an i3Chara of its own
 //   * I3R2 #1: i3AIContext "DefaultGND1" > i3AI "DefaultAI_0" > i3AIState list. i3AIState: u8 nameLen, name, 'AIS1',
@@ -29,7 +29,7 @@ import { scanI3R2 } from './i3r2/i3r2.mjs';
 import { readAnimPack, sampleTrack } from './i3r2/skin-anim.mjs';
 import { readBody, readSkeleton } from './i3r2/skin.mjs';
 
-const PACKS = clientPath(baseClient(['cross']), 'Pack'); // Cross only: Weapon_*.i3Pack of the Cross weapon AI; other clients fail with a message
+const PACKS = clientPath(baseClient('cross'), 'Pack'); // Cross only by default (--client <key> for a diagnostic run)
 const ASSETS = assetPath('weapons');
 const OUT = path.join(ASSETS, 'anim');
 const low = (p) => p.replace(/\\/g, '/').toLowerCase();
@@ -273,7 +273,7 @@ let clips = 0, bad = 0, bytes = 0;
 for (const [pack, list] of byPack) {
   const d = fs.readFileSync(path.join(PACKS, packByLow.get(pack.toLowerCase())));
   const bones = isAgg(pack) ? null : skeletonBones(d);
-  const out = { source: `Clients/PBKaybo/GameData/Apps/PB/Pack/${pack}.i3Pack`, tool: 'export-weapon-anim.mjs', clips: {} };
+  const out = { source: `Clients/PBKaybo/GameData/Apps/PB/Pack/${pack}.i3Pack`, tool: 'web-poc/tools/export-weapon-anim.mjs', clips: {} };
   for (const [k, h] of list) {
     try { out.clips[k] = clipJson(h.A.clip(h.i), isAgg(pack) ? unionBones(k) : bones); clips++; } catch (e) { bad++; console.warn(`${pack}: ${k} ${e.message}`); continue; }
     libs[k] = `lib/${pack.toLowerCase()}.json`;
@@ -284,6 +284,6 @@ for (const [pack, list] of byPack) {
 }
 // states whose clip failed to parse are dropped
 for (const s of sets) for (const [n, v] of Object.entries(s.states)) if (!libs[v.clip]) delete s.states[n];
-fs.writeFileSync(path.join(OUT, 'index.json'), JSON.stringify({ generated: new Date().toISOString(), tool: 'export-weapon-anim.mjs',
+fs.writeFileSync(path.join(OUT, 'index.json'), JSON.stringify({ generated: new Date().toISOString(), tool: 'web-poc/tools/export-weapon-anim.mjs',
   source: 'Clients/PBCross/Pack (PBCross client)', sets, models: byModel, libs, missing }));
 console.log(`models with anim ${Object.keys(byModel).length}/${models.length}, ${sets.length} state sets, ${clips} clips (${bad} unreadable) in ${byPack.size} libs, ${(bytes / 1024).toFixed(0)} KiB`);

@@ -268,6 +268,14 @@ for (const w of weapons) {
   if (fire) used.add(fire);
   if (swap) used.add(swap);
 }
+// Medical kits (ThrowingHeal 528xxx) have no throw/pin clip in their pef block: their only sound is the WM_MedicKit_Recovery
+// node of the pef _FireEffect (buff.i3s), so the entry carries that clip as `recovery` (the audit's sfx gate; the web plays the node
+// itself). Chocolate_Kit.i3s has no sound node: left without an entry, so the Chocolate kit stays hidden.
+if (files.has('wm_medickit_recovery')) for (const w of weapons) {
+  if (w.className !== 'ThrowingHeal' || /chocolate/i.test(w.pb?.src ?? '')) continue;
+  res.weapons[w.id] = { recovery: 'wm_medickit_recovery' };
+  used.add('wm_medickit_recovery');
+}
 
 // terrain sounds by I3_TERRAIN_TYPE (CGameSoundManager defaults at exe 0xbaae40: WM_Hit_<T>_1/2, WM_Knife_Hit_<T>,
 // WM_Throw_Bound_<T>, ...): the knife's wall hit and the grenade bounce come from Melee_Common / Throw_Common by name
@@ -283,6 +291,9 @@ for (const k of files.keys()) if (/_fire_muffler$|_zoom_?fire$|_zoom_attack$|_fi
 for (const k of files.keys()) if (/^wm_(k400|k413|flash|smoke|wp_smoke|c5)_explosion|^wm_throw_(hold|take)$|^wm_c5_(stick|count_a)$|^wm_recovery_candy_(boom|throw_bound_\d)$|^wm_k201_explosion$|^wm_m14_explosion$|^wm_waterbomb_fire$/.test(k)) used.add(k);
 // WM_C5_Stick / WM_C5_Count_A: exe string table (0x7b4eec / 0x7b4a64); candy bound clips: exe strings WM_Recovery_Candy_Throw_Bound_1..4; Candy_Boom, K201_Explosion
 // (Snowman Grenade) and WaterBomb_Fire: the sound nodes of Exp_Gr_CandyGrenade / Exp_Snowman_Grenade / Exp_Water_Bomb
+// WM_Hit_GrazeBullet_1..3 (Common/Hit): CGameSoundManager table 0xd60958 slot 3 (rows 0xb0 apart), played at random (rand() % 3)
+// by the bullet collision 0x6048b1 when a bullet's ray crosses the local character
+for (const k of files.keys()) if (/^wm_hit_grazebullet_[123]$/.test(k)) used.add(k);
 
 let bytes = 0;
 for (const k of [...used].sort()) {

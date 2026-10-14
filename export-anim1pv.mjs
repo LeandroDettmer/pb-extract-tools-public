@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // 1st-person (arms) animation library per weapon, straight from the PBCross character AI, pure Node ESM.
 //
-//   node export-anim1pv.mjs [SWAT_Male SWAT_Female]   # -> <out>/chars/<name>/anim1pv/
-//   node export-anim1pv.mjs --list [SWAT_Male]         # itemId -> resolved 1PV AI + clip set (no write)
+//   node web-poc/tools/export-anim1pv.mjs [SWAT_Male SWAT_Female]   # -> public/assets/chars/<name>/anim1pv/
+//   node web-poc/tools/export-anim1pv.mjs --list [SWAT_Male]         # itemId -> resolved 1PV AI + clip set (no write)
 //
 // Source: ONLY the PBCross client (Clients/PBCross/Chara/<Name>/): <Name>.I3CHR (I3R2, tools/i3r2/charai-i3r2.mjs)
 // gives Upper/1PV/<Group>/<Weapon>/{AttackIdle, Zoom}/<State> -> .i3a + i3AIState blend / duration; the clips come from
@@ -26,7 +26,7 @@ import { GLB, readGLB } from './i3r2/skin-glb.mjs';
 import { addClips } from './export-anim.mjs';
 import { pefById } from './pef-cross.mjs';
 
-const GAME = clientPath(baseClient(['cross'])); // Cross only: pef-cross weapon blocks; other clients fail with a message
+const GAME = clientPath(baseClient('cross')); // Cross only by default (--client <key> for a diagnostic run)
 const ASSETS = assetPath();
 
 /**
@@ -156,7 +156,7 @@ export function buildAnim1pv(name = 'SWAT_Male', { log = console.log } = {}) {
   }
   for (const a of Object.values(ai)) for (const S of Object.values(a.stances)) for (const k of Object.keys(S)) if (!bundles[S[k].clip]) delete S[k];
   const index = {
-    generated: new Date().toISOString(), tool: 'export-anim1pv.mjs', source: `PBCross Chara/${name}/${name}.I3CHR + Chara_${name}_*.i3AnimPack`,
+    generated: new Date().toISOString(), tool: 'web-poc/tools/export-anim1pv.mjs', source: `PBCross Chara/${name}/${name}.I3CHR + Chara_${name}_*.i3AnimPack`,
     note: 'state = { clip, blend (s, i3AIState blend-in), dur (s, i3AIState duration), loop }; zoomType = weapon.pef _ZoomType (2|3 -> Zoom stance); fallback = [RECRIADO] AI substitutions',
     ai, weapons, names, zoomType, fallback, bundles,
   };

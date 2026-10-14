@@ -39,7 +39,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const defaultPackDir = () => clientPath(baseClient(['br3123']), 'Pack'); // 3.123 Pack, read only when unpack gets a map name
+const DEFAULT_PACK_DIR = clientPath(baseClient('br3123'), 'Pack');
 const ENTRY_SIZE = 92;
 
 // i3Engine BitRotateDecrypt: whole buffer as a circular bitstream rotated right by `key` bits.
@@ -371,8 +371,8 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const isMapName = args.length === 1 && !/[\\/]/.test(args[0]) && !/\.i3Pack$/i.test(args[0]);
   const mapName = isMapName ? args[0] : 'NStation';
   if (out === null) out = extractedPath(mapName);
-  const packs = args.length && !isMapName ? args : fs.readdirSync(defaultPackDir())
-    .filter(f => new RegExp(`^${mapName}.*\\.i3Pack$`, 'i').test(f)).map(f => path.join(defaultPackDir(), f));
+  const packs = args.length && !isMapName ? args : fs.readdirSync(DEFAULT_PACK_DIR)
+    .filter(f => new RegExp(`^${mapName}.*\\.i3Pack$`, 'i').test(f)).map(f => path.join(DEFAULT_PACK_DIR, f));
   let bad = 0;
   for (const p of packs) {
     try {

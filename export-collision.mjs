@@ -118,6 +118,73 @@ function readNxsMeshes(d, start, end) {
   return out;
 }
 
+// ---- PhysX 2.8 cooked convex hull ("NXS\x01CVXM", Ice ConvexHull "CVHL") ----------
+// Layout after the 'CVHL' tag (i+32): u32 version(5), u32 V, u32 E, u32 F0, u32 P (polygons), u32 PI (polygon index count),
+// u32 PI again, then V x f32[3] at i+64, a u32 (V-1), then the triangle fan as u8 triples (u16 when V > 255 is not seen in
+// Under23). Triangles = PI - 2P (sum of n-2 over the polygons; F0 is not the triangle count). Checked on the 174 hulls of
+// Under23_Col: every edge shared by exactly 2 triangles. Winding is set outward (centroid test), the mesh flip handles mirroring.
+function readNxsHulls(d, start, end) {
+  const out = [];
+  let i = start;
+  while ((i = d.indexOf('NXS\x01CVXM', i, 'latin1')) >= 0 && i < end) {
+    const V = d.readUInt32LE(i + 40), P = d.readUInt32LE(i + 52), PI = d.readUInt32LE(i + 56), F = PI - 2 * P;
+    const vOff = i + 64, tOff = vOff + 12 * V + 4;
+    if (!(V >= 4 && V < 256 && F >= 4) || tOff + 3 * F > end) throw new Error(`NXS hull @${i}: bad counts V=${V} P=${P} PI=${PI}`);
+    const pos = new Float32Array(V * 3);
+    for (let k = 0; k < V * 3; k++) pos[k] = d.readFloatLE(vOff + 4 * k);
+    const idx = new Uint32Array(3 * F);
+    for (let k = 0; k < 3 * F; k++) { idx[k] = d[tOff + k]; if (idx[k] >= V) throw new Error(`NXS hull @${i}: index ${idx[k]} >= V ${V}`); }
+    const c = [0, 0, 0]; for (let v = 0; v < V; v++) for (let a = 0; a < 3; a++) c[a] += pos[3 * v + a] / V;
+    const at = v => [pos[3 * v], pos[3 * v + 1], pos[3 * v + 2]];
+    for (let t = 0; t < F; t++) {
+      const [a, b, e] = [idx[3 * t], idx[3 * t + 1], idx[3 * t + 2]];
+      const A = at(a), u = at(b).map((x, k) => x - A[k]), w = at(e).map((x, k) => x - A[k]);
+      const n = [u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0]];
+      const out = n.reduce((s, x, k) => s + x * (A[k] + (u[k] + w[k]) / 3 - c[k]), 0); // normal . (face centroid - hull centre)
+      if (out < 0) { idx[3 * t + 1] = e; idx[3 * t + 2] = b; }
+    }
+    out.push({ pos, idx });
+    i += 8;
+  }
+  return out;
+}
+
+// ---- PhysX 2.8 box shape (NxBoxShapeDesc, stream block type 33) --------------------
+// Block: u32 0xabcdef, u32 33, u32 size, u32 0x01234567, payload = vec3 halfExtents, then a nested NxShapeDesc block
+// (type 32) at +28: u32 0, u32 N (name length), name (N bytes + NUL when N > 0), localPose 4x4 row-major [R | t]
+// (column-vector R, t in the 4th column, row 3 = 0 0 0 1). Checked on the 329 boxes of Under23_Col (the 'ShapeSet2D'
+// shape records): every pose row 3 is 0 0 0 1 and every R is orthonormal with det +1. The shapes in one set come out as one part.
+// No sphere/capsule/plane blocks (types 34-37, 40) occur in Under23.
+function readNxsBoxes(d, start, end) {
+  const pos = [], idx = [];
+  const MARK = Buffer.from([0xef, 0xcd, 0xab, 0x00]);
+  const FACES = [[1, 3, 7], [1, 7, 5], [0, 4, 6], [0, 6, 2], [2, 6, 7], [2, 7, 3], [0, 1, 5], [0, 5, 4], [4, 5, 7], [4, 7, 6], [0, 2, 3], [0, 3, 1]];
+  for (let p = d.indexOf(MARK, start); p >= 0 && p < end; p = d.indexOf(MARK, p + 4)) {
+    if (d.readUInt32LE(p + 4) !== 33) continue;
+    const q = p + 28;
+    if (d.readUInt32LE(q + 4) !== 32) throw new Error(`NXS box @${p}: no NxShapeDesc block`);
+    const N = d.readUInt32LE(q + 20), o = q + 24 + (N ? N + 1 : 0);
+    const h = [0, 1, 2].map(k => d.readFloatLE(p + 16 + 4 * k));
+    const P = k => d.readFloatLE(o + 4 * k);
+    const R = [P(0), P(1), P(2), P(4), P(5), P(6), P(8), P(9), P(10)], t = [P(3), P(7), P(11)];
+    const base = pos.length / 3;
+    for (let v = 0; v < 8; v++) {
+      const x = [v & 1 ? h[0] : -h[0], v & 2 ? h[1] : -h[1], v & 4 ? h[2] : -h[2]];
+      for (let a = 0; a < 3; a++) pos.push(R[3 * a] * x[0] + R[3 * a + 1] * x[1] + R[3 * a + 2] * x[2] + t[a]);
+    }
+    const at = v => [pos[3 * v], pos[3 * v + 1], pos[3 * v + 2]];
+    for (const f of FACES) {
+      const [a, b, c] = f.map(v => base + v);
+      // outward winding: face normal . (face centre - box centre) > 0, same test as readNxsHulls
+      const A = at(a), u = at(b).map((x, k) => x - A[k]), w = at(c).map((x, k) => x - A[k]);
+      const n = [u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0]];
+      const out = n.reduce((s, x, k) => s + x * ((A[k] + (u[k] + w[k]) / 3) - t[k]), 0);
+      idx.push(a, out < 0 ? c : b, out < 0 ? b : c);
+    }
+  }
+  return pos.length ? [{ pos: new Float32Array(pos), idx: new Uint32Array(idx) }] : [];
+}
+
 // ---- GLB writer (POSITION + indices only) ------------------------------------
 function writeGlb(file, meshes) {
   const bufs = []; let byteLen = 0;
@@ -209,6 +276,19 @@ function readRespawns(scenePack) {
     const [qx, qy, qz, qw] = [f(0x24), f(0x28), f(0x2c), f(0x30)];
     const team = d.readUInt32LE(r + 0x14) === RESPAWN_CLASS ? TEAMS[d.readUInt32LE(r + 0x4c)] : undefined;
     out.push({ name, pos: [f(0x18), f(0x1c), f(0x20)].map(v => +v.toFixed(3)), yawDeg: quatYawDeg(qx, qy, qz, qw), ...(team && { team }) });
+  }
+  if (out.length) return out;
+  // Some v4 tables (Cross Hardrock) hold records that aren't 200 B before the respawns,
+  // so the fixed-stride walk stops early: find respawn records by classHash instead
+  // (record start = hit - 0x14), keep the ones with a unit quat, scale 1 and a Respawn name.
+  const pat = Buffer.alloc(4); pat.writeUInt32LE(RESPAWN_CLASS);
+  for (let i = d.indexOf(pat, base); i >= 0; i = d.indexOf(pat, i + 4)) {
+    const r = i - 0x14, f = k => d.readFloatLE(r + k);
+    if (r + 0xc8 > d.length) break;
+    const name = d.toString('latin1', r + 0x6c, r + 0xc8).replace(/\0[\s\S]*$/, '');
+    if (!/^Respawn/i.test(name) || Math.abs(Math.hypot(f(0x24), f(0x28), f(0x2c), f(0x30)) - 1) > 0.01 || Math.abs(f(0x34) - 1) > 0.01) continue;
+    const team = TEAMS[d.readUInt32LE(r + 0x4c)];
+    out.push({ name, pos: [f(0x18), f(0x1c), f(0x20)].map(v => +v.toFixed(3)), yawDeg: quatYawDeg(f(0x24), f(0x28), f(0x2c), f(0x30)), ...(team && { team }) });
   }
   return out;
 }
@@ -309,7 +389,7 @@ for (const ss of objs.filter(o => o.className === 'i3PhysixShapeSet')) {
   const flip = det3(M) < 0; // mirrored chain -> reverse winding to keep CCW front faces
   // size <= ~32 means the table only covers the name header, no mesh payload
   const end = ss.size <= 32 ? nextOffAfter(ss.off) : ss.off + ss.size;
-  const parts = readNxsMeshes(d, ss.off, end);
+  const parts = [...readNxsMeshes(d, ss.off, end), ...readNxsHulls(d, ss.off, end), ...readNxsBoxes(d, ss.off, end)];
   parts.forEach((p, k) => {
     const pos = new Float32Array(p.pos.length);
     for (let v = 0; v < p.pos.length; v += 3) {

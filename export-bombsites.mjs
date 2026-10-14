@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Bomb Mission sites (A / B) of every stage, from the PBCross client's own Stage config (Cross only, no 2017 fallback).
 //
-//   node export-bombsites.mjs   # -> <out>/cross/maps/bombsites.json
+//   node web-poc/tools/export-bombsites.mjs   # -> public/assets/cross/maps/bombsites.json
 //
 // Source: extracted/pef-cross/br/Stage.json (Config "Stage" > <StageName> > BombPosition_A / BombPosition_B / BombFloorOnMiniMap_A/B),
 // read by CStageBattle::LoadProperties 0x764080 into the stage (+0xbc / +0xcc positions, +0xc8 / +0xd8 floors), copied to the mission

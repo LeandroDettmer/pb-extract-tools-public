@@ -3,19 +3,18 @@
 //
 //   node ui-export/ui-strings.mjs
 //
-// Source: Clients/PointBlank 3.123/Script/uiLuaString/Brazil/String_Brazil.lua (STBL_IDX_KEY = "text", plain
+// Source: Clients/PBCross/Script/uiLuaString/Brazil/String_Brazil.lua (STBL_IDX_KEY = "text", plain
 // UTF-8 Lua source — this is the real, in-the-clear PT-BR translation table the client Lua uses via
 // pbString.lua's STBL_IDX_* globals). It is NOT the same table baked into the .i3UIs design captions
 // (those are Korean design-time placeholders, see README "Strings").
 //
-// Item names -> items.pt-BR.json (itemId -> {name, desc, key}), from the Kaybo 2017 client, NOT from 3.123
-// (Locale_Brazil_String.i3Pack Weapon_Brazil.txt etc. use a per-file cipher decodeContent() doesn't cover):
-//   ids:   Pack/Script.i3Pack config/Weapon.pef (tools/pef/extract-config.mjs, nation slot 1):
-//          weapon itemId = (_UsageType + 1) * 100000 + _ClassType * 1000 + _Number   (1090 of the server's
-//          Data/Match/ItemStatistics.xml ids hit, e.g. Gun/K-2 -> 103004); Goods.pef SetGoods/* -> _GoodsId.
-//   text:  Pack/String.i3Pack Script/String/Latin_America/{Weapon,Goods}_Latin_America.txt (UTF-16LE,
-//          "Weapon\Gun\K-2\_Name<TAB>K-2", key = the .pef path). Names are the weapon/set names (language
-//          neutral); desc is INDONESIAN (that client's only item text; no PT-BR item table exists in 2017).
+// Item names -> items.pt-BR.json (itemId -> {name, desc, key}), from PBCross only:
+//   ids:   Pack/Script.i3Pack Config/Weapon.pef + Goods.pef (pef/export-cross.mjs readCrossPefs, nation slot 1):
+//          weapon itemId = (_UsageType + 1) * 100000 + _ClassType * 1000 + _Number (Gun/K-2 -> 103004);
+//          Goods.pef SetGoods/* -> _GoodsId. The Cross pef numbers throwables like the 2017 packs (407004 = C-5,
+//          407008 = K-413): weapons/throwables.ts pack2017Id still applies.
+//   text:  Pack/String.i3Pack Brazil/{Weapon,Goods}_Brazil.txt (UTF-16LE, "Weapon\Gun\K-2\_Name<TAB>K-2",
+//          key = the .pef path). name and desc are PT-BR.
 //   Equipment/Character/ShopItem have names too but their itemId formula is unverified -> not emitted.
 
 import { clientPath, rel } from '../lib/paths.mjs';
@@ -24,9 +23,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { OUT, writeJSON } from './lib.mjs';
 import { parsePack, decodeContent } from '../i3pack/unpack.mjs';
-import { readScriptPack, parsePef, resolveNation } from '../pef/extract-config.mjs';
+import { readCrossPefs } from '../pef/export-cross.mjs';
 
-const SRC = clientPath('br3123', 'Script', 'uiLuaString', 'Brazil', 'String_Brazil.lua');
+const SRC = clientPath('cross', 'Script', 'uiLuaString', 'Brazil', 'String_Brazil.lua');
 
 // STBL_IDX_KEY / STR_TBL_KEY / STR_... = "text with \" \\ \n escapes"   (one assignment per logical entry; values may span
 // balanced {col:...} tags but never real newlines in the .lua source itself)
@@ -58,11 +57,11 @@ export function exportStrings() {
   return { file, count: Object.keys(strings).length, dupes, source: SRC };
 }
 
-const KAYBO_PACK = clientPath('kaybo', 'Pack');
+const CROSS_PACK = clientPath('cross', 'Pack');
 const BS = '\\';
 
-function readKayboStringTable(name) {
-  const d = fs.readFileSync(path.join(KAYBO_PACK, 'String.i3Pack'));
+export function readStringTable(name) {
+  const d = fs.readFileSync(path.join(CROSS_PACK, 'String.i3Pack'));
   for (const n of parsePack(d).nodes) for (const f of n.files) {
     if (f.name !== name) continue;
     let buf = d.subarray(f.offset, f.offset + f.size);
@@ -78,9 +77,8 @@ function readKayboStringTable(name) {
 }
 
 export function exportItems() {
-  const pefs = Object.fromEntries(readScriptPack(fs.readFileSync(path.join(KAYBO_PACK, 'Script.i3Pack')))
-    .filter(f => f.name.endsWith('.pef')).map(f => { const t = parsePef(f.data); return [f.name, resolveNation(t.RegistryRoot ?? t, 1)]; }));
-  const text = new Map([...readKayboStringTable('Weapon_Latin_America.txt'), ...readKayboStringTable('Goods_Latin_America.txt')]);
+  const pefs = Object.fromEntries(readCrossPefs().map(p => [p.name + '.pef', p.json]));
+  const text = new Map([...readStringTable('Weapon_Brazil.txt'), ...readStringTable('Goods_Brazil.txt')]);
   const items = {};
   let dupes = 0;
   const add = (id, key) => {
