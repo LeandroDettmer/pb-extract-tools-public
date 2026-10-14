@@ -1,16 +1,21 @@
 // Title (designation) table of the Perfil / Títulos phase -> src/lobby/core/titleData.ts
 //   node export-titles.mjs
 // Sources: extracted/pef-cross/br/DesignationValue.json (pef/export-cross.mjs; DesignationSet = the PBCross title table,
-// DesignationValue effect values), old/runtime/db-init/022_migration_system_titles_20260725.sql (requirements the
-// server-ts handleTitleChange checks: system_titles). Tree: PBCross UI_Project_Profile Designation_Tree_Slot<N>; the Cross exe
+// DesignationValue effect values), system_titles (requirements the server-ts handleTitleChange checks): --server
+// old/runtime/db-init/022_migration_system_titles_20260725.sql (private layout) or db/init/001_init.sql (public layout). Tree: PBCross UI_Project_Profile Designation_Tree_Slot<N>; the Cross exe
 // links slot N to the DesignationSet whose _Type-set index is N (profile.ts nodeTitle), so TREE_NODES needs no layout file.
-import { TOOLS, extractedPath, generatedPath, oldServerPath } from './lib/paths.mjs';
-import { readFileSync, writeFileSync } from "node:fs";
+import { TOOLS, extractedPath, generatedPath, oldServerPathOpt, dbInitPath } from './lib/paths.mjs';
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const pef = JSON.parse(readFileSync(extractedPath('pef-cross', 'br', 'DesignationValue.json'), "utf8"));
-const sql = readFileSync(oldServerPath("runtime", "db-init", "022_migration_system_titles_20260725.sql"), "utf8");
+const migration = oldServerPathOpt("runtime", "db-init", "022_migration_system_titles_20260725.sql");
+const sql = readFileSync(migration && existsSync(migration) ? migration : dbInitPath("001_init.sql"), "utf8");
+// 022: INSERT tuples. 001 (pg_dump): tab-separated COPY rows, turned into the same "(a, b, ...)" tuples
+const block = migration && existsSync(migration)
+  ? sql.slice(sql.indexOf("INSERT INTO system_titles"), sql.indexOf("INSERT INTO system_title_awards"))
+  : (() => { const start = sql.indexOf("COPY public.system_titles ("); return sql.slice(start, sql.indexOf("\n\\.", start)).replace(/\t/g, ", ").replace(/^(\d.*)$/gm, "($1)"); })();
 
 // effect ids (DESIGNATION_ID) decoded from the exe (tools/designation-effects.json): id = family base + level - 1, value = pef key
 const fx = JSON.parse(readFileSync(join(TOOLS, "designation-effects.json"), "utf8"));
@@ -25,7 +30,6 @@ for (const [base, fam] of fx.families) {
 }
 
 // system_titles rows: (id, class_id, ribbon, ensign, medal, master_medal, rank, slot, req1, req2)
-const block = sql.slice(sql.indexOf("INSERT INTO system_titles"), sql.indexOf("INSERT INTO system_title_awards"));
 const reqs = new Map();
 for (const m of block.matchAll(/^\s*\((\d+), (\d+), (\d+), (\d+), (\d+), (\d+), (\d+), (\d+), (\d+), (\d+)\)/gm)) {
   const [id, classId, ribbon, ensign, medal, master, rank, slot, req1, req2] = m.slice(1).map(Number);

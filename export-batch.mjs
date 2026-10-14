@@ -203,7 +203,7 @@ function weaponTables() {
   };
   walk(W.WeaponList, '');
   const stats = new Map();
-  const xml = readOpt(path.join(SERVER, 'runtime/Data/Match/ItemStatistics.xml'));
+  const xml = readOpt(serverPathOpt('runtime', 'Data', 'Match', 'ItemStatistics.xml') ?? '');
   for (const m of xml.matchAll(/<Statistic Id="(\d+)"\s+Name="([^"]*)"/g)) stats.set(+m[1], m[2]);
   const items = list.filter((w) => w._ResName && w._ClassType !== undefined && w._Number !== undefined).map((w) => {
     const S = (w._UsageType ?? 0) + 1, C = w._ClassType, N = w._Number;

@@ -68,7 +68,7 @@ Coloque estas flags **antes** do nome do grupo. Elas não são repassadas ao scr
 | `--client <chave>=<dir>` (no `init`) | `PB_CLIENT_<CHAVE>` | `overrides.<chave>` | derivado | uma pasta de cliente, quando não estão todas sob uma raiz |
 | `--out <dir>` | `PB_ASSETS` | `assets` | `./out` | saída dos assets (o que o cliente web carrega) |
 | `--web <dir>` | `PB_WEB` | `web` | nenhum | pasta do projeto web que consome os assets (tem `src/`). Habilita os passos que leem ou escrevem nela |
-| `--server <dir>` | `PB_SERVER` | `server` | nenhum | raiz do servidor com `server/` e `old/` (dados do servidor do jogo). Habilita os passos que leem nela |
+| `--server <dir>` | `PB_SERVER` | `server` | nenhum | raiz do servidor com `server/` (dados de runtime), `db/init/001_init.sql` (seed do banco, layout público) e `old/` opcional (fontes antigas, seed do banco do layout privado). Habilita os passos que leem nela |
 | `--extracted <dir>` | `PB_EXTRACTED` | `extracted` | `./extracted` | JSON parseado que outros passos leem |
 | `--snapshots <dir>` | `PB_SNAPSHOTS` | `snapshots` | `./snapshots` | snapshots para `snapshot` e `verify assets` |
 
@@ -89,6 +89,10 @@ Chaves de cliente: `kaybo` (2017), `br3123` (3.123), `cross`, `ru`, `portable`, 
 | `blackout` | `EpicBlackout` | EpicBlackout (2014) | janelas de UI clássica e imagens de marca |
 
 A versão é um palpite pela pasta. Confirme no jogo antes de confiar numa exportação. `pbx doctor` mostra para qual pasta cada chave aponta.
+
+**Obtendo o cliente.** Este repositório não inclui nenhum cliente. Para obter uma cópia do Point Blank Cross, pesquise `PointBlank Cross` no YouTube. Use apenas uma cópia que você tenha o direito de usar, e coloque sob a raiz de clientes como `PBCross`. Não há links de download aqui.
+
+**Outros clientes.** As ferramentas foram feitas e testadas com o Point Blank Cross. Outros clientes do Point Blank usam os mesmos formatos i3Engine, então podem ser suportados adaptando as ferramentas. Assistentes de código com IA podem ajudar bastante: aponte para este README, os comandos, os formatos dos packs e a pasta do seu cliente.
 
 ## Cliente base (`--client`)
 

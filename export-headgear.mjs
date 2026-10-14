@@ -36,7 +36,7 @@
 // GLB layout = weapons: AxisRotate (i3 -> three) > HelmetDummy (origin) > meshes; the runtime strips AxisRotate and
 // parents HelmetDummy's content to HelmetPointDummy (src/game/charEquip.ts). Never deletes public/assets folders:
 // files are overwritten in place.
-import { assetPath, clientPath, extractedPath, oldServerPathOpt, rel, webPath } from './lib/paths.mjs';
+import { assetPath, clientPath, dbInitPathOpt, extractedPath, oldServerPathOpt, rel, webPath } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -189,14 +189,16 @@ const nn = (s) => String(s).toLowerCase().replace(/^mask_/, '').replace(/_mask$/
 const SLOT = { 7: 'head', 8: 'face', 27: 'beret' };
 const CATS = { 7: ['Event', 'Head', 'Mask'], 8: ['Mask'], 27: ['Beret'] };
 
-// Server item key per id: the system_shop rows of the server DB seed (--server: old/runtime/db-init/*.sql, item_name =
-// the equipment key "A_F_Jason_Latin_Trinidad" where the seed kept it), then itemNames.json (the same table's snapshot,
+// Server item key per id: the system_shop rows of the server DB seed (--server: old/runtime/db-init/*.sql, or the pg_dump
+// COPY block of db/init/001_init.sql in the public layout; item_name = the equipment key "A_F_Jason_Latin_Trinidad" where the seed kept it), then itemNames.json (the same table's snapshot,
 // keys or display names). Keys first: a display name ("Skull Mask") can match another Cross entry than the key.
 function serverItemKeys() {
   const pairs = [];
   const dir = oldServerPathOpt('runtime', 'db-init');
   if (dir && fs.existsSync(dir)) for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.sql')).sort())
     for (const m of fs.readFileSync(path.join(dir, f), 'utf8').matchAll(/\((\d{6,7}), '(A_[FHE]_[^']+)'/g)) pairs.push([+m[1], m[2]]);
+  const pub = dbInitPathOpt('001_init.sql');
+  if (pub && fs.existsSync(pub)) for (const m of fs.readFileSync(pub, 'utf8').matchAll(/^(\d{6,7})\t(A_[FHE]_[^\t]+)\t/gm)) pairs.push([+m[1], m[2]]);
   for (const [id, [n]] of Object.entries(rj(webPath('src/lobby/state/data/itemNames.json')).names)) pairs.push([+id, n]);
   return pairs;
 }

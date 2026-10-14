@@ -140,7 +140,7 @@ pbx --clients "D:\Clients" --out "D:\pb-assets" export sfx
 | `--client <key>=<dir>` (in `init`) | `PB_CLIENT_<KEY>` | `overrides.<key>` | derived | one client folder, when not all sit under one root |
 | `--out <dir>` | `PB_ASSETS` | `assets` | `./out` | assets output (what the web client loads) |
 | `--web <dir>` | `PB_WEB` | `web` | none | folder of the web project that consumes the assets (has `src/`). Enables steps that read or write it |
-| `--server <dir>` | `PB_SERVER` | `server` | none | server root with `server/` and `old/` (game server data). Enables steps that read it |
+| `--server <dir>` | `PB_SERVER` | `server` | none | server root with `server/` (runtime data), `db/init/001_init.sql` (DB seed, public layout) and optional `old/` (older sources, DB seed of the private layout). Enables steps that read it |
 | `--extracted <dir>` | `PB_EXTRACTED` | `extracted` | `./extracted` | parsed JSON that other steps read |
 | `--snapshots <dir>` | `PB_SNAPSHOTS` | `snapshots` | `./snapshots` | snapshots for `snapshot` and `verify assets` |
 
@@ -161,6 +161,10 @@ Client keys: `kaybo` (2017), `br3123` (3.123), `cross`, `ru`, `portable`, `hyper
 | `blackout` | `EpicBlackout` | EpicBlackout (2014) | classic UI windows and branding images |
 
 The version is a guess from the folder. Confirm it in the game before you rely on an export. `pbx doctor` shows which folder each key points to.
+
+**Getting the client.** This repository does not include any client. To get a copy of Point Blank Cross, search YouTube for `PointBlank Cross`. Use only a copy you have the right to use, and place it under the clients root as `PBCross`. No download links are given here.
+
+**Other clients.** The tools were built and tested against Point Blank Cross. Other Point Blank clients use the same i3Engine formats, so they can be supported by adapting the tools. AI coding assistants can help a lot: point them at this README, the commands, the pack formats and your client folder.
 
 ## Base client (`--client`)
 
