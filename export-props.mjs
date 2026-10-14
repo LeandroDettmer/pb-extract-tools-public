@@ -119,6 +119,47 @@ function oldGeomBlocks(d, n, pack, file, out) {
   }
 }
 
+// OLD leaf nodes, .i3Obj by content: the table walk (oldNodeFiles) pairs names with payloads by order, and one name without
+// a payload (or a non-I3R2 file between them) shifts every later .i3Obj onto the next object: Construction_Pilar_02.i3Obj held
+// Construction_Pilar_01's blob (state CONSTRUCTION_PILAR_01.I3S), so the OLD 2017 states/life/breakable came out wrong and the
+// GINS md5 pointed at the wrong definition. The 12-byte slot after each name is uninitialised fill (0xCC/0x33), no offset.
+// So each i3Object blob is matched by its own name: the editor string (D:\...\construction_pilar_02.i3ObjectEditor), else its first state (Object/break/CONSTRUCTION_PILAR_02.I3S -> construction_pilar_02).
+// Blobs with the CObjectTemplate twin (same states, no GOI1) are not definitions and are skipped. Unmatched names get no entry.
+const stemOf = (p) => p.split(/[\\/]/).pop().replace(/\.i3s$/i, '').toLowerCase();
+function oldObjBlobs(d, n) {
+  const byStem = new Map();
+  for (let p = d.indexOf('I3R2', n.dataStart, 'latin1'); p >= 0 && p < n.dataEnd; p = d.indexOf('I3R2', p + 4, 'latin1')) {
+    let r;
+    try { r = readI3R2(d, p); } catch { continue; }
+    if (!r.objects.some((o) => o.cls === 'i3Object')) continue;
+    const end = p + i3r2Need(d, p);
+    let info;
+    try { info = readI3Obj(d.subarray(p, end)); } catch { continue; }
+    // the editor string is the object's own name (helicopter_ch47: states CH47_IDLE.I3S); the first state is the fallback
+    const ed = r.strings.find((s) => /\.i3ObjectEditor$/i.test(s));
+    const key = ed ? stemOf(ed.replace(/\.i3ObjectEditor$/i, '')) : info.states[0] && stemOf(info.states[0]);
+    if (key && !byStem.has(key)) byStem.set(key, { offset: p, size: end - p, attr: 0 });
+  }
+  return byStem;
+}
+function oldNodeEntries(d, n) {
+  const objs = oldObjBlobs(d, n);
+  const walked = oldNodeFiles(d, n) ?? [];
+  const isObj = (nm) => /\.i3obj$/i.test(nm);
+  const claimed = new Set([...objs.values()].map((e) => e.offset));
+  // no i3Object of its own by content (Object_cgame millicloth: i3TransformSequence + i3Animation, Object_moving helicopter_ch47):
+  // keep the table-order payload, unless another object's blob already claims it
+  const own = [];
+  for (const f of n.files) {
+    if (!isObj(f.name)) continue;
+    const stem = f.name.replace(/\.i3obj$/i, '').toLowerCase();
+    if (objs.has(stem)) { own.push({ name: f.name, ...objs.get(stem) }); continue; }
+    const w = walked.find((e) => e.name === f.name);
+    if (w && !claimed.has(w.offset)) own.push(w);
+  }
+  return [...walked.filter((e) => !isObj(e.name)), ...own];
+}
+
 // ---- pack index: every file of every pack, by upper-case path; .i3Obj also by md5 --------------------------------
 function buildIndex(packDir) {
   const byPath = new Map(), byMd5 = new Map(), texPacks = [], geomByName = new Map();
@@ -130,7 +171,7 @@ function buildIndex(packDir) {
     let hasObj = false;
     for (const n of nodes) {
       if (!n.indexOk && n.pfnVer === 'OLD' && /^Object(\/|$)/i.test(n.path)) oldGeomBlocks(d, n, f, file, geomByName);
-      const files = n.indexOk ? n.files : n.pfnVer === 'OLD' ? oldNodeFiles(d, n) : null;
+      const files = n.indexOk ? n.files : n.pfnVer === 'OLD' ? oldNodeEntries(d, n) : null;
       if (!files) continue;
       for (const e of files) {
         const p = (n.path ? n.path + '/' : '') + e.name;
