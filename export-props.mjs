@@ -153,9 +153,14 @@ function buildIndex(packDir) {
 
 // Model of an i3Obj state: the table entry first, else the geometry block that names this file (see oldGeomBlocks).
 // A table entry that holds no i3Geometry (the OLD name/payload drift) falls through to the block too.
-function exportModelAny(id, modelPath, IX, texFor, log) {
+// Cross Object/break Construction_*: the state of Construction_Wall00.i3Obj names Construction_Pilar_06.i3s (every
+// Construction_* state is one object down). The self-named block Construction_Wall00.i3s is the 2017 model: 18/18 match
+// the OLD export (vertex count + bounds). So when the state's file is not the object's own name, the own block goes first.
+function exportModelAny(id, modelPath, IX, texFor, log, ownPath) {
   if (!modelPath) throw new Error('i3Obj has no model state');
-  const cands =[IX.byPath.get(normPath(modelPath).toUpperCase()), IX.geomByName.get(baseName(modelPath))].filter(Boolean);
+  const ownKey = ownPath && baseName(ownPath).replace(/\.i3obj$/, '.i3s');
+  const own = ownKey && baseName(modelPath) !== ownKey ? IX.geomByName.get(ownKey) : undefined;
+  const cands = [own, IX.byPath.get(normPath(modelPath).toUpperCase()), IX.geomByName.get(baseName(modelPath))].filter(Boolean);
   let err = `model ${modelPath} not found`;
   for (const ent of cands) {
     try { return exportModel(id, ent, texFor, { log }); } catch (e) { err = e.message; }
@@ -666,7 +671,7 @@ function exportMapProps(pack, dir, mapId, IX, texFor, defs, serverMaps, log) {
       // Helispot_UH60_RED.i3Obj has no i3SceneGraphInfo ref (its model is an i3Animation 'Model_UH60'): the model is the sibling .i3s
       if (!info.states.length && team) info.states = [ent.path.replace(/\.i3obj$/i, '.i3s')];
       const def = { id, i3Obj: `${ent.pack}:${ent.path}`, life: info.life, stateCount: info.stateCount, breakable: info.breakable && info.stateCount > 1, states: info.states, breakEffects: info.breakEffects, breakSounds: info.breakSounds, stateSounds: info.stateSounds, explosion: info.explosion };
-      try { Object.assign(def, exportModelAny(id, info.states[0], IX, texFor, log)); } catch (e) { def.error = e.message; }
+      try { Object.assign(def, exportModelAny(id, info.states[0], IX, texFor, log, ent.path)); } catch (e) { def.error = e.message; }
       // states 1.. = broken models (same GLB space): <id>_s1.glb. Objects with a single model just vanish when broken.
       if (def.breakable && !def.error) {
         def.brokenStates = [];
