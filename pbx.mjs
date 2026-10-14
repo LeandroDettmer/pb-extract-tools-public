@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// pbx: one entry point for the asset tools (AI or human). Dispatch, setup and doctor only: each command runs its script.
+// pbx: one entry point for the asset tools (people or scripts). Dispatch, setup and doctor only: each command runs its script.
 //
 //   pbx init --clients <dir>                      write pbx.config.json (once per machine). <dir> = Clients root or one client folder
 //   pbx doctor                                    Node, deps, ffmpeg, Python, clients, what each command group can run
@@ -258,7 +258,7 @@ function exportAll(args) {
   const n = steps.length - start;
   if (dry) console.log(`\n${n} steps. Nothing run. Snapshot first: pbx snapshot --restore to revert.`);
   else console.log(`\nexport all: ${n - skipped.length} of ${n} steps OK${skipped.length ? `; skipped: ${skipped.join(', ')}` : ''}.`);
-  if (!dry && !hadBaseline) console.log('assets-verify: sem baseline (pasta de assets vazia antes do export): nada foi comparado. Rode de novo para ter o gate de regressão.');
+  if (!dry && !hadBaseline) console.log('assets-verify: no baseline (assets folder was empty before the export): nothing was compared. Run again to get the regression gate.');
 }
 
 function help() {

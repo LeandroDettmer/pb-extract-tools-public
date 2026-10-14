@@ -2,19 +2,15 @@
 
 Command line tools (`pbx`) that read **your own copy** of the Point Blank client folders, unpack the `.i3Pack` archives and export models, animations, sounds, textures and UI to open formats (GLB, JSON, OGG, PNG, DDS). It is a private study tool. This repository contains no game files.
 
-> **Português:** veja a [seção em português](#português) mais abaixo.
+Read this in Portuguese: [README.pt-BR.md](README.pt-BR.md).
 
----
+## What it is
 
-## English
-
-### What it is
-
-- One entry point, `pbx`, that runs one exporter per command. The exporters are plain Node ESM scripts with no runtime dependencies beyond `three` and `ffmpeg-static`.
+- One entry point, `pbx`, that runs one exporter per command. The exporters are plain Node ESM scripts. Runtime dependencies: `three`, `ffmpeg-static`, and `sharp` (used only by `bloodtex`).
 - All paths come from one module, `lib/paths.mjs`. Nothing else hardcodes a client folder, `../..` or the output layout.
 - Output goes to `./out` by default. The game folders are read in place and never written to.
 
-### Requirements
+## Requirements
 
 | Thing | Version | Needed for |
 |---|---|---|
@@ -25,16 +21,16 @@ Command line tools (`pbx`) that read **your own copy** of the Point Blank client
 
 Windows is the platform the tools are developed on. The Python `py` launcher is used on Windows, `python3` elsewhere.
 
-### Install
+## Install
 
 ```bash
-git clone https://github.com/LeandroDettmer/pb-extract-tools.git
+git clone https://github.com/LeandroDettmer/pb-extract-tools-public.git pb-extract-tools
 cd pb-extract-tools
 npm install
 npm link          # optional: makes `pbx` available everywhere
 ```
 
-### Quickstart
+## Quickstart
 
 You need a copy of at least one client (for example the 2017 "Kaybo" client, folder `PBKaybo\GameData\Apps\PB`). Then:
 
@@ -43,7 +39,7 @@ pbx init --clients "C:\Games\PB\Clients"        # or straight to one client fold
 pbx doctor                                       # what works on this machine
 pbx re pef-config                                # reads Script.i3Pack -> extracted/pef2017 (needed once)
 pbx unpack "C:\Games\PB\Clients\PBKaybo\GameData\Apps\PB\Pack\Weapon_AUG_A3.i3Pack" --out out/unpacked
-pbx export batch weapons --only "^aug_a3"        # one weapon family (base + skins); weapons need the 2017 client only
+pbx export batch weapons --only "^aug_a3"        # one weapon family (base + skins); batch reads the PBCross client only
 ```
 
 Where the output lands:
@@ -54,9 +50,9 @@ Where the output lands:
 
 Run `pbx doctor` again after each step. It lists which command groups can run on this machine.
 
-> `export batch`, `anim3pv`, `anim1pv`, `weapon-anim`, `weaponfx`, `fxmesh`, `c5-bomb` and `headgear` read the PBCross client only (2026-10-13): no fallback to 2017, 3.123, RU or portable packs. Content PBCross lacks is not exported (listed in docs/SINGLE_CLIENT_PLAN.md, W3).
+> `export batch`, `anim3pv`, `anim1pv`, `weapon-anim`, `weaponfx`, `fxmesh`, `c5-bomb` and `headgear` read the PBCross client only (2026-10-13): no fallback to 2017, 3.123, RU or portable packs. Content PBCross lacks is not exported (the single-client plan, item W3, is not in this repository yet).
 
-### Commands
+## Commands
 
 Each row is one command. "Needs" lists the clients it reads and whether it needs `--web` (the web app source and server data).
 
@@ -128,9 +124,9 @@ Each row is one command. "Needs" lists the clients it reads and whether it needs
 | `pbx re shopdat` | `Shop.dat` parser (3.123) | 3.123 | `pbx re shopdat "C:\Games\PB\Clients\PointBlank 3.123\Shop.dat"` |
 | `pbx re fpscam` | bake the first-person camera pivot | 2017 | `pbx re fpscam` |
 
-Commands take `--help`-less arguments as shown. `pbx help` prints the same table from the code.
+Run the commands as shown. `pbx help` lists the same commands, generated from the code.
 
-### Global flags
+## Global flags
 
 Put these **before** the group name. They are not passed to the script, so a script's own `--out` (for example `unpack`) keeps working.
 
@@ -152,7 +148,7 @@ Precedence: flag, then environment, then `pbx.config.json`, then the default. Re
 
 Client keys: `kaybo` (2017), `br3123` (3.123), `cross`, `ru`, `portable`, `hyper`, `blackout`.
 
-### Clients
+## Clients
 
 | Key | Folder under the clients root | Version | What the tools read from it |
 |---|---|---|---|
@@ -166,7 +162,7 @@ Client keys: `kaybo` (2017), `br3123` (3.123), `cross`, `ru`, `portable`, `hyper
 
 The version is a guess from the folder. Confirm it in the game before you rely on an export. `pbx doctor` shows which folder each key points to.
 
-### Base client (`--client`)
+## Base client (`--client`)
 
 Exporters that read a client's originals get the client from `baseClient(default)` in `lib/paths.mjs`. The default is the client that exporter reads today, so nothing changes unless you ask. To read another client, pass `--client <key>` after the command, or set `PB_BASE_CLIENT=<key>` for the whole run:
 
@@ -229,7 +225,7 @@ Scope:
 | `ui strings` | `ui-export/ui-strings.mjs` | br3123, kaybo | no: several clients, fixed |
 | helpers (no command of their own): `export-anim.mjs`, `export-model.mjs`, `pef/extract-config.mjs`, `ui-export/vtex-kaybo.mjs`, `ui-export/lib.mjs` | | br3123 / kaybo | only when the step that calls them passes `--client` on |
 
-### Output formats
+## Output formats
 
 | Output | Format | Written by |
 |---|---|---|
@@ -242,7 +238,7 @@ Scope:
 | web source | `.ts` / `.json` written into `src/` with `--web`, else into `out/generated/` (said out loud) | `missions`, `titles`, `match-data`, `sound-rsc`, `fpscam` |
 | raw parsed data | JSON in `extracted/` | `re pef-config`, `pef-json`, `unpack` (into the folder you give) |
 
-### Recipes
+## Recipes
 
 **Export the whole pipeline (dry run first):**
 
@@ -261,7 +257,7 @@ A step whose client is missing, or which needs `--web` without it, is skipped wi
 pbx export all --from weapons
 ```
 
-### Troubleshooting
+## Troubleshooting
 
 | Symptom | Cause and fix |
 |---|---|
@@ -276,177 +272,17 @@ pbx export all --from weapons
 | `bloodtex` fails with `Cannot find package 'sharp'` | run `npm install` |
 | `Node 22.7` or older errors on `.mjs` | update Node. The tools use native TypeScript stripping for the `--experimental-transform-types` flag |
 
-### For AI agents
+## Safe-use checklist
 
 - Read `pbx help` and `pbx doctor` before anything else. Only run commands whose "Needs" column is satisfied.
 - Dry run first: `pbx export all --dry-run`. Show the list before a mass export.
 - Snapshot before any mass re-export: `pbx snapshot`. Revert with `pbx snapshot --restore`.
-- Never run `pbx export all` without asking the user. It rewrites many files in `out/`.
+- Never run `pbx export all` without asking first. It rewrites many files in `out/`.
 - One asset: `pbx export <name>` (for example `pbx export sfx`). Check the "Needs" column first.
 - After an export: `pbx verify assets`. Exit code 1 means a regression against the snapshot.
-- Do not accept a recreated sound or effect until you have checked the original in `PBKaybo\GameData\Apps\PB\Pack` (see `CLAUDE.md`).
+- Do not accept a recreated sound or effect until you have checked the original in `PBKaybo\GameData\Apps\PB\Pack`.
 - Most exported JSON records its source (`source`, `tool`, `generated`). Keep those fields.
 
-### Legal
+## Legal
 
 This repository contains **no game assets, no game executables and no decompiled game code**. The tools only read copies of the game folders that you own. Point Blank, its formats and its assets belong to their rights holders (Zepetto). Use the output for private study and testing. Do not redistribute exported assets.
-
----
-
-## Português
-
-### O que é
-
-- Uma só entrada, `pbx`, que roda um exportador por comando. Os exportadores são scripts Node ESM simples, com dependências de runtime apenas `three` e `ffmpeg-static`.
-- Todos os caminhos vêm de um módulo, `lib/paths.mjs`. Nenhum outro arquivo fixa pasta de cliente, `../..` ou o layout de saída.
-- A saída vai para `./out` por padrão. As pastas do jogo são lidas no lugar e nunca são escritas.
-
-### Requisitos
-
-| Item | Versão | Para quê |
-|---|---|---|
-| Node.js | **22.7 ou mais novo** (usa remoção nativa de tipos TypeScript) | tudo |
-| npm | qualquer recente | instalar |
-| Python 3 + `capstone` (+ `pefile` para `re cross-text`) | opcional | comandos `re` e `shopdat` |
-| ffmpeg | 6.x ou mais novo, trazido por `ffmpeg-static` (vem com 6.1.1) | `sound` e exportação OGG |
-
-As ferramentas são desenvolvidas no Windows. Usa-se o lançador `py` no Windows e `python3` nos demais.
-
-### Instalação
-
-```bash
-git clone https://github.com/LeandroDettmer/pb-extract-tools.git
-cd pb-extract-tools
-npm install
-npm link          # opcional: deixa `pbx` disponível em qualquer pasta
-```
-
-### Início rápido
-
-Você precisa de uma cópia de pelo menos um cliente (por exemplo o cliente 2017 "Kaybo", pasta `PBKaybo\GameData\Apps\PB`). Depois:
-
-```bash
-pbx init --clients "C:\Games\PB\Clients"        # ou direto na pasta de um cliente
-pbx doctor                                       # o que funciona nesta máquina
-pbx re pef-config                                # lê Script.i3Pack -> extracted/pef2017 (uma vez)
-pbx unpack "C:\Games\PB\Clients\PBKaybo\GameData\Apps\PB\Pack\Weapon_AUG_A3.i3Pack" --out out/unpacked
-pbx export batch weapons --only "^aug_a3"        # uma família de arma (base + skins); armas precisam só do 2017
-```
-
-Onde a saída cai:
-
-- `out/weapons/models/<id>.glb` e as texturas em `out/weapons/models/tex/<id>/`
-- `out/weapons/models/index.json` (uma entrada por arma, com o cliente de origem)
-- `out/unpacked/` para `unpack`; `extracted/` para os leitores `re`
-
-Rode `pbx doctor` de novo depois de cada passo. Ele mostra quais grupos de comando funcionam nesta máquina.
-
-> O `export batch` precisa do cliente 3.123 para os conjuntos de animação dos personagens. Os modelos das armas vêm do cliente 2017 quando ele tem o pack, então `batch weapons` roda só com o 2017.
-
-### Comandos
-
-Cada linha é um comando. "Precisa" lista os clientes que ele lê e se precisa de `--web` (o código do app web e dados do servidor).
-
-As linhas da tabela em inglês acima valem aqui também: a coluna "Example" mostra um exemplo por comando. A lista completa com saída e requisitos está na seção em inglês, e `pbx help` imprime a mesma tabela a partir do código.
-
-### Flags globais
-
-Coloque estas flags **antes** do nome do grupo. Elas não são repassadas ao script, então o `--out` próprio de um script (por exemplo `unpack`) continua funcionando.
-
-| Flag | Variável de ambiente | Chave no `pbx.config.json` | Padrão | O que é |
-|---|---|---|---|---|
-| `--clients <dir>` | `PB_CLIENTS` | `clients` | nenhum (obrigatório) | pasta que contém as pastas dos clientes |
-| `--client <chave>=<dir>` (no `init`) | `PB_CLIENT_<CHAVE>` | `overrides.<chave>` | derivado | uma pasta de cliente, quando não estão todas sob uma raiz |
-| `--out <dir>` | `PB_ASSETS` | `assets` | `./out` | saída dos assets (o que o cliente web carrega) |
-| `--web <dir>` | `PB_WEB` | `web` | nenhum | pasta do projeto web que consome os assets (tem `src/`). Habilita os passos que leem ou escrevem nela |
-| `--server <dir>` | `PB_SERVER` | `server` | nenhum | raiz do servidor com `server/` e `old/` (dados do servidor do jogo). Habilita os passos que leem nela |
-| `--extracted <dir>` | `PB_EXTRACTED` | `extracted` | `./extracted` | JSON parseado que outros passos leem |
-| `--snapshots <dir>` | `PB_SNAPSHOTS` | `snapshots` | `./snapshots` | snapshots para `snapshot` e `verify assets` |
-
-Ordem: flag, depois variável de ambiente, depois `pbx.config.json`, depois o padrão. Caminhos relativos saem da pasta onde você roda o `pbx`. O `pbx init` grava caminhos absolutos.
-
-Chaves de cliente: `kaybo` (2017), `br3123` (3.123), `cross`, `ru`, `portable`, `hyper`, `blackout`.
-
-### Clientes
-
-| Chave | Pasta sob a raiz de clientes | Versão | O que as ferramentas leem |
-|---|---|---|---|
-| `kaybo` | `PBKaybo\GameData\Apps\PB` | Point Blank 2017 (Kaybo) | referência de personagens, armas, sons, mapas e HUD. A maioria dos exportadores usa este |
-| `br3123` | `PointBlank 3.123` | Point Blank 3.123 (BR) | conjuntos de animação dos personagens, armas de reserva, voz de rádio, dados da loja, textos de UI, colisão de mapa |
-| `cross` | `PBCross` | Point Blank Cross | UI do Cross, ícones, música do lobby, showroom, marcas de clã, locais de bomba |
-| `ru` | `PB RUSSIA` | Point Blank Russia | packs de reserva para `batch` e layouts de ragdoll |
-| `portable` | `Point-Blank-Portable\3-PointBlank` | Point Blank Portable 3.1 | HUD de contagem regressiva, iluminação de reserva |
-| `hyper` | `Point Blank Hyper` | Point Blank Hyper | ícone de patente do placar |
-| `blackout` | `EpicBlackout` | EpicBlackout (2014) | janelas de UI clássica e imagens de marca |
-
-A versão é um palpite pela pasta. Confirme no jogo antes de confiar numa exportação. `pbx doctor` mostra para qual pasta cada chave aponta.
-
-### Cliente base (`--client`)
-
-Exportadores que leem os originais de um cliente pegam o cliente de `baseClient(default)` em `lib/paths.mjs`. O default é o cliente que o exportador lê hoje, então nada muda sem pedido. Para ler outro, passe `--client <chave>` depois do comando, ou defina `PB_BASE_CLIENT=<chave>` para a execução toda (`pbx export sfx --client cross`). Chave desconhecida para o erro `--client <chave>: unknown client key`.
-
-- **Trocam:** exportadores que leem um cliente só. `--client cross` lê `PBCross`.
-- **Não trocam:** exportadores que leem vários clientes como fonte ou reserva, e os que já leem o Cross (`ui cross-*`, `ui clanmark`, `re cross-pef`). A tabela de status por comando está na seção em inglês acima.
-- `surfaces` lê todas as pastas de cliente: não troca.
-
-### Formatos de saída
-
-| Saída | Formato | Quem grava |
-|---|---|---|
-| personagens e modelos de arma | GLB (glTF 2.0 binário) + texturas PNG + índice JSON | `export batch`, `anim3pv`, `anim1pv`, `c5-bomb`, `headgear`, `ui-idle` |
-| texturas de modelo | DXT `.dds` ao lado do PNG | `model-dds`, `map-dds`, `env-ref`, `visual`, `cross-showroom` |
-| geometria de mapa | `visual.glb`, `collision.glb` + `collision.json`, `surfaces.json`, `lighting.json`, `props.json` | `maps`, `visual`, `collision`, `surfaces`, `lighting`, `props`, `env-ref` |
-| bibliotecas de clipes e dados | JSON (`index.json`, `ragdoll.json`, `weaponfx.json`, `ambient.json`) | `anim3pv`, `anim1pv`, `weapon-anim`, `weaponfx`, `ragdoll`, `ambient`, `sound-rsc` |
-| sons | `.wav` (origem), `.ogg` (Vorbis, o que o navegador toca) | `sfx`, `charsfx`, `announce`, `c4-sfx`, `break-sfx`, `radio-voice`, `wav-to-ogg` (`sound convert`) |
-| UI | atlas PNG + JSON (cenas, templates, textos, ligações Lua) | `ui *`, `classic-ui`, `clanmark`, `cross-icons` |
-| código do web | `.ts` / `.json` gravados em `src/` com `--web`, senão em `out/generated/` (avisado) | `missions`, `titles`, `match-data`, `sound-rsc`, `fpscam` |
-| dados brutos parseados | JSON em `extracted/` | `re pef-config`, `pef-json`, `unpack` (na pasta que você der) |
-
-### Receitas
-
-**Exportar o pipeline inteiro (primeiro simulação):**
-
-```bash
-pbx export all --client cross --dry-run  # lista os passos; marca os pulados e os que ficam de fora
-pbx snapshot                             # copia o que a re-exportação em massa reescreve
-pbx export all                           # roda em ordem; para no primeiro erro e mostra --from para retomar
-pbx verify assets                        # regressões contra o snapshot
-```
-
-Um passo cujo cliente falta, ou que precisa de `--web` sem ele, é pulado com uma linha dizendo o motivo. A execução continua e termina com um resumo.
-
-**Retomar depois de um erro:**
-
-```bash
-pbx export all --from weapons
-```
-
-### Solução de problemas
-
-| Sintoma | Causa e correção |
-|---|---|
-| `pbx: Point Blank 2017 (Kaybo): missing "...", expected at "..."` | o caminho dentro do cliente está errado para esta versão. Confira a pasta ou rode `pbx init --clients <dir>` |
-| `pbx: client not set (needs ...)` | nenhuma pasta de clientes configurada. Rode `pbx init --clients <dir>` |
-| `pbx: not produced yet: "...extracted\pef2017...". Run pbx re pef-config first` | falta uma entrada parseada. Rode uma vez o passo `re` indicado |
-| `pbx: needs --web <dir>` ou `needs --server <dir>` | o passo lê ou escreve código-fonte do app web ou dados do servidor. Passe a flag ou pule o passo |
-| packs PFN1 são pulados | alguns packs de 2017 usam um formato que esta ferramenta não decodifica (PFN1). Packs de sniper e de alguns sons mantêm valores de reserva. O log diz quais |
-| packs com caminhos internos `D:\...` falham ao descompactar | o pack guarda um caminho de build do disco do desenvolvedor (ex.: `UI_Main.i3Pack`). Leia em memória com `parsePack` / `readI3R2` de `i3pack/unpack.mjs`, em vez de descompactar no disco |
-| `ffmpeg 5.x refused` / `needs >= 6` | o binário `ffmpeg` é antigo (o build de 2018 preenche o último bloco Vorbis). Rode `npm install` (usa o 6.1.1 incluído), ou aponte `FFMPEG` para um binário mais novo |
-| comandos `re` falham com `No module named capstone` | instale Python 3 e `pip install capstone pefile`. Os comandos `re` são opcionais |
-| `bloodtex` falha com `Cannot find package 'sharp'` | rode `npm install` |
-| erro em `.mjs` com Node 22.7 ou mais antigo | atualize o Node. As ferramentas usam remoção nativa de TypeScript (flag `--experimental-transform-types`) |
-
-### Para agentes de IA
-
-- Leia `pbx help` e `pbx doctor` antes de tudo. Rode só comandos cuja coluna "Precisa" esteja atendida.
-- Simulação primeiro: `pbx export all --dry-run`. Mostre a lista antes de uma exportação em massa.
-- Snapshot antes de qualquer re-exportação em massa: `pbx snapshot`. Reverter: `pbx snapshot --restore`.
-- Nunca rode `pbx export all` sem perguntar ao usuário. Ele reescreve muitos arquivos em `out/`.
-- Um asset só: `pbx export <nome>` (ex.: `pbx export sfx`). Confira antes a coluna "Precisa".
-- Depois de exportar: `pbx verify assets`. Código de saída 1 significa regressão contra o snapshot.
-- Não aceite um som ou efeito recriado antes de conferir o original em `PBKaybo\GameData\Apps\PB\Pack` (ver `CLAUDE.md`).
-- A maioria dos JSON exportados grava a origem (`source`, `tool`, `generated`). Mantenha esses campos.
-
-### Legal
-
-Este repositório **não contém assets do jogo, executáveis do jogo nem código decompilado**. As ferramentas só leem cópias das pastas do jogo que você possui. Point Blank, seus formatos e seus assets pertencem aos respectivos titulares (Zepetto). Use a saída para estudo privado e testes. Não redistribua os assets exportados.
