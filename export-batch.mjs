@@ -11,7 +11,7 @@
 // shorter name prefixes (Weapon_AUG_A3_Carnaval -> Weapon_AUG_A3).
 //
 // Characters -> public/assets/chars/<id>/model.glb (+ arms_1pv.glb, tex/), chars/index.json
-//   itemId / hp: old/runtime/Data/Match/CharaHealth.xml (tracked; old/binary/Debug is a local build) (601xxx = red team, 602xxx = blue team),
+//   itemId / hp: server/runtime/Data/Match/CharaHealth.xml (--server; same file export-cross.mjs reads) (601xxx = red team, 602xxx = blue team),
 //   charaResId: server/Server.Match/Data/Enums/CharaResId.cs. Cross ships the animation sets Chara/SWAT_Male and
 //   Chara/SWAT_Female; every character shares the bone names of one of the two skeletons
 //   ("family", picked by the bind pose), so the clips are embedded once, in swat_male / swat_female, and the
@@ -24,7 +24,7 @@
 //   animations. Items whose _ResName_I3S is a texture-only pack are skins: listed in items[] of the base model and,
 //   with --skins, exported as <skin id>.glb = base geometry + the skin maps (texture_change_Weapon.json mapping).
 
-import { assetPath, clientPath, extractedPath, rel, oldServerPathOpt } from './lib/paths.mjs';
+import { assetPath, clientPath, extractedPath, rel, oldServerPathOpt, serverPathOpt } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -41,7 +41,7 @@ const OUT = process.env.PB_OUT_ROOT || assetPath(); // PB_OUT_ROOT: tools/export
 const CROSS = { key: 'cross', version: 'Cross', root: clientPath('cross') };
 const CLIENTS = [{ ...CROSS, pack: path.join(CROSS.root, 'Pack'), chara: path.join(CROSS.root, 'Chara') }];
 // server/ only keeps runtime data; the C# sources + binary/Debug live in old/ (the .NET server no longer runs)
-// Server data (hp, charaResId, inServer) is optional: read from <server>/old when --server is given, else left empty.
+// Server data (itemId, hp: <server>/server/runtime; charaResId: <server>/old) is optional: read when --server is given, else left empty.
 const SERVER = oldServerPathOpt() ?? '(none)';
 const readOpt = (f) => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : '');
 const PEF = extractedPath('pef-cross', 'br');
@@ -88,7 +88,7 @@ function pickClient(fileName, opts) {
 // ---- server tables ------------------------------------------------------------------------
 function charaTables() {
   const health = new Map();
-  const xml = readOpt(path.join(SERVER, 'runtime/Data/Match/CharaHealth.xml'));
+  const xml = readOpt(serverPathOpt('runtime', 'Data', 'Match', 'CharaHealth.xml') ?? '');
   for (const m of xml.matchAll(/<Chara Id="(\d+)" HP="(\d+)"\/>\s*;([^\s<]+)/g)) health.set(norm(m[3]), { itemId: +m[1], hp: +m[2], itemName: m[3] });
   const res = new Map();
   const cs = readOpt(path.join(SERVER, 'Server.Match/Data/Enums/CharaResId.cs'));
