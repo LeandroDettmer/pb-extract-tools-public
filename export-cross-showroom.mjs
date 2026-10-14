@@ -27,7 +27,7 @@ import { assetPath, clientPath } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parsePack, carve, decodeContent } from './i3pack/unpack.mjs';
+import { parsePack, carveNamed, decodeContent } from './i3pack/unpack.mjs';
 import { readI3R2 } from './i3r2/i3r2.mjs';
 import { collectMeshes, meshIndices, readNode, mul } from './i3r2/scene.mjs';
 import { GLB, checkGLB, readI3IB, decodeI3IB, encodePNG, stem } from './i3r2/skin-glb.mjs';
@@ -56,15 +56,17 @@ const readMat = (d, o) => Array.from({ length: 16 }, (_, k) => d.readFloatLE(o +
 function packFiles() {
   const d = fs.readFileSync(PACK);
   const node = parsePack(d).nodes.find((n) => n.fileCount);
-  const files = carve(d, node).files;
+  // .i3i names pair with their payload by the texture's own source name (carveNamed), the rest by table order
+  const files = carveNamed(d, { ...node, files: NAMES.map((name) => ({ name })) });
   if (files.length !== NAMES.length) throw new Error(`UI_Showroom: ${files.length} files, expected ${NAMES.length}`);
   return files.map((f, i) => {
     let buf = d.subarray(f.offset, f.offset + f.size);
     if (f.attr) buf = decodeContent(buf, f.attr) ?? buf;
-    const want = MAGIC[NAMES[i].split('.').pop().toLowerCase()];
-    if (buf.toString('latin1', 0, 4) !== want) throw new Error(`file ${i} (${NAMES[i]}): magic ${buf.toString('latin1', 0, 4)} != ${want}`);
-    return { name: NAMES[i], buf };
-  });
+    if (!NAMES.includes(f.name)) throw new Error(`file ${i}: no name (payload ${f.name})`);
+    const want = MAGIC[f.name.split('.').pop().toLowerCase()];
+    if (buf.toString('latin1', 0, 4) !== want) throw new Error(`file ${i} (${f.name}): magic ${buf.toString('latin1', 0, 4)} != ${want}`);
+    return { name: f.name, buf };
+  }).sort((a, b) => NAMES.indexOf(a.name) - NAMES.indexOf(b.name));
 }
 
 // ---- scene -> GLB ------------------------------------------------------------------------------------------------------

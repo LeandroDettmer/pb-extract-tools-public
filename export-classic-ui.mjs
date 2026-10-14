@@ -19,7 +19,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readGuiSets } from './i3gui/i3gui.mjs';
-import { parsePack, carve, decodeContent } from './i3pack/unpack.mjs';
+import { parsePack, carveNamed, decodeContent } from './i3pack/unpack.mjs';
 import { readI3IB, decodeI3IB, encodePNG } from './i3r2/skin-glb.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -31,7 +31,7 @@ function packFiles(file) {
   const d = fs.readFileSync(file), out = [];
   for (const n of parsePack(d).nodes) {
     if (!n.fileCount) continue;
-    const files = n.indexOk ? n.files : carve(d, n).files.map((f, k) => ({ ...f, name: n.files[k]?.name ?? String(k).padStart(3, '0') }));
+    const files = n.indexOk ? n.files : carveNamed(d, n);
     for (const f of files) {
       let buf = d.subarray(f.offset, f.offset + f.size);
       if (f.attr) buf = decodeContent(buf, f.attr) ?? buf;

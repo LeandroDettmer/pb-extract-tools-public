@@ -142,6 +142,40 @@ function oldObjBlobs(d, n) {
   }
   return byStem;
 }
+// OLD leaf .i3i by content, the same drift: the walk pairs the .i3i names with I3IB payloads by order, and one extra payload
+// moves every later texture. Object_break2: break_1 got the VentOpening.TGA payload (the 3rd I3IB, between Barricade_Stone_02
+// and break_1), so Construction_* had ventopening instead of break_1. Each I3IB names its own source file (srcPath), so a name
+// takes the payload with its own stem. A name with no such payload takes the walked payload only when that payload names no
+// file (empty srcPath); a walked payload that names another file is not this texture. Unmatched names get no entry (the
+// texture lookup then falls back to the stem in other packs).
+function oldTexEntries(d, n, walked) {
+  const blobs = [];
+  for (let p = d.indexOf('I3IB', n.dataStart, 'latin1'); p >= 0 && p < n.dataEnd; p = d.indexOf('I3IB', p + 4, 'latin1')) {
+    const t = readI3IB(d, p, n.dataEnd);
+    if (t) blobs.push({ offset: p, src: t.srcPath ? stem(t.srcPath).toLowerCase() : '' });
+  }
+  // a payload ends at the next I3IB / I3R2 of the node (or the node end): raw formats size their mips from it
+  const nextStart = (p) => {
+    let e = n.dataEnd;
+    for (const m of ['I3IB', 'I3R2']) { const i = d.indexOf(m, p + 4, 'latin1'); if (i >= 0 && i < e) e = i; }
+    return e;
+  };
+  const byOffset = new Map(blobs.map((b) => [b.offset, b]));
+  const out = [], taken = new Set(), pending = [];
+  for (const f of n.files) {
+    if (!/\.i3i$/i.test(f.name)) continue;
+    const k = stem(f.name).toLowerCase();
+    const hit = blobs.find((b) => b.src === k && !taken.has(b.offset));
+    if (hit) { taken.add(hit.offset); out.push({ name: f.name, offset: hit.offset, size: nextStart(hit.offset) - hit.offset, attr: 0 }); }
+    else pending.push(f);
+  }
+  for (const f of pending) {
+    const w = walked.find((e) => e.name === f.name);
+    const b = w && byOffset.get(w.offset);
+    if (b && !b.src && !taken.has(b.offset)) { taken.add(b.offset); out.push(w); }
+  }
+  return out;
+}
 function oldNodeEntries(d, n) {
   const objs = oldObjBlobs(d, n);
   const walked = oldNodeFiles(d, n) ?? [];
@@ -157,7 +191,8 @@ function oldNodeEntries(d, n) {
     const w = walked.find((e) => e.name === f.name);
     if (w && !claimed.has(w.offset)) own.push(w);
   }
-  return [...walked.filter((e) => !isObj(e.name)), ...own];
+  const tex = oldTexEntries(d, n, walked);
+  return [...walked.filter((e) => !isObj(e.name) && !/\.i3i$/i.test(e.name)), ...own, ...tex];
 }
 
 // ---- pack index: every file of every pack, by upper-case path; .i3Obj also by md5 --------------------------------

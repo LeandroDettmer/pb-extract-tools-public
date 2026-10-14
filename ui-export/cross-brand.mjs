@@ -10,7 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { clientPath, assetPath } from '../lib/paths.mjs';
-import { parsePack, carve, decodeContent } from '../i3pack/unpack.mjs';
+import { parsePack, carveNamed, decodeContent } from '../i3pack/unpack.mjs';
 import { readI3IB, decodeI3IB, encodePNG } from '../i3r2/skin-glb.mjs';
 
 const EXE = clientPath('cross', 'PointBlank.exe');
@@ -76,7 +76,7 @@ function loginTexture() {
   const d = fs.readFileSync(PACK);
   for (const n of parsePack(d).nodes) {
     if (!n.fileCount) continue;
-    const files = n.indexOk ? n.files : carve(d, n).files.map((f, k) => ({ ...f, name: n.files[k]?.name ?? '' }));
+    const files = n.indexOk ? n.files : carveNamed(d, n);
     for (const f of files) {
       if (!LOGIN_TEX.test(f.name)) continue;
       let buf = d.subarray(f.offset, f.offset + f.size);

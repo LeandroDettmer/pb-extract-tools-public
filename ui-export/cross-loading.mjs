@@ -11,7 +11,7 @@
 import { assetPath, clientPath } from '../lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
-import { parsePack, carve, decodeContent } from '../i3pack/unpack.mjs';
+import { parsePack, carveNamed, decodeContent } from '../i3pack/unpack.mjs';
 import { readI3IB, decodeI3IB, encodePNG } from '../i3r2/skin-glb.mjs';
 
 const PACKS = clientPath('cross', 'Pack');
@@ -22,8 +22,8 @@ function i3is(file) {
   const d = fs.readFileSync(file), out = [];
   for (const n of parsePack(d).nodes) {
     if (!n.fileCount) continue;
-    // OLD-format nodes (DeadTown_SubData) carry names only: carve the payload, names by position (as export-classic-ui)
-    const files = n.indexOk ? n.files : carve(d, n).files.map((f, k) => ({ ...f, name: n.files[k]?.name ?? '' }));
+    // OLD-format nodes (DeadTown_SubData) carry names only: carve the payload, names by content for .i3i (carveNamed)
+    const files = n.indexOk ? n.files : carveNamed(d, n);
     for (const f of files) {
       if (!/\.i3i$/i.test(f.name)) continue;
       let buf = d.subarray(f.offset, f.offset + f.size);

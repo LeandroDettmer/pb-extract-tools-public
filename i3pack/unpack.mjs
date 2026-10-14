@@ -317,6 +317,35 @@ export function carve(d, node) {
   return { files, leftover: end - p };
 }
 
+// Carved payloads of an OLD node with their table names. Pairing by position drifts when one payload is extra or missing
+// (Object_break2: break_1 got the VentOpening.TGA payload), so an .i3i name takes the I3IB whose srcPath stem is its own
+// (the texture names its source file). Other names, and .i3i names with no payload of their own, keep table order; a
+// payload that names another texture is not theirs. Unpaired payloads get a numeric name.
+export function carveNamed(d, n) {
+  const carved = carve(d, n).files;
+  const names = n.files.map((f) => f.name);
+  const stemOf = (p) => p.split(/[\\/]/).pop().replace(/\.[^.]*$/, '').toLowerCase();
+  const src = carved.map((f) => {
+    if (d.toString('latin1', f.offset, f.offset + 4) !== 'I3IB') return '';
+    const len = Math.min(d.readUInt16LE(f.offset + 26), f.size - 60);
+    return len > 0 ? stemOf(d.toString('latin1', f.offset + 60, f.offset + 60 + len)) : '';
+  });
+  const isTex = (nm) => /\.i3i$/i.test(nm);
+  const assigned = new Map(), taken = new Set();
+  names.forEach((nm, k) => {
+    if (!isTex(nm)) return;
+    const j = src.findIndex((s, i) => s && s === stemOf(nm) && !taken.has(i));
+    if (j >= 0) { taken.add(j); assigned.set(k, j); }
+  });
+  names.forEach((nm, k) => {
+    if (assigned.has(k) || k >= carved.length || taken.has(k)) return;
+    if (isTex(nm) && src[k] && src[k] !== stemOf(nm)) return;
+    taken.add(k); assigned.set(k, k);
+  });
+  const byPayload = new Map([...assigned].map(([k, j]) => [j, names[k]]));
+  return carved.map((f, j) => ({ ...f, name: byPayload.get(j) ?? String(j).padStart(3, '0') }));
+}
+
 export function unpack(packFile, outRoot, { raw = false } = {}) {
   const d = fs.readFileSync(packFile);
   const base = path.basename(packFile).replace(/\.i3Pack$/i, '');
