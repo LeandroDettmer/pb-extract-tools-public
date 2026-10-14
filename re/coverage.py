@@ -1,6 +1,6 @@
 # RE coverage map for the Point Blank Cross exe: doldecomp-style progress, not a matching decompilation.
 #   py <tools>/re/coverage.py [exe] [game root]    (default root = cwd: run from the game repo root; needs capstone)
-#   writes web-poc/docs/re/cross_symbols.tsv + cross_rejected.tsv + coverage.html (treemap, self-contained) and prints the summary
+#   writes web-poc/docs/re/cross_symbols.tsv + cross_rejected.tsv + coverage.html (treemap, self-contained), web-poc/docs/re-coverage.svg (static treemap for READMEs) and prints the summary
 #   status: ported (cited) / inferido (every citation [INFERIDO]) / untouched.
 #   A VA counts only if it is an exact Cross function start or its comment contains `cross`; others are rejected.
 import bisect
@@ -11,6 +11,7 @@ import os
 import re
 import struct
 import sys
+from xml.sax.saxutils import escape
 
 import capstone
 
@@ -585,3 +586,102 @@ with open(html_path, "w", encoding="utf-8", newline="\n") as fh:
 
 print(f"wrote {os.path.join(OUT_DIR, 'cross_symbols.tsv')}")
 print(f"wrote {html_path} ({os.path.getsize(html_path)} bytes)")
+
+# ---- static SVG treemap: GitHub does not run the HTML JS, so README <img> gets this file ----
+# same units, order and stacked green/yellow/grey fill as the HTML; fixed hex colours, no CSS media queries
+SVG_GREY, SVG_GREEN, SVG_YELLOW = (221, 225, 231), (46, 158, 79), (232, 196, 60)
+SVG_BG, SVG_INK, SVG_MUTED, SVG_LINE = "#f6f8fa", "#1f2328", "#57606a", "#d0d7de"
+MAP_X, MAP_Y, MAP_W, MAP_H = 8, 80, 1184, 512
+
+
+def svg_hex(c):
+    return "#" + "".join(f"{round(v):02x}" for v in c)
+
+
+def svg_fill(u):
+    p, i = u["pb"] / u["nb"], u["ib"] / u["nb"]
+    g = max(0.0, 1 - p - i)
+    return svg_hex(SVG_GREY[k] * g + SVG_GREEN[k] * p + SVG_YELLOW[k] * i for k in range(3))
+
+
+def squarify(vals, x, y, w, h):
+    # Bruls, Huijbregts, van Wijk: same algorithm as squarify() in the HTML page; vals sorted desc
+    def worst(row, s):
+        tot = sum(row)
+        return max((s * s * max(row)) / (tot * tot), (tot * tot) / (s * s * min(row)))
+
+    k = (w * h) / sum(vals)
+    area = [v * k for v in vals]
+    out = []
+    i = 0
+    while i < len(area):
+        s = min(w, h)
+        row = [area[i]]
+        i += 1
+        while i < len(area) and worst(row + [area[i]], s) <= worst(row, s):
+            row.append(area[i])
+            i += 1
+        sm = sum(row)
+        if w >= h:
+            cw = sm / h
+            yy = y
+            for a in row:
+                ch = a / cw
+                out.append((x, yy, cw, ch))
+                yy += ch
+            x += cw
+            w -= cw
+        else:
+            rh = sm / w
+            xx = x
+            for a in row:
+                rw = a / rh
+                out.append((xx, y, rw, rh))
+                xx += rw
+            y += rh
+            h -= rh
+    return out
+
+
+pb_pct = 100 * CB / TB
+fn_pct = 100 * len(cov) / N
+title = f"Cross exe RE coverage — {pb_pct:.2f}% bytes, {fn_pct:.2f}% functions ({len(cov)}/{N})"
+body, labels = [], []
+for key, (x, y, w, h) in zip(order, squarify([ustat[k]["nb"] for k in order], MAP_X, MAP_Y, MAP_W, MAP_H)):
+    u = ustat[key]
+    cov_u = (u["pb"] + u["ib"]) / u["nb"]
+    tip = f"{u['name']}: {100 * cov_u:.1f}% covered, {u['nf']} functions, {u['nb']} bytes"
+    body.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{w:.1f}" height="{h:.1f}" fill="{svg_fill(u)}">'
+                f"<title>{escape(tip)}</title></rect>")
+    maxc = int((w - 8) / 6.4)
+    if w >= 56 and h >= 16 and maxc >= 4:
+        name = u["name"] if len(u["name"]) <= maxc else u["name"][: maxc - 1] + "..."
+        labels.append(f'<text x="{x + 4:.1f}" y="{y + 13:.1f}">{escape(name)}</text>')
+        if w >= 80 and h >= 32:
+            labels.append(f'<text x="{x + 4:.1f}" y="{y + 26:.1f}">{100 * cov_u:.1f}%</text>')
+
+legend, lx = [], 700
+for txt, c in (("untouched", SVG_GREY), ("ported", SVG_GREEN), ("inferido", SVG_YELLOW)):
+    legend.append(f'<rect x="{lx}" y="40" width="10" height="10" rx="2" fill="{svg_hex(c)}"/>'
+                  f'<text x="{lx + 14}" y="49">{txt}</text>')
+    lx += 14 + 6.4 * len(txt) + 18
+
+svg_doc = "\n".join([
+    '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">',
+    f"<title>{escape(title)}</title>",
+    '<g font-family="system-ui,-apple-system,\'Segoe UI\',Roboto,sans-serif">',
+    f'<rect width="1200" height="600" rx="6" fill="{SVG_BG}" stroke="{SVG_LINE}"/>',
+    f'<text x="16" y="30" font-size="17" font-weight="600" fill="{SVG_INK}">{escape(title)}</text>',
+    f'<text x="16" y="50" font-size="11" fill="{SVG_MUTED}">tile area = unit bytes · generated {data["generated"]} · {escape(data["exe"])}</text>',
+    f'<g font-size="11" fill="{SVG_INK}">', *legend, "</g>",
+    f'<line x1="0" y1="72" x2="1200" y2="72" stroke="{SVG_LINE}"/>',
+    f'<g stroke="{SVG_BG}" stroke-width="1">', *body, "</g>",
+    f'<g font-size="11" fill="{SVG_INK}">', *labels, "</g>",
+    "</g>",
+    "</svg>",
+    "",
+])
+svg_path = os.path.join(ROOT, "web-poc", "docs", "re-coverage.svg")
+with open(svg_path, "w", encoding="utf-8", newline="\n") as fh:
+    fh.write(svg_doc)
+print(f"wrote {svg_path} ({os.path.getsize(svg_path)} bytes)")
