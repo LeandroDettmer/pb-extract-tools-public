@@ -25,7 +25,8 @@
 //   i3Object 'GOI1': +0x10 u32 stateCount, +0x14 f32 life. States reference external i3SceneGraphInfo
 //   (id 0xffff0000 | stringIndex -> "Object/break/VENDING_01.I3S"), in the order they appear in the i3Object blob:
 //   state 0 = intact model (exported), the others = broken/destroyed models (listed, not exported yet).
-//   i3ActionBreakObject present = breakable.
+//   i3ActionBreakObject present = breakable. Cross CObjectTemplate files (Construction_Pilar_02, Column_05...) have no i3Object:
+//   ABO1 still names the break, and life = f32 after the 'OTP1' tag (same values as the 2017 GOI1 life) [INFERIDO: field name].
 //
 // ---- model .I3S ----------------------------------------------------------------------------------------------------
 //   Same scene graph as a map (tools/i3r2/scene.mjs), root "AxisRotate" (i3 Z-up -> three Y-up) included, so the GLB
@@ -282,6 +283,10 @@ function readI3Obj(buf) {
       if (v >>> 16 === 0xffff && sgRefs.has(v & 0xffff) && !states.includes(sgRefs.get(v & 0xffff))) { states.push(sgRefs.get(v & 0xffff)); p += 3; }
     }
   }
+  // Cross CObjectTemplate (Construction_Pilar_02, Column_05...: no i3Object, no GOI1): the break action is still there (ABO1).
+  // Its life is the f32 after the 'OTP1' tag; the value equals the 2017 GOI1 life of the same prop (80, 100, 40) [INFERIDO: field name]
+  const template = !obj && F.objects.some((o) => o.cls === 'CObjectTemplate');
+  if (template) { const t = buf.indexOf('OTP1', 0, 'latin1'); if (t >= 0) life = r4(buf.readFloatLE(t + 4)); }
   // fall back to string order when the blob refs were not found
   if (!states.length) for (const s of F.strings) if (/\.i3s$/i.test(s)) states.push(s);
   // i3ActionEmitEffect ('AEE2' + u32 id of an i3MemoryBuffer = u32 len + effect name) and i3ActionPlaySound (i3Sound ext
@@ -303,7 +308,7 @@ function readI3Obj(buf) {
   const at = ex ? buf.indexOf('AEX1', ex.off, 'latin1') : -1;
   if (at >= 0 && at < ex.off + ex.size) explosion = { raw: [0, 1, 2, 3].map((k) => r4(buf.readFloatLE(at + 4 + k * 4))) };
   if (explosion) Object.assign(explosion, { damage: explosion.raw[1], range: explosion.raw[2] });
-  return { life, stateCount, states, breakEffects, breakSounds, stateSounds: readStateSounds(buf, F), explosion, breakable: F.objects.some((o) => o.cls === 'i3ActionBreakObject'), classes: [...new Set(F.objects.map((o) => o.cls))] };
+  return { life, stateCount, states, breakEffects, breakSounds, stateSounds: readStateSounds(buf, F), explosion, breakable: F.objects.some((o) => o.cls === 'i3ActionBreakObject'), template, classes: [...new Set(F.objects.map((o) => o.cls))] };
 }
 
 // ---- model (.I3S) -> GLB ------------------------------------------------------------------------------------------
@@ -678,7 +683,7 @@ function exportMapProps(pack, dir, mapId, IX, texFor, defs, serverMaps, log) {
       // Cross Object_cgame millicloth.i3Obj: no model state (i3TransformSequence + i3Animation only); its model is the sibling
       // MilliCloth_Ani.i3s, the 2017 state [INFERIDO: from the name, the Cross i3Obj does not name it]
       if (!info.states.length) { const ani = ent.path.replace(/\.i3obj$/i, '_Ani.i3s'); if (IX.byPath.has(ani.toUpperCase())) info.states = [ani]; }
-      const def = { id, i3Obj: `${ent.pack}:${ent.path}`, life: info.life, stateCount: info.stateCount, breakable: info.breakable && info.stateCount > 1, states: info.states, breakEffects: info.breakEffects, breakSounds: info.breakSounds, stateSounds: info.stateSounds, explosion: info.explosion };
+      const def = { id, i3Obj: `${ent.pack}:${ent.path}`, life: info.life, stateCount: info.stateCount, breakable: info.breakable && (info.stateCount > 1 || info.template), states: info.states, breakEffects: info.breakEffects, breakSounds: info.breakSounds, stateSounds: info.stateSounds, explosion: info.explosion };
       try { Object.assign(def, exportModelAny(id, info.states[0], IX, texFor, log, ent.path)); } catch (e) { if (e.noModel) def.noModel = e.message; else { def.error = e.message; errors++; } }
       // states 1.. = broken models (same GLB space): <id>_s1.glb. Objects with a single model just vanish when broken.
       if (def.breakable && !def.error) {
