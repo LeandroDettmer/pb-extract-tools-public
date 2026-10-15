@@ -8,7 +8,7 @@ Nothing in this repository is game data. Keep it that way.
 
 | Path | What it is |
 |---|---|
-| `pbx.mjs` | CLI entry. Dispatches the `export`, `re`, `snapshot`, `verify`, `sound`, `unpack` commands |
+| `pbx.mjs` | CLI entry. Dispatches the `export`, `ui`, `re`, `snapshot`, `verify`, `sound`, `unpack` commands. `CMDS` and `ALL` (the `export all` order and `after` waits) live here |
 | `export-*.mjs`, `audit-*.mjs`, `ui-export/` | one exporter per output family |
 | `lib/paths.mjs` | the only place that knows where clients, assets, the web app and the server live |
 | `pef/`, `pef-cross.mjs`, `re/` | reverse-engineering helpers that parse the client's PEF tables and binaries |
@@ -21,7 +21,8 @@ Nothing in this repository is game data. Keep it that way.
 ```sh
 npm install
 npm run pbx -- doctor                                  # clients found, which steps can run
-npm run pbx -- export all --client cross --dry-run     # lists the steps, writes nothing
+npm run pbx -- export all --client cross --dry-run     # lists the steps and their waits, writes nothing
+npm run pbx -- export all --jobs 1                     # one step at a time, in ALL order (default: min(4, cores / 3, RAM / 2 GB) at once)
 npm run pbx -- export <name> --client cross            # one step
 npm run pbx -- snapshot                                # copy what a mass re-export will rewrite
 npm run pbx -- snapshot --restore                      # revert to the last snapshot
@@ -61,3 +62,5 @@ Settings: flag, then env (`PB_CLIENTS`, `PB_ASSETS`, `PB_WEB`, `PB_SERVER`, `PB_
 ## Adapting to another client
 
 The tools were built and tested against Point Blank Cross. Other clients use the same i3Engine formats. Add a key to `CLIENTS` in `lib/paths.mjs`, then check each exporter that names a client. Compare the pack names and the PEF tables with the Cross output before you trust a new client's export.
+
+README "Other clients (not Cross)" lists what blocks each key today. A step follows `--client` only when its `CMDS` entry has `base: true`. Its script must also call `baseClient`. `export all --client <key>` needs its own `--out`.
