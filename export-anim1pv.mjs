@@ -71,7 +71,7 @@ export function resolve1pv(name = 'SWAT_Male') {
   const hasIdle = (k) => !!(U[k]?.stances.AttackIdle?.Idle?.clip || U[k]?.stances.AttackIdle?.RightIdle?.clip);
   // LinkedToCharaAI of the PBCross weapon.pef block (tools/pef-cross.mjs)
   const byId = pefById();
-  const catalog = JSON.parse(fs.readFileSync(path.join(ASSETS, 'cross/weapons/weapons.json'), 'utf8')).weapons;
+  const catalog = JSON.parse(fs.readFileSync(path.join(ASSETS, baseClient('cross'), 'weapons/weapons.json'), 'utf8')).weapons;
   const weapons = {}, names = {}, fallback = {}, zoomType = {};
   for (const w of catalog) {
     const p = byId.get(w.id);

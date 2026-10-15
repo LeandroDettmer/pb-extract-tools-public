@@ -16,7 +16,7 @@
 //     (64 KB, row-major tiles, rows inside a tile). flag=1 = IIA2 per tile (W3, tools/ui-export/vtex-crypt.mjs).
 //     Files of 128 bytes are locale placeholders (header only).
 
-import { assetPath, clientPath, rel } from '../lib/paths.mjs';
+import { assetPath, baseClient, clientPath, rel } from '../lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
@@ -29,7 +29,7 @@ export { rel };
 
 const P123 = clientPath('br3123');
 const KAYBO = clientPath('kaybo');
-const CROSS = clientPath('cross');
+const CROSS = clientPath(baseClient('cross'));
 
 // Where each UI version lives. vtex: lookup order (locale first, then _Common).
 export const VERSIONS = {

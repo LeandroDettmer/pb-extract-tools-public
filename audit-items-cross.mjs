@@ -23,7 +23,7 @@
 // items (export-headgear.mjs: server id -> Cross Equipment entry). Complete = a GLB for every family of the complete Cross
 // characters (chars/complete-cross.json) + Cross icon (icons[id], export-cross-icons.mjs) + Cross pt-BR name
 // (Equipment_Brazil.txt "Equipment\<cat>\<pef>\_Name"). Server ids, not Cross numbering.
-import { assetPath, clientPath, extractedPath } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPath, pefDir } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -39,7 +39,7 @@ const PARTS = { 7: 'Head', 8: 'Face', 27: 'Beret' };
 
 /** PBCross String.i3Pack table (UTF-16 "key<TAB>text" lines) -> Map key -> text. */
 function crossStrings(file) {
-  const d = fs.readFileSync(clientPath('cross', 'Pack', 'String.i3Pack'));
+  const d = fs.readFileSync(clientPath(baseClient('cross'), 'Pack', 'String.i3Pack'));
   for (const n of parsePack(d).nodes) for (const f of n.files) {
     if (f.name !== file) continue;
     let buf = d.subarray(f.offset, f.offset + f.size);
@@ -71,8 +71,8 @@ function couponRows() {
 }
 
 export function audit() {
-  const goods = rj(extractedPath('pef-cross', 'br', 'Goods.json')).ShopItem;
-  const icons = rj(path.join(ASSETS, 'ui/cross/icons/index.json')).byName?.item ?? {};
+  const goods = rj(pefDir('br', 'Goods.json')).ShopItem;
+  const icons = rj(path.join(ASSETS, 'ui', baseClient('cross'), 'icons/index.json')).byName?.item ?? {};
   const text = crossStrings('Goods_Brazil.txt');
   const rows = [];
   const noId = {};
@@ -109,7 +109,7 @@ export function audit() {
   }
   // parts: server ids of the exported Cross accessories
   const equip = rj(path.join(ASSETS, 'equip/index.json'));
-  const ids = rj(path.join(ASSETS, 'ui/cross/icons/index.json')).icons;
+  const ids = rj(path.join(ASSETS, 'ui', baseClient('cross'), 'icons/index.json')).icons;
   const charaOk = new Set(rj(path.join(ASSETS, 'chars/complete-cross.json')).complete);
   const fams = new Set(rj(path.join(ASSETS, 'chars/index.json')).chars.filter((c) => (c.itemIds ?? []).some((i) => charaOk.has(i)))
     .map((c) => equip.charas?.[c.id]?.family).filter(Boolean));

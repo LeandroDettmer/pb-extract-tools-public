@@ -7,7 +7,7 @@
 // rejected by bounds / respawn hash and the client builds live).
 //
 //   node bake-navgraph.mjs <map ...>      bake the listed maps
-//   node bake-navgraph.mjs --all [--jobs 4] [--force]   every map the game offers (one process per map)
+//   node bake-navgraph.mjs --all [--jobs N] [--force]   every map the game offers (one process per map; N = --jobs, else PB_JOBS, else min(4, cores))
 import { webPath } from './lib/paths.mjs';
 import './lib/nodeTs.mjs';
 import fs from 'node:fs';
@@ -19,7 +19,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
 const all = args.includes('--all'), force = args.includes('--force');
-const jobs = Number(args[args.indexOf('--jobs') + 1]) || 4;
+const ji = args.indexOf('--jobs');
+const jobs = (ji >= 0 && Number(args[ji + 1])) || Number(process.env.PB_JOBS) || Math.min(4, os.availableParallelism()); // pbx sets PB_JOBS
 const maps = args.filter((a, i) => !a.startsWith('--') && args[i - 1] !== '--jobs');
 
 const { installNodeEnv, buildNodeLevel, availableMaps, PUBLIC } = await import(pathToFileURL(webPath('src/game/dev/navLevel.node.ts')).href);

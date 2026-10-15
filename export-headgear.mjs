@@ -6,6 +6,7 @@
 //   node web-poc/tools/export-headgear.mjs --all      # every 3.123 ITEMID that maps to a 2017 entry (not only sold ones)
 //   node web-poc/tools/export-headgear.mjs --list     # mapping only (no write)
 //   node web-poc/tools/export-headgear.mjs --charas   # only re-apply the costume rule to index.json charas (no GLB export)
+// PB_JOBS=N: entries (one per item / default helmet, all families) built N at a time in worker threads (default min(4, cores)).
 //
 // Source (PBCross Pack, Equip_*.i3Pack; no fallback client):
 //   extracted/pef-cross/br/Equipment.json  Equipment.{Mask,Beret,Event,Head}.<key> = { ResLocalPath, ResPostName,
@@ -36,10 +37,12 @@
 // GLB layout = weapons: AxisRotate (i3 -> three) > HelmetDummy (origin) > meshes; the runtime strips AxisRotate and
 // parents HelmetDummy's content to HelmetPointDummy (src/game/charEquip.ts). Never deletes public/assets folders:
 // files are overwritten in place.
-import { assetPath, clientPath, dbInitPathOpt, extractedPath, oldServerPathOpt, rel, webPath } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPath, dbInitPathOpt, oldServerPathOpt, pefDir, rel, webPath } from './lib/paths.mjs';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { Worker, isMainThread, parentPort } from 'node:worker_threads';
 import { fileURLToPath } from 'node:url';
 import { scanI3R2 } from './i3r2/i3r2.mjs';
 import { IDENTITY, readBody, readSkeleton, collectBodyMeshes, plainIndices } from './i3r2/skin.mjs';
@@ -47,10 +50,11 @@ import { GLB, checkGLB, stem } from './i3r2/skin-glb.mjs';
 import { parsePack, decodeContent } from './i3pack/unpack.mjs';
 import { packTextures, materialFactory, buildPrimitive, addSkeletonNodes } from './export-model.mjs';
 
-const PACKS = clientPath('cross', 'Pack');
+const PACKS = clientPath(baseClient('cross'), 'Pack');
 const ASSETS = assetPath();
 const OUT = path.join(ASSETS, 'equip');
 const MAX_TEX = 512;
+const JOBS = Number(process.env.PB_JOBS) || Math.min(4, os.availableParallelism());
 const rj = (p) => JSON.parse(fs.readFileSync(p, 'utf8'));
 
 export const FAMILIES = ['SWAT_Male', 'SWAT_Female', 'REBEL_Male', 'REBEL_Female', 'ViperRed', 'D-Fox', 'Leopard', 'Hide', 'Bella', 'Chou'];
@@ -235,10 +239,63 @@ function soldIds() {
 
 const sceneNames = (cat, post, fam) => (cat === 'Mask' ? [`${fam}_Mask_${post}.I3S`, `${fam}_${post}.I3S`] : [`${fam}_${post}.I3S`, `${post}_${fam}_Beret.I3S`]);
 
-function main() {
+// ---- one entry (an item or a default helmet): its GLB per family, in its own out dir ----------------------------------
+// Entries do not share files, so each one builds in a worker thread (own pack caches); main() keeps the entry order.
+function buildEntry({ key, cat, k17, famList, names, v }) {
+  const post = v.ResPostName;
+  const prefer = `Equip_${String(v.ResLocalPath).replace(/[\\/]/g, '_')}.i3Pack`;
+  const e = { cat, pef: k17, pack: prefer, replacesHelmet: cat !== 'Mask', files: {}, missing: {} };
+  for (const fam of famList) {
+    const hit = findScene(names ?? sceneNames(cat, post, fam), prefer);
+    if (!hit) { e.missing[fam] = 'no I3S in a readable pack'; continue; }
+    const overrides = new Map();
+    const ov = (p) => (p ? texAnywhere(p) ?? hit.tex.get(p) : null);
+    const diff = ov(v.DiffuseTexture), emb = ov(v.EmblemTexture);
+    if (diff || emb) {
+      // replace the diffuse map of the scene's materials: emblem meshes get EmblemTexture, the rest DiffuseTexture
+      const lod = readBody(hit.d, hit.scene, hit.scene.objects.find((o) => o.cls === 'i3Body')).lods[0];
+      for (const m of collectBodyMeshes(hit.d, hit.scene, lod.root).meshes) {
+        const ao = m.state.i3TextureBindAttr;
+        if (!ao) continue;
+        const ref = hit.d.readUInt32LE(ao.off), t = hit.scene.byId.get(ref) || hit.scene.byId.get(ref & 0xffff);
+        const p = t?.extPath;
+        if (!p) continue;
+        const repl = /emblem/i.test(m.name) ? emb : diff;
+        if (repl && !overrides.has(stem(p))) overrides.set(stem(p), repl);
+      }
+    }
+    const r = exportScene(hit, { key, family: fam, overrides });
+    if (r.error) { e.missing[fam] = r.error; continue; }
+    e.files[fam] = r.file;
+    e.source ??= r.source;
+    e.meshes ??= r.meshes;
+    e.root ??= r.root;
+    if (r.missing.length) e.missingTextures = [...new Set([...(e.missingTextures ?? []), ...r.missing])];
+    if (r.meshes.some((n) => /^Model_Helmet$/i.test(n))) e.replacesHelmet = true;
+  }
+  return e;
+}
+
+// plan: [{ key, cat, k17, famList, names, v }] -> entries in plan order. JOBS workers, one entry at a time each.
+function buildEntries(plan) {
+  const out = new Array(plan.length);
+  let next = 0, done = 0;
+  return new Promise((resolve, reject) => {
+    if (!plan.length) return resolve(out);
+    const feed = (w) => { if (next < plan.length) w.postMessage({ i: next, task: plan[next++] }); else w.terminate(); };
+    for (let k = 0; k < Math.min(JOBS, plan.length); k++) {
+      const w = new Worker(new URL(import.meta.url), { argv: process.argv.slice(2) });
+      w.on('message', ({ i, e }) => { out[i] = e; if (++done === plan.length) resolve(out); feed(w); });
+      w.on('error', reject);
+      feed(w);
+    }
+  });
+}
+
+async function main() {
   const args = process.argv.slice(2);
   const chars = rj(path.join(ASSETS, 'chars/index.json')).chars;
-  const costumes = costumeCharas(chars, rj(path.join(ASSETS, 'cross/config/character.json')));
+  const costumes = costumeCharas(chars, rj(path.join(ASSETS, baseClient('cross'), 'config/character.json')));
   if (args.includes('--charas')) {
     const file = path.join(OUT, 'index.json'), index = rj(file);
     for (const id of costumes) if (index.charas[id]) index.charas[id].helmet = null;
@@ -246,76 +303,57 @@ function main() {
     console.log(`costume charas (no default helmet): ${[...costumes].join(', ')} -> ${rel(file)}`);
     return;
   }
-  const e17 = rj(extractedPath('pef-cross', 'br', 'Equipment.json')).Equipment;
+  const e17 = rj(pefDir('br', 'Equipment.json')).Equipment;
   const mapped = mapItems(e17);
   const sold = soldIds();
   const want = Object.entries(mapped).filter(([id]) => args.includes('--all') || sold.ids.has(Number(id)));
   if (args.includes('--list')) { for (const [id, m] of want) console.log(`${id}\t${m.slot}\t${m.name3}\t-> ${m.cat}:${m.k17}`); console.log(`${want.length} mapped (${sold.source})`); return; }
 
-  const charas = {};
-  const entries = {};
-  const log = [];
-  const doEntry = (key, cat, k17, famList, overrideNames = null) => {
-    if (entries[key]) return entries[key];
-    const v = e17[cat][k17];
-    const post = v.ResPostName;
-    const prefer = `Equip_${String(v.ResLocalPath).replace(/[\\/]/g, '_')}.i3Pack`;
-    const e = (entries[key] = { cat, pef: k17, pack: prefer, replacesHelmet: cat !== 'Mask', files: {}, missing: {} });
-    for (const fam of famList) {
-      const hit = findScene(overrideNames?.(fam) ?? sceneNames(cat, post, fam), prefer);
-      if (!hit) { e.missing[fam] = 'no I3S in a readable pack'; continue; }
-      const overrides = new Map();
-      const ov = (p) => (p ? texAnywhere(p) ?? hit.tex.get(p) : null);
-      const diff = ov(v.DiffuseTexture), emb = ov(v.EmblemTexture);
-      if (diff || emb) {
-        // replace the diffuse map of the scene's materials: emblem meshes get EmblemTexture, the rest DiffuseTexture
-        const lod = readBody(hit.d, hit.scene, hit.scene.objects.find((o) => o.cls === 'i3Body')).lods[0];
-        for (const m of collectBodyMeshes(hit.d, hit.scene, lod.root).meshes) {
-          const ao = m.state.i3TextureBindAttr;
-          if (!ao) continue;
-          const ref = hit.d.readUInt32LE(ao.off), t = hit.scene.byId.get(ref) || hit.scene.byId.get(ref & 0xffff);
-          const p = t?.extPath;
-          if (!p) continue;
-          const repl = /emblem/i.test(m.name) ? emb : diff;
-          if (repl && !overrides.has(stem(p))) overrides.set(stem(p), repl);
-        }
-      }
-      const r = exportScene(hit, { key, family: fam, overrides });
-      if (r.error) { e.missing[fam] = r.error; continue; }
-      e.files[fam] = r.file;
-      e.source ??= r.source;
-      e.meshes ??= r.meshes;
-      e.root ??= r.root;
-      if (r.missing.length) e.missingTextures = [...new Set([...(e.missingTextures ?? []), ...r.missing])];
-      if (r.meshes.some((n) => /^Model_Helmet$/i.test(n))) e.replacesHelmet = true;
-    }
-    log.push(`${key}: ${Object.keys(e.files).length}/${famList.length} families${Object.keys(e.missing).length ? ` (missing ${Object.keys(e.missing).join(',')})` : ''}`);
-    return e;
+  // The plan keeps the serial order: entries created in this order (key order of entries, lines of log), a key once.
+  const plan = [], planned = new Set();
+  const addEntry = (key, cat, k17, famList, names = null) => {
+    if (planned.has(key)) return;
+    planned.add(key);
+    plan.push({ key, cat, k17, famList, names, v: e17[cat][k17] });
   };
 
   // default helmets: the family helmet (HelmetDefault) + the variant's own helmet when the client has one
-  doEntry('helmet_default', 'Head', 'HelmetDefault', FAMILIES);
+  addEntry('helmet_default', 'Head', 'HelmetDefault', FAMILIES);
+  const rows = [];
   for (const c of chars) {
     const { family, variant } = familyOf(c);
     if (!family) continue;
     const suffix = variant.replace(/^(SWAT_Male|SWAT_Female|REBEL_Male|REBEL_Female|REBEL_ViperRed|REBEL|D-Fox|Leopard|Hide|Bella|Chou)_?/i, '').replace(/[()]/g, '').replace(/_+$/, '');
-    let helmet = costumes.has(c.id) ? null : 'helmet_default';
+    const helmet = costumes.has(c.id) ? null : 'helmet_default';
+    let helmetKey = null;
     if (suffix && helmet) {
       const names = [`${variant.replace(/^REBEL_/, '')}_Helmet.I3S`, `${family}_${suffix}_Helmet.I3S`, `${family}_Helmet_${suffix}.I3S`];
       if (findScene(names, 'Equip_Helmet.i3Pack')) {
-        const key = `helmet_${c.id}`;
-        const e = doEntry(key, 'Head', 'HelmetDefault', [family], () => names);
-        if (e.files[family]) helmet = key;
+        helmetKey = `helmet_${c.id}`;
+        addEntry(helmetKey, 'Head', 'HelmetDefault', [family], names);
       }
     }
-    charas[c.id] = { family, helmet };
+    rows.push({ id: c.id, family, helmet, helmetKey });
   }
-  const items = {};
+  const itemRows = [];
   for (const [id, m] of want) {
     const key = m.k17.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
-    const e = doEntry(key, m.cat, m.k17, FAMILIES);
-    if (Object.keys(e.files).length) items[id] = { key, slot: m.slot, name3: m.name3 };
+    addEntry(key, m.cat, m.k17, FAMILIES);
+    itemRows.push({ id, key, m });
   }
+
+  const built = await buildEntries(plan);
+  const entries = {};
+  const log = [];
+  plan.forEach((t, i) => {
+    const e = (entries[t.key] = built[i]);
+    log.push(`${t.key}: ${Object.keys(e.files).length}/${t.famList.length} families${Object.keys(e.missing).length ? ` (missing ${Object.keys(e.missing).join(',')})` : ''}`);
+  });
+  // a costume keeps no default helmet; a helmet variant counts only when its own GLB exists for the family
+  const charas = {};
+  for (const r of rows) charas[r.id] = { family: r.family, helmet: r.helmetKey && entries[r.helmetKey].files[r.family] ? r.helmetKey : r.helmet };
+  const items = {};
+  for (const { id, key, m } of itemRows) if (Object.keys(entries[key].files).length) items[id] = { key, slot: m.slot, name3: m.name3 };
   const index = {
     generated: new Date().toISOString(), tool: 'web-poc/tools/export-headgear.mjs', sold: sold.source,
     note: 'Head accessories of the PB 2017 client per character family. entries[key].files[family] = GLB (AxisRotate > HelmetDummy > meshes), attached at the chara HelmetPointDummy. replacesHelmet = beret / hat / helmet (drawn instead of the default helmet); masks are worn under it. charas[id].helmet = the default helmet entry, null = costume with its own head (none). items = server itemId -> entry ([INFERIDO] 3.123 key <-> 2017 name match).',
@@ -328,4 +366,5 @@ function main() {
   console.log(`${Object.keys(items).length}/${want.length} items exported (${sold.source}), ${Object.keys(entries).length} entries, ${nf} GLBs -> ${rel(OUT)}`);
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+if (!isMainThread) parentPort.on('message', ({ i, task }) => parentPort.postMessage({ i, e: buildEntry(task) }));
+if (isMainThread && process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await main();

@@ -119,6 +119,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const ci = args.indexOf('--compact'); const compact = ci >= 0; if (compact) args.splice(ci, 1);
   const mi = args.indexOf('--meta'); const meta = mi >= 0; if (meta) args.splice(mi, 1);
   const [inFile, outFile] = args;
+  if (!inFile) { console.error('usage: pbx re pef-json <file.pef> [out.json] [--key Path/To/Key] [--meta] [--nation N] [--compact]'); process.exit(2); }
   const pef = parsePef(fs.readFileSync(inFile));
   let json = {};
   for (const r of pef.roots) json[pef.byId.get(r).name] = toJSON(pef, r, meta, nation);

@@ -18,13 +18,13 @@
 // totalTexCnt). NOT the 2017 minfo (no RealMapScale / RealBakedSize): the world -> minimap transform must come from the
 // Cross exe (CBattleHUD_MiniMap, RE group), not from a value in this file. Airport and Kickpoint have 0 files in the
 // Cross packs: reported as missing.
-import { assetPath, clientPath, extractedPath, rel } from '../lib/paths.mjs';
+import { assetPath, baseClient, clientPath, pefDir, rel } from '../lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { parsePack, decodeContent } from '../i3pack/unpack.mjs';
 import { readI3IB, decodeI3IB, encodePNG } from '../i3r2/skin-glb.mjs';
 
-const PACK = clientPath('cross', 'Pack');
+const PACK = clientPath(baseClient('cross'), 'Pack');
 const OUT = assetPath('ui', 'cross-hud');
 const index = { format: 'pb-cross-hud/1', generated: new Date().toISOString(), tool: 'pb-extract-tools-cross/ui-export/cross-hud.mjs', client: 'PBCross', textures: {}, killIcons: {}, minimaps: {} };
 
@@ -116,7 +116,7 @@ for (const [pack, re] of SHEET_PACKS) {
   // ord = the weapon's _UIShapeIndex in the Cross Weapon.pef (CHud::SetKillText 0x741210 -> 0x7a8140 / 0x7a7f20 / 0x7a8240),
   // key = classType * 1000 + number (item id without the slot digit). Dino class 19 (by name) and class 100 (no weapon: fall /
   // other, table 0xd62d10) are not mapped yet.
-  const pef = JSON.parse(fs.readFileSync(extractedPath('pef-cross', 'br', 'Weapon.json'), 'utf8'));
+  const pef = JSON.parse(fs.readFileSync(pefDir('br', 'Weapon.json'), 'utf8'));
   const ord = {};
   const walk = (o) => { for (const v of Object.values(o)) if (v && typeof v === 'object') { if ('_UIShapeIndex' in v && '_ClassType' in v) ord[v._ClassType * 1000 + v._Number] = v._UIShapeIndex; else walk(v); } };
   walk(pef.WeaponList?.Weapon ?? pef);

@@ -10,7 +10,7 @@
 // SWAT_Male / SWAT_Female); those are exported into the family's bundle too, and the family's own clips no state names are not. One small GLB per weapon folder (fetched on demand), clips named by the lower-cased key
 // "<weapon folder>/ui/ui_idlea" (path under Chara/<Folder>/3PV/), the same key src/lobby/screens/preview3d.ts derives
 // from the swat_male / swat_female anim3pv index. Bone names = the shared 63-bone skeleton.
-import { assetPath, clientPath } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPath } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,7 +20,7 @@ import { addClips } from './export-anim.mjs';
 
 const ASSETS = assetPath();
 /** the base client only (PBCross) */
-const CLIENTS = [clientPath('cross')];
+const CLIENTS = [clientPath(baseClient('cross'))];
 /** assets/chars/<family> -> Chara/<Folder> of the original clients (src/lobby/screens/preview3d.ts uiFamilyOf keeps the skins -> family map) */
 const FAMILIES = {
   rebel_viperred: 'REBEL_Female(ViperRed)', rebel_female: 'REBEL_Female', rebel_male: 'REBEL_Male',

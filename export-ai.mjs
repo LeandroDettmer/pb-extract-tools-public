@@ -3,10 +3,10 @@
 //   node export-ai.mjs
 // Source: extracted/pef-cross/br/AICharacter.json (pef/export-cross.mjs): AICharacter.Level_<N>.AI_<k> = the bot's values.
 // Output: { "<N>": [ { hp, dev, atk, pre, tot, ang, rng, resp }, ... ] }, the AI_<k> rows of each level in k order.
-import { extractedPath, generatedPath, rel } from './lib/paths.mjs';
+import { generatedPath, pefDir, rel } from './lib/paths.mjs';
 import { readFileSync, writeFileSync } from "node:fs";
 
-const cross = JSON.parse(readFileSync(extractedPath('pef-cross', 'br', 'AICharacter.json'), "utf8")).AICharacter;
+const cross = JSON.parse(readFileSync(pefDir('br', 'AICharacter.json'), "utf8")).AICharacter;
 const FIELDS = { hp: 'Hp', dev: 'Deviation', atk: 'AttackTime', pre: 'AttackTime_Pre', tot: 'AttackTime_Total', ang: 'SeeSight_Angle', rng: 'SeeSight_Range', resp: 'RespawnTime' };
 
 const out = {};

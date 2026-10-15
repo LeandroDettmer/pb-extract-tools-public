@@ -24,7 +24,7 @@
 //   animations. Items whose _ResName_I3S is a texture-only pack are skins: listed in items[] of the base model and,
 //   with --skins, exported as <skin id>.glb = base geometry + the skin maps (texture_change_Weapon.json mapping).
 
-import { assetPath, clientPath, extractedPath, rel, oldServerPathOpt, serverPathOpt } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPath, extractedPath, pefDir, rel, oldServerPathOpt, serverPathOpt } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -33,18 +33,20 @@ import { readBody, readSkeleton, collectBodyMeshes, plainIndices } from './i3r2/
 import { readI3IB, normPath, stem } from './i3r2/skin-glb.mjs';
 import { parsePack, decodeContent } from './i3pack/unpack.mjs';
 import os from 'node:os';
+import { Worker, isMainThread, parentPort, threadId, workerData } from 'node:worker_threads';
 import { createHash } from 'node:crypto';
 import { exportChara, exportWeapon, packTextures } from './export-model.mjs';
 
 const OUT = process.env.PB_OUT_ROOT || assetPath(); // PB_OUT_ROOT: tools/export-model-dds.mjs
-// the one client this export reads (no fallback chain): a missing PBCross folder stops the run in main
-const CROSS = { key: 'cross', version: 'Cross', root: clientPath('cross') };
+// the one client this export reads (no fallback chain): a missing PBCross folder stops the run in main. cross by default (--client <key>)
+const KEY = baseClient('cross');
+const CROSS = { key: KEY, version: KEY === 'cross' ? 'Cross' : KEY, root: clientPath(KEY) };
 const CLIENTS = [{ ...CROSS, pack: path.join(CROSS.root, 'Pack'), chara: path.join(CROSS.root, 'Chara') }];
 // server/ only keeps runtime data; the C# sources + binary/Debug live in old/ (the .NET server no longer runs)
 // Server data (itemId, hp: <server>/server/runtime; charaResId: <server>/old) is optional: read when --server is given, else left empty.
 const SERVER = oldServerPathOpt() ?? '(none)';
 const readOpt = (f) => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : '');
-const PEF = extractedPath('pef-cross', 'br');
+const PEF = pefDir('br');
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 const sharedPrefix = (a, b) => { let i = 0; while (i < a.length && a[i] === b[i]) i++; return i; };
 const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -119,8 +121,9 @@ const CHARA_RES = { 'D-Fox': 'DFox', 'REBEL_Female(Tarantula_P1000)': 'REBEL_Fem
 const NOT_PLAYABLE = /^Chara(_Clan.*|_Equip|_NPC|_Dino.*)?$/;
 // animation families: the model that embeds the clips + the 3.123 anim folder
 const FAMILIES = {
-  male: { id: 'swat_male', name: 'SWAT_Male', animDir: clientPath('cross', 'Chara', 'SWAT_Male') },
-  female: { id: 'swat_female', name: 'SWAT_Female', animDir: clientPath('cross', 'Chara', 'SWAT_Female') },
+  // [INFERIDO] SWAT_* is the Cross family: another client without these folders fails here with the one-line missing message
+  male: { id: 'swat_male', name: 'SWAT_Male', animDir: clientPath(KEY, 'Chara', 'SWAT_Male') },
+  female: { id: 'swat_female', name: 'SWAT_Female', animDir: clientPath(KEY, 'Chara', 'SWAT_Female') },
 };
 
 function familyOf(bones, refs) {
@@ -140,7 +143,7 @@ function familyOf(bones, refs) {
   return best;
 }
 
-function exportChars({ only, maxTex, embedClips, dry, log }) {
+async function exportChars({ only, maxTex, embedClips, dry, log }) {
   const names = new Set();
   for (const c of CLIENTS) for (const f of fs.existsSync(c.pack) ? fs.readdirSync(c.pack) : []) {
     const m = f.match(/^(Chara_.+)\.i3Pack$/i);
@@ -155,10 +158,10 @@ function exportChars({ only, maxTex, embedClips, dry, log }) {
     if (!p?.client) throw new Error(`family model ${f.name} has no plain source`);
     refSkel[k] = p.info.skel[1] || p.info.skel[0];
   }
-  const entries = [], skipped = [];
-  for (const p of picks) {
-    if (only && !only.test(p.name)) continue;
-    if (!p.client) { skipped.push({ name: p.name, why: p.tried }); log(`chara ${p.name}: SKIP ${JSON.stringify(p.tried)}`); continue; }
+  const slot = [], tasks = [], at = []; // slot[i]: result of picks[i] (in pick order); tasks[k] = the job of picks[at[k]]
+  picks.forEach((p, i) => {
+    if (only && !only.test(p.name)) return;
+    if (!p.client) { slot[i] = { skip: { name: p.name, why: p.tried } }; log(`chara ${p.name}: SKIP ${JSON.stringify(p.tried)}`); return; }
     const fam = familyOf(p.info.skel[1] || p.info.skel[0], refSkel);
     const famDef = fam && FAMILIES[fam.family];
     const id = slug(p.name);
@@ -174,16 +177,18 @@ function exportChars({ only, maxTex, embedClips, dry, log }) {
       sourceStatus: p.tried,
     };
     if (!itemId) extra.note = 'no CharaHealth.xml item for this pack';
-    if (dry) { log(`chara ${p.name} <- ${p.client.key} id=${id} team=${team} item=${itemId} res=${extra.charaResId} family=${fam?.family}`); entries.push({ name: id, ...extra, team }); continue; }
+    if (dry) { log(`chara ${p.name} <- ${p.client.key} id=${id} team=${team} item=${itemId} res=${extra.charaResId} family=${fam?.family}`); slot[i] = { entry: { name: id, ...extra, team } }; return; }
     // same pack in the other clients, the shared equipment / clan maps, then every other character pack (skins reuse maps)
     const others = [...CLIENTS.filter((c) => c !== p.client).map((c) => path.join(c.pack, `Chara_${p.name}.i3Pack`)),
       ...['Chara_Equip', 'Chara_Clan', 'Chara_ClanMarkContents'].flatMap((n) => CLIENTS.map((c) => path.join(c.pack, n + '.i3Pack'))),
       ...[...names].filter((n) => n !== p.name).sort((a, b) => sharedPrefix(b, p.name) - sharedPrefix(a, p.name)).flatMap((n) => [...CLIENTS].reverse().map((c) => path.join(c.pack, `Chara_${n}.i3Pack`)))];
-    try {
-      const e = exportChara({ name: p.name, team, id, packDir: p.client.pack, animDir: famDef && (isBase || embedClips) ? famDef.animDir : null, texFallback: others, extra }, { log, maxTex });
-      entries.push(e);
-    } catch (err) { skipped.push({ name: p.name, why: err.message }); log(`chara ${p.name}: FAILED ${err.stack}`); }
-  }
+    at.push(i);
+    tasks.push({ name: p.name, team, id, packDir: p.client.pack, animDir: famDef && (isBase || embedClips) ? famDef.animDir : null, texFallback: others, extra, maxTex });
+  });
+  const outs = await runPool('chara', tasks);
+  outs.forEach((o, k) => { slot[at[k]] = 'skip' in o ? { skip: { name: tasks[k].name, why: o.skip } } : { entry: o.entry }; });
+  const entries = [], skipped = [];
+  for (const s of slot) { if (s?.entry) entries.push(s.entry); else if (s?.skip) skipped.push(s.skip); }
   return { entries, skipped };
 }
 
@@ -229,7 +234,10 @@ function weaponTextureIndex(log) {
     let lib; try { lib = packTextures(fs.readFileSync(f), f); } catch { continue; }
     for (const st of lib.stems) (idx[st] ||= []).push(f);
   }
-  fs.writeFileSync(cache, JSON.stringify(idx));
+  // per-thread temp name, then rename: several pool workers can build the index at once
+  const tmp = `${cache}.${process.pid}.${threadId}`;
+  fs.writeFileSync(tmp, JSON.stringify(idx));
+  try { fs.renameSync(tmp, cache); } catch { fs.rmSync(tmp, { force: true }); } // another worker renamed the same index in first (Windows: EPERM)
   return new Map(Object.entries(idx));
 }
 
@@ -251,7 +259,7 @@ function skinTextures(skin, wanted) {
   return { map, client: CLIENTS.map((c) => c.key).sort((a, b) => n(b) - n(a))[0], from };
 }
 
-function exportWeapons({ only, maxTex, skins, dry, log }) {
+async function exportWeapons({ only, maxTex, skins, dry, log }) {
   const names = new Set();
   for (const c of CLIENTS) for (const f of fs.existsSync(c.pack) ? fs.readdirSync(c.pack) : []) {
     const m = f.match(/^Weapon_(.+)\.i3Pack$/i);
@@ -295,15 +303,14 @@ function exportWeapons({ only, maxTex, skins, dry, log }) {
     for (const n of cands) for (const c of CLIENTS) { const f = path.join(c.pack, `Weapon_${names.has(n) ? n : byNorm.get(norm(n)) || n}.i3Pack`); if (f !== exclude && fs.existsSync(f) && !out.includes(f)) out.push(f); }
     return out;
   };
-  let texIndex = null;
-  const skinJobs = [];
   // Packs whose item name does not match ItemStatistics.xml by name (checked by hand).
   const PACK_ITEM_OVERRIDES = { "Weapon_M-7Knife": 301001 /* ItemStatistics 301001 Name="M-7" */, "Weapon_L115A1_Gold": 105015 /* Name="L115A1 G" */ };
-  const entries = [], skipped = [], skinStats = { listed: 0, exported: 0, noTextures: [], shadowed: [] };
+  const entries = [], slot = [], members = [], skinStats = { listed: 0, exported: 0, noTextures: [], shadowed: [] };
+  // phase 1 (here, in target order): inspect each pack. slot[seq] = a skipped pack; members = the packs to export.
   const targets = [...names].filter((n) => !only || only.test(n) || only.test('Weapon_' + n)).sort();
-  for (const n of targets) {
+  targets.forEach((n, seq) => {
     const b = body(n);
-    if (!b.client) { if (!/no i3Body/.test(b.tried.cross || '') || Object.values(b.tried).some((r) => /keyed|parse/.test(r))) skipped.push({ pack: `Weapon_${n}`, why: b.tried }); continue; }
+    if (!b.client) { if (!/no i3Body/.test(b.tried.cross || '') || Object.values(b.tried).some((r) => /keyed|parse/.test(r))) slot[seq] = { skip: { pack: `Weapon_${n}`, why: b.tried } }; return; }
     // items whose model is this pack: own res name, or a skin name that is this (bodied) pack
     const own = (resOf.get(norm(n)) || []).filter((it) => (it.skin && norm(it.skin) === norm(n)) || (!it.skin || it.skin === it.res || !body(it.skin)?.client) && norm(it.res) === norm(n));
     const main = own.find((it) => norm(it.key) === norm(n) && (!it.skin || norm(it.skin) === norm(n))) || own.find((it) => !it.skin || norm(it.skin) === norm(n)) || own[0];
@@ -320,58 +327,50 @@ function exportWeapons({ only, maxTex, skins, dry, log }) {
     if (extra.classType == null && famClass.has(extra.family)) { extra.classType = famClass.get(extra.family); extra.classFrom = 'family'; }
     const kind = KIND[extra.classType] || 'unknown';
     skinStats.listed += skinItems.length;
-    if (dry) { log(`weapon ${pack} <- ${b.client.key} id=${id} kind=${kind} item=${extra.itemId} family=${extra.family} skins=${skinItems.length}`); entries.push({ id, kind, ...extra }); continue; }
+    if (dry) { log(`weapon ${pack} <- ${b.client.key} id=${id} kind=${kind} item=${extra.itemId} family=${extra.family} skins=${skinItems.length}`); entries.push({ id, kind, ...extra }); return; }
     // two packs can slug to the same id (AUG-A3_Blue / AUG_A3_Blue): keep the one with an item, then the preferred client
     // ... then the pack whose exact name is the item's _ResName / _ResName_I3S (AUG-A3_Blue vs AUG_A3_Blue), then the preferred client
     const rank = (extra.itemId ? 0 : 10) + (own.some((it) => it.res === n || it.skin === n) ? 0 : 5) + CLIENTS.indexOf(b.client);
-    const prev = entries.findIndex((e) => e.id === id);
-    if (prev >= 0 && entries[prev].rank <= rank) { (entries[prev].aliases ||= []).push(pack); continue; }
-    let texFallback = fallbackFiles(n, main?.res, path.join(b.client.pack, `${pack}.i3Pack`));
-    let e;
-    try {
-      e = exportWeapon({ pack, id, kind, packDir: b.client.pack, texFallback, extra }, { log, maxTex });
-      if (e.missingTextures.length) { // second pass: any weapon pack that carries the missing maps
-        const tidx = (texIndex ||= weaponTextureIndex(log));
-        const more = [...new Set(e.missingTextures.flatMap((st) => tidx.get(st) || []))].filter((f) => !texFallback.includes(f))
-          .sort((x, y) => CLIENTS.findIndex((c) => x.startsWith(c.pack)) - CLIENTS.findIndex((c) => y.startsWith(c.pack)));
-        if (more.length) { texFallback = [...texFallback, ...more]; e = exportWeapon({ pack, id, kind, packDir: b.client.pack, texFallback, extra }, { log, maxTex }); }
-      }
-    } catch (err) { skipped.push({ pack, why: err.message }); log(`weapon ${pack}: FAILED ${err.message}`); continue; }
-    Object.defineProperty(e, 'rank', { value: rank, enumerable: false });
-    if (prev >= 0) { e.aliases = [...(entries[prev].aliases || []), entries[prev].pack]; entries.splice(prev, 1); }
-    entries.push(e);
-    if (skins) skinJobs.push({ n, pack, id, kind, b, texFallback, extra, skinItems });
+    members.push({ seq, n, pack, id, kind, rank, packDir: b.client.pack, client: b.client.key, extra, skinItems, texFallback: fallbackFiles(n, main?.res, path.join(b.client.pack, `${pack}.i3Pack`)) });
+  });
+  // phase 2: models. One job per id: packs that share an id run in order inside their job, so the best-ranked pack keeps the id.
+  const byId = new Map();
+  for (const m of members) (byId.get(m.id) || byId.set(m.id, []).get(m.id)).push(m);
+  const gOut = await runPool('weaponGroup', [...byId.values()].map((ms) => ({ members: ms, maxTex })));
+  const memberOf = new Map(members.map((m) => [m.seq, m]));
+  const okTex = new Map(); // seq -> texFallback of every exported pack (its skins reuse it)
+  for (const g of gOut) {
+    if (g.win) entries.push(g.win);
+    for (const s of g.skipped) slot[s.seq] = { skip: s.skip };
+    for (const o of g.ok) okTex.set(o.seq, o.texFallback);
   }
-  // texture skins (after every model, so a model id always wins over a skin id): base geometry + the maps named by
-  // texture_change_Weapon.json
-  for (const { n, pack, id, kind, b, texFallback, extra, skinItems } of skinJobs) {
-    if (!entries.some((x) => x.id === id && x.pack === pack)) continue; // base lost an id clash
-    const tcKey = Object.keys(tc).find((k) => norm(k.split('/')[0]) === norm(n));
-    for (const s of [...new Map(skinItems.map((it) => [norm(it.skin), it])).values()]) {
-      // mapping lives under the base .I3S (named after the res, or another base such as Cheytac_M200 for Cheytac)
+  // phase 3: texture skins, after every model (a model id always wins over a skin id). One job per skin id, in order inside the job.
+  const winKeys = new Set(entries.map((e) => `${e.id}\0${e.pack}`)), modelIds = new Set(entries.map((e) => e.id));
+  const skinGroups = new Map();
+  let skinSeq = 0;
+  if (skins) for (const seq of [...okTex.keys()].sort((a, b) => a - b)) {
+    const m = memberOf.get(seq);
+    if (!winKeys.has(`${m.id}\0${m.pack}`)) continue; // base lost an id clash
+    // mapping lives under the base .I3S (named after the res, or another base such as Cheytac_M200 for Cheytac)
+    const tcKey = Object.keys(tc).find((k) => norm(k.split('/')[0]) === norm(m.n));
+    for (const s of [...new Map(m.skinItems.map((it) => [norm(it.skin), it])).values()]) {
       const skinOf = (k) => tc[k] && Object.keys(tc[k]).find((x) => norm(x) === norm(s.skin));
       const baseKey = skinOf(tcKey) ? tcKey : Object.keys(tc).find(skinOf);
       const lod0 = baseKey && tc[baseKey][skinOf(baseKey)]?.['LOD 0'];
       const wanted = lod0 ? Object.values(lod0).filter((v) => v && v !== '(null)').map((v) => stem(v)) : [];
-      // a packless skin (s.packless): no client ships its maps (no MedicalKit_PBNC6_*.i3i in any Cross pack), so it is the base
-      // model with the base maps [INFERIDO: the engine keeps the base texture when the changed .i3i is missing]
-      const lib = lod0 && (skinTextures(s.skin, wanted) || (s.packless ? { map: new Map(), client: b.client.key, from: {} } : null));
-      if (!lib) { skinStats.noTextures.push(s.skin); continue; }
-      const swap = new Map(Object.entries(lod0).filter(([, v]) => v && v !== '(null)').map(([k, v]) => [stem(k), lib.map.get(stem(v))]).filter(([, t]) => t));
-      if (![...swap.keys()].length && !s.packless) { skinStats.noTextures.push(s.skin); continue; }
       const sid = slug(s.skin);
-      // a bodied pack slugs to the same id (AUG-A3_Blue skin vs Weapon_AUG_A3_Blue model): the real model wins
-      if (entries.some((x) => x.id === sid)) { skinStats.shadowed.push(s.skin); continue; }
-      const sItems = skinItems.filter((it) => norm(it.skin) === norm(s.skin));
-      try {
-        const e = exportWeapon({ pack, id: sid, kind, packDir: b.client.pack, texFallback, texOverride: (p) => swap.get(stem(normPath(p))) || null,
-          extra: { ...extra, itemId: sItems[0].itemId, itemIds: sItems.map((it) => it.itemId), inServer: sItems.some((it) => it.inServer), items: undefined,
-            skinOf: id, skin: s.skin, skinClient: lib.client, skinVersion: CLIENTS.find((c) => c.key === lib.client)?.version, skinMapsFrom: new Set(Object.values(lib.from)).size > 1 ? lib.from : undefined, skinMaps: [...swap.keys()], skinMapsMissing: s.packless ? wanted : undefined } }, { log: () => {}, maxTex });
-        entries.push(e); skinStats.exported++;
-      } catch (err) { skinStats.noTextures.push(`${s.skin} (${err.message})`); }
+      if (!skinGroups.has(sid)) skinGroups.set(sid, { modelTaken: modelIds.has(sid), items: [] });
+      skinGroups.get(sid).items.push({ seq: skinSeq++, sid, skin: s.skin, packless: !!s.packless, lod0, wanted, pack: m.pack, id: m.id, kind: m.kind, packDir: m.packDir,
+        client: m.client, extra: m.extra, texFallback: okTex.get(seq), sItems: m.skinItems.filter((it) => norm(it.skin) === norm(s.skin)).map((it) => ({ itemId: it.itemId, inServer: it.inServer })) });
     }
   }
-  return { entries, skipped, skinStats };
+  const sOut = (await runPool('skinGroup', [...skinGroups.values()].map((g) => ({ ...g, maxTex })))).flat().sort((a, b) => a.seq - b.seq);
+  for (const r of sOut) {
+    if (r.status === 'exported') { entries.push(r.entry); skinStats.exported++; }
+    else if (r.status === 'shadowed') skinStats.shadowed.push(r.skin);
+    else skinStats.noTextures.push(r.text);
+  }
+  return { entries, skipped: slot.filter(Boolean).map((s) => s.skip), skinStats };
 }
 
 // ---- index + report -----------------------------------------------------------------------
@@ -389,7 +388,84 @@ function writeIndex(file, key, entries, replaceAll) {
 const dirBytes = (p) => !fs.existsSync(p) ? 0 : fs.statSync(p).isDirectory() ? fs.readdirSync(p).reduce((s, f) => s + dirBytes(path.join(p, f)), 0) : fs.statSync(p).size;
 const mb = (b) => +(b / 1048576).toFixed(1);
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+// ---- worker pool --------------------------------------------------------------------------
+// PB_JOBS worker threads (this file, see the bottom), default min(4, cores). A job is one plain-data task run by JOB[kind]; its log
+// lines come back with the result and print in task order, so the output reads like a serial run.
+const JOBS = Math.max(1, Math.floor(+process.env.PB_JOBS) || Math.min(4, os.availableParallelism()));
+function runPool(kind, tasks) {
+  return new Promise((resolve, reject) => {
+    if (!tasks.length) return resolve([]);
+    const out = new Array(tasks.length), workers = [];
+    let next = 0, done = 0, shown = 0;
+    const give = (w) => { if (next < tasks.length) w.postMessage({ i: next, kind, task: tasks[next++] }); };
+    const stop = () => { for (const w of workers) w.terminate(); };
+    for (let k = 0; k < Math.min(JOBS, tasks.length); k++) {
+      const w = new Worker(fileURLToPath(import.meta.url), { workerData: { batchPool: true }, argv: process.argv.slice(2) });
+      workers.push(w);
+      w.on('message', (m) => {
+        if (m.err) { stop(); return reject(new Error(m.err)); }
+        out[m.i] = m;
+        for (; shown < tasks.length && out[shown]; shown++) for (const line of out[shown].logs) console.log(line);
+        if (++done === tasks.length) { stop(); return resolve(out.map((x) => x.value)); }
+        give(w);
+      });
+      w.on('error', (err) => { stop(); reject(err); });
+      give(w);
+    }
+  });
+}
+
+// the jobs of runPool: run in a worker thread, so they see this module's tables (CLIENTS, KIND ...) as the parent does
+let texIndex = null; // weapon texture index, read once per worker
+const JOB = {
+  chara(t, log) {
+    try { return { entry: exportChara({ name: t.name, team: t.team, id: t.id, packDir: t.packDir, animDir: t.animDir, texFallback: t.texFallback, extra: t.extra }, { log, maxTex: t.maxTex }) }; }
+    catch (err) { log(`chara ${t.name}: FAILED ${err.stack}`); return { skip: err.message }; }
+  },
+  // members: the packs of one id in target order. win = the pack that keeps the id ({e, rank}); the others become its aliases.
+  weaponGroup({ members, maxTex }, log) {
+    let win = null;
+    const ok = [], skipped = [];
+    for (const m of members) {
+      if (win && win.rank <= m.rank) { (win.e.aliases ||= []).push(m.pack); continue; }
+      let e, texFallback = m.texFallback;
+      try {
+        e = exportWeapon({ pack: m.pack, id: m.id, kind: m.kind, packDir: m.packDir, texFallback, extra: m.extra }, { log, maxTex });
+        if (e.missingTextures.length) { // second pass: any weapon pack that carries the missing maps
+          texIndex ||= weaponTextureIndex(log);
+          const more = [...new Set(e.missingTextures.flatMap((st) => texIndex.get(st) || []))].filter((f) => !texFallback.includes(f))
+            .sort((x, y) => CLIENTS.findIndex((c) => x.startsWith(c.pack)) - CLIENTS.findIndex((c) => y.startsWith(c.pack)));
+          if (more.length) { texFallback = [...texFallback, ...more]; e = exportWeapon({ pack: m.pack, id: m.id, kind: m.kind, packDir: m.packDir, texFallback, extra: m.extra }, { log, maxTex }); }
+        }
+      } catch (err) { skipped.push({ seq: m.seq, skip: { pack: m.pack, why: err.message } }); log(`weapon ${m.pack}: FAILED ${err.message}`); continue; }
+      if (win) e.aliases = [...(win.e.aliases || []), win.e.pack];
+      win = { e, rank: m.rank };
+      ok.push({ seq: m.seq, texFallback });
+    }
+    return { win: win?.e ?? null, ok, skipped };
+  },
+  // one texture skin per job-item, in order: a skin id that a model or an earlier skin of this group took is shadowed
+  skinGroup({ modelTaken, items, maxTex }) {
+    let taken = modelTaken;
+    return items.map((k) => {
+      const lib = k.lod0 && (skinTextures(k.skin, k.wanted) || (k.packless ? { map: new Map(), client: k.client, from: {} } : null));
+      if (!lib) return { seq: k.seq, status: 'noTextures', text: k.skin };
+      const swap = new Map(Object.entries(k.lod0).filter(([, v]) => v && v !== '(null)').map(([kk, v]) => [stem(kk), lib.map.get(stem(v))]).filter(([, t]) => t));
+      if (![...swap.keys()].length && !k.packless) return { seq: k.seq, status: 'noTextures', text: k.skin };
+      if (taken) return { seq: k.seq, status: 'shadowed', skin: k.skin };
+      try {
+        const e = exportWeapon({ pack: k.pack, id: k.sid, kind: k.kind, packDir: k.packDir, texFallback: k.texFallback, texOverride: (p) => swap.get(stem(normPath(p))) || null,
+          extra: { ...k.extra, itemId: k.sItems[0].itemId, itemIds: k.sItems.map((it) => it.itemId), inServer: k.sItems.some((it) => it.inServer), items: undefined,
+            skinOf: k.id, skin: k.skin, skinClient: lib.client, skinVersion: CLIENTS.find((c) => c.key === lib.client)?.version, skinMapsFrom: new Set(Object.values(lib.from)).size > 1 ? lib.from : undefined,
+            skinMaps: [...swap.keys()], skinMapsMissing: k.packless ? k.wanted : undefined } }, { log: () => {}, maxTex });
+        taken = true;
+        return { seq: k.seq, status: 'exported', entry: e };
+      } catch (err) { return { seq: k.seq, status: 'noTextures', text: `${k.skin} (${err.message})` }; }
+    });
+  },
+};
+
+async function main() {
   const args = process.argv.slice(2);
   const opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
   const only = opt('--only') ? new RegExp(opt('--only'), 'i') : null;
@@ -404,7 +480,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   try { prevReport = JSON.parse(fs.readFileSync(repFile, 'utf8')); } catch { /* first run */ }
   const report = { ...prevReport, generated: new Date().toISOString(), maxTex, only: only?.source || null }; // chars / weapons sections kept from the last run of each
   if (doChars) {
-    const r = exportChars({ only, maxTex, embedClips: args.includes('--embed-clips'), dry, log });
+    const r = await exportChars({ only, maxTex, embedClips: args.includes('--embed-clips'), dry, log });
     if (only && !r.entries.length) log(`no character matches --only ${only.source}`);
     const idx = path.join(OUT, 'chars', 'index.json');
     const list = dry ? r.entries : writeIndex(idx, 'chars', r.entries, !only);
@@ -412,7 +488,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
       withItemId: list.filter((e) => e.itemId).length, bytesMB: dry ? 0 : mb(dirBytes(path.join(OUT, 'chars'))), byClient: Object.fromEntries(CLIENTS.map((c) => [c.key, list.filter((e) => e.client === c.key).length])), skipped: r.skipped };
   }
   if (doWeapons) {
-    const r = exportWeapons({ only, maxTex, skins: args.includes('--skins'), dry, log });
+    const r = await exportWeapons({ only, maxTex, skins: args.includes('--skins'), dry, log });
     if (only && !r.entries.length) log(`no weapon matches --only ${only.source}`);
     const idx = path.join(OUT, 'weapons', 'models', 'index.json');
     const list = dry ? r.entries : writeIndex(idx, 'weapons', r.entries, !only);
@@ -424,4 +500,16 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   if (!dry) { fs.mkdirSync(path.dirname(repFile), { recursive: true }); fs.writeFileSync(repFile, JSON.stringify(report, null, 1)); }
   const brief = JSON.parse(JSON.stringify(report, (k, v) => (['skipped', 'untextured', 'skinsWithoutTextures'].includes(k) && Array.isArray(v) ? `${v.length} (see report)` : v)));
   console.log(JSON.stringify(brief, null, 1), dry ? '' : `\nreport: ${rel(repFile)}`);
+}
+
+// main() runs in the parent only; in a worker (runPool) the JOB table answers the messages
+if (isMainThread && process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+
+// worker side of runPool: one job per message; the log lines travel back with the value (or the error)
+if (!isMainThread && workerData?.batchPool) {
+  parentPort.on('message', ({ i, kind, task }) => {
+    const logs = [], log = (...a) => logs.push(a.join(' '));
+    try { parentPort.postMessage({ i, logs, value: JOB[kind](task, log) }); }
+    catch (err) { parentPort.postMessage({ i, logs, err: err.stack || err.message }); }
+  });
 }

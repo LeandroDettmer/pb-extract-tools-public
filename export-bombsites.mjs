@@ -10,13 +10,13 @@
 // 4bba60 has no sqrt => 3D distance < 2 m) AND |d.y| < 0.2. A site at (0,0,0) is "not present" (0x76b570 tests all three components
 // against 0): the stage has no such area. (The reference server's MapStructure.xml has the same positions and its own "EveryWhere" rule.)
 // Each site is checked against the exported collision floor: `floorDy` = site Y - the closest upward-facing floor at its XZ.
-import { assetPath, extractedPath } from './lib/paths.mjs';
+import { assetPath, baseClient, pefDir } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const STAGE_CROSS = extractedPath('pef-cross', 'br', 'Stage.json'); // tools/pef/export-cross.mjs
+const STAGE_CROSS = pefDir('br', 'Stage.json'); // tools/pef/export-cross.mjs
 const MAPS = assetPath('maps');
-const OUT_DIR = assetPath('cross', 'maps');
+const OUT_DIR = assetPath(baseClient('cross'), 'maps');
 // Biolab and OldDock: Cross BombPosition_A is the same point for both (-14.4126, 7.4243, 34.4615), a copied value, so they
 // have no bomb mode (absent from bombsites.json; game.ts initBomb reads only this file, no server fallback) [INFERIDO]
 const NO_BOMB_MODE = ['Biolab', 'OldDock'];

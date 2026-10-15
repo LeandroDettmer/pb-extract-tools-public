@@ -20,7 +20,7 @@
 //   <dir>.glb    one animation-only GLB per clip folder (e.g. AssultRifle_AK47.glb): nodes = skeleton bone names,
 //                clips named by key "<Folder>/<Sub>/<Clip>" (path under Chara/<Name>/3PV/, no extension).
 // Tracks are the same bone-local TRS as model.glb (tools/export-anim.mjs addClips), so the clips bind to its bones.
-import { assetPath, clientPath } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPath } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -30,7 +30,7 @@ import { GLB, readGLB } from './i3r2/skin-glb.mjs';
 import { addClips } from './export-anim.mjs';
 import { pefById } from './pef-cross.mjs';
 
-const GAME = clientPath('cross'); // PBCross only: several clients were read before, now none (no fallback)
+const GAME = clientPath(baseClient('cross')); // Cross by default (--client <key> reads that client's chars); no fallback
 const ASSETS = assetPath();
 
 /**
@@ -96,7 +96,7 @@ export function resolve3pv(name = 'SWAT_Male') {
     return cands[0] ?? null;
   };
   const byId = pefById();
-  const catalog = JSON.parse(fs.readFileSync(path.join(ASSETS, 'cross/weapons/weapons.json'), 'utf8')).weapons;
+  const catalog = JSON.parse(fs.readFileSync(path.join(ASSETS, baseClient('cross'), 'weapons/weapons.json'), 'utf8')).weapons;
   const weapons = {}, names = {}, fallback = {}, zoomType = {}, unlinked = new Map();
   for (const w of catalog) {
     const p = byId.get(w.id);

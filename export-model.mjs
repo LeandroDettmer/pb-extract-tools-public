@@ -19,14 +19,16 @@
 // the barrel points +Z, the muzzle is the bone node "FXDummy" (listed as `muzzle` in index.json / extras).
 // Only plain IIA2 index arrays (key == 0) are exported; keyed geometries are skipped and counted.
 
-import { assetPath, clientPath, rel, baseClient } from './lib/paths.mjs';
+import { assetPath, clientPath, rel, baseClient, cachePath } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
+import { threadId } from 'node:worker_threads';
 import { scanI3R2 } from './i3r2/i3r2.mjs';
 import { mul } from './i3r2/scene.mjs';
 import { IDENTITY, invert, decompose, xformPoint, xformDir, readBody, readSkeleton, collectBodyMeshes, plainIndices, scanConvexHulls } from './i3r2/skin.mjs';
-import { GLB, checkGLB, textureLibrary, readI3IB, decodeI3IB, encodePNG, stem } from './i3r2/skin-glb.mjs';
+import { GLB, checkGLB, textureLibrary, readI3IB, decodeI3IB, encodePNG, PNG_LEVEL, stem } from './i3r2/skin-glb.mjs';
 import { parsePack, decodeContent } from './i3pack/unpack.mjs';
 import { charaClips, addClips } from './export-anim.mjs';
 import { ddsOf, hasAlphaFast } from './export-visual.mjs';
@@ -125,13 +127,37 @@ export function packTextures(d, source) {
 export function shrinkRGBA(rgba, w, h, max) {
   while (max && (w > max || h > max) && w > 1 && h > 1) {
     const nw = w >> 1, nh = h >> 1, out = Buffer.alloc(nw * nh * 4);
-    for (let y = 0; y < nh; y++) for (let x = 0; x < nw; x++) for (let k = 0; k < 4; k++) {
-      const i = (a, b) => rgba[((y * 2 + b) * w + x * 2 + a) * 4 + k];
-      out[(y * nw + x) * 4 + k] = (i(0, 0) + i(1, 0) + i(0, 1) + i(1, 1) + 2) >> 2;
+    for (let y = 0; y < nh; y++) for (let x = 0; x < nw; x++) {
+      const o0 = (y * 2 * w + x * 2) * 4, o1 = o0 + w * 4; // the 2x2 block: row 2y at o0, row 2y+1 at o1
+      for (let k = 0; k < 4; k++) out[(y * nw + x) * 4 + k] = (rgba[o0 + k] + rgba[o0 + 4 + k] + rgba[o1 + k] + rgba[o1 + 4 + k] + 2) >> 2;
     }
     rgba = out; w = nw; h = nh;
   }
   return { rgba, w, h };
+}
+
+// Decode + box-downscale + PNG of one texture, cached on disk (<extracted>/cache/tex) under a hash of the texels it comes from
+// and of every setting that changes the bytes (maxTex, opaque, PB_PNG_LEVEL). A hit returns the bytes the encoder wrote before.
+// Cache file = 1 byte hasAlpha, then the PNG.
+const texelBytes = (t) => (t.kind === 'raw' ? t.w * t.h * t.bpp : Math.max(1, (t.w + 3) >> 2) * Math.max(1, (t.h + 3) >> 2) * (t.kind === 'dxt1' ? 8 : 16));
+function encodeTexture(t, opaque, maxTex) {
+  const key = createHash('sha256').update(JSON.stringify([t.kind, t.w, t.h, t.bpp ?? 0, t.format, maxTex, opaque, PNG_LEVEL]))
+    .update(t.buf.subarray(t.data, t.data + texelBytes(t))).digest('hex');
+  const file = cachePath('tex', key + '.bin');
+  try {
+    const hit = fs.readFileSync(file);
+    return { png: hit.subarray(1), hasAlpha: hit[0] === 1 };
+  } catch { /* miss: decode and encode below */ }
+  const sh = shrinkRGBA(decodeI3IB(t.buf, t), t.w, t.h, maxTex);
+  let minA = 255;
+  if (!opaque) for (let i = 3; i < sh.rgba.length; i += 4) if (sh.rgba[i] < minA) minA = sh.rgba[i];
+  const hasAlpha = minA < 250;
+  const png = encodePNG(sh.rgba, sh.w, sh.h, hasAlpha);
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  const tmp = `${file}.${process.pid}.${threadId}`; // workers can race on one key: each writes its own tmp
+  fs.writeFileSync(tmp, Buffer.concat([Buffer.from([hasAlpha ? 1 : 0]), png]));
+  try { fs.renameSync(tmp, file); } catch { fs.rmSync(tmp, { force: true }); } // same key = same bytes: keep the file another worker renamed in (Windows: EPERM)
+  return { png, hasAlpha };
 }
 
 // Texture of an attr-state entry (i3TextureBindAttr / i3NormalMapBindAttr ...) -> I3IB or null.
@@ -173,11 +199,9 @@ export function materialFactory(G, P, texDir, texUri) {
         if (dds) fs.writeFileSync(path.join(texDir, name + '.dds'), dds);
         fs.writeFileSync(path.join(texDir, name + '.png'), Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])); // placeholder: checkGLB only wants the file to exist (temp dir)
       } else {
-        const sh = shrinkRGBA(decodeI3IB(t.buf, t), t.w, t.h, P.maxTex);
-        let minA = 255;
-        if (!opaque) for (let i = 3; i < sh.rgba.length; i += 4) if (sh.rgba[i] < minA) minA = sh.rgba[i];
-        hasAlpha = minA < 250;
-        fs.writeFileSync(path.join(texDir, name + '.png'), encodePNG(sh.rgba, sh.w, sh.h, hasAlpha));
+        const enc = encodeTexture(t, opaque, P.maxTex);
+        hasAlpha = enc.hasAlpha;
+        fs.writeFileSync(path.join(texDir, name + '.png'), enc.png);
       }
       const uri = `${texUri}/${encodeURIComponent(name)}.png`;
       if (asExtra) r = { uri, hasAlpha };

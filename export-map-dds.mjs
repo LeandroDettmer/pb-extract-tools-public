@@ -6,7 +6,7 @@
 //
 // Pack source: visual.json.source in Clients/PBCross/Pack (the only map client). A map is
 // accepted only when the image names, the texture count, the PNG dimensions AND the alpha flags match what is on disk; otherwise its .dds files are removed.
-import { assetPath, clientPath } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPath } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,14 +15,14 @@ import os from 'node:os';
 import { exportVisual } from './export-visual.mjs';
 
 const ROOT = assetPath('maps');
-const PACKS = [clientPath('cross', 'Pack')];
+const PACKS = [clientPath(baseClient('cross'), 'Pack')];
 
 const CHILD = process.env.DDS_CHILD === '1';
 const dirs = process.argv.length > 2 ? process.argv.slice(2)
   : fs.readdirSync(ROOT).filter((n) => fs.existsSync(path.join(ROOT, n, 'visual.json')));
-// No args: one child process per map (the work is CPU-bound JS), a few at a time.
+// No args: one child process per map (the work is CPU-bound JS), PB_JOBS at a time (default min(4, cores - 2)).
 if (!CHILD && process.argv.length <= 2) {
-  const queue = [...dirs], par = Math.max(1, Math.min(4, os.cpus().length - 2));
+  const queue = [...dirs], par = Number(process.env.PB_JOBS) || Math.max(1, Math.min(4, os.cpus().length - 2));
   let dds = 0, png = 0, bytes = 0, skipped = 0;
   const run = () => new Promise((res) => {
     const d = queue.shift();

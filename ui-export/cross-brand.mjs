@@ -9,13 +9,13 @@
 //   (ID / PASSWORD fields) is baked into it; the web login form sits over those fields.
 import fs from 'node:fs';
 import path from 'node:path';
-import { clientPath, assetPath } from '../lib/paths.mjs';
+import { assetPath, baseClient, clientPath } from '../lib/paths.mjs';
 import { parsePack, carveNamed, decodeContent } from '../i3pack/unpack.mjs';
 import { readI3IB, decodeI3IB, encodePNG } from '../i3r2/skin-glb.mjs';
 
-const EXE = clientPath('cross', 'PointBlank.exe');
-const PACK = clientPath('cross', 'Pack', 'UI_Loading.i3Pack');
-const OUT = assetPath('ui', 'cross', 'brand');
+const EXE = clientPath(baseClient('cross'), 'PointBlank.exe');
+const PACK = clientPath(baseClient('cross'), 'Pack', 'UI_Loading.i3Pack');
+const OUT = assetPath('ui', baseClient('cross'), 'brand');
 const LOGIN_TEX = /^Login\.i3i$/i;
 // [x0, y0, x1, y1] of the wordmark in the 1024 x 1024 login texture (login art: wordmark at the bottom of the picture)
 const LOGO_BOX = [262, 620, 836, 704];

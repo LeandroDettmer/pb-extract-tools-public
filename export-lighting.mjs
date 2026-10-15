@@ -25,14 +25,14 @@
 //            with an RGBA colour per triangle. Characters query it with a sphere every 0.033 s and use
 //            avg(rgb * 2 / 255) as their material diffuse (exe 0x821e50 -> 0x821ae0 i3MaterialAttr::GetDiffuse).
 
-import { assetPath, clientPath, extractedPath, rel } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPath, pefDir, rel } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readI3R2, scanI3R2 } from './i3r2/i3r2.mjs';
 import { parsePack, decodeContent } from './i3pack/unpack.mjs';
 
-const CROSS = clientPath('cross', 'Pack');
+const CROSS = clientPath(baseClient('cross'), 'Pack');
 const MAPS_DIR = assetPath('maps');
 
 // Stage.pef key when it differs from the pack name beyond case.
@@ -200,7 +200,7 @@ function readLightVolume(files, pack) {
 }
 
 export function exportLighting(mapId, { outRoot = assetPath('maps'), log = console.log } = {}) {
-  const stageAll = JSON.parse(fs.readFileSync(extractedPath('pef-cross', 'br', 'Stage.json'), 'utf8')).Stage;
+  const stageAll = JSON.parse(fs.readFileSync(pefDir('br', 'Stage.json'), 'utf8')).Stage;
   const m = resolveMap(mapId, stageAll);
   const st = m.stage && stageAll[m.stage];
   // DeadTown has a map pack but no Cross Stage.pef entry. Cross exe (PointBlank.exe, CStageBattle::LoadProperties 0x759920):

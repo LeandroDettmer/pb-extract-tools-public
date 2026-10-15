@@ -5,14 +5,14 @@
 // The node index has names but no offsets, and the next-magic split of carve() would stop at the 2nd "OggS" page,
 // so each Ogg is walked page by page (oggStreams, i3pack/unpack.mjs) from its BOS page to its EOS page; the k-th Ogg name of the node is the k-th stream.
 // Sound/BackGround/Menu_BGM.ogg is loose in the client but no string in the exe names it: not exported.
-import { assetPath, clientPath } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPath } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { oggStreams, parsePack } from './i3pack/unpack.mjs';
 
-const PACK = clientPath('cross', 'Pack', 'Sound_UI.i3Pack');
-const OUT = assetPath('sfx', 'cross');
+const PACK = clientPath(baseClient('cross'), 'Pack', 'Sound_UI.i3Pack');
+const OUT = assetPath('sfx', baseClient('cross'));
 
 fs.mkdirSync(OUT, { recursive: true });
 const d = fs.readFileSync(PACK);
@@ -30,6 +30,6 @@ for (const node of parsePack(d).nodes) {
 }
 if (!found.length) throw new Error(`no PB_BGM_NO*.ogg in ${PACK}`);
 // Sound/BackGround/Menu_BGM.ogg: the loose 1:08 menu track (same file in Cross / 3.123 / RUSSIA), user-confirmed lobby music
-fs.copyFileSync(clientPath('cross', 'Sound', 'BackGround', 'Menu_BGM.ogg'), path.join(OUT, 'Menu_BGM.ogg'));
+fs.copyFileSync(clientPath(baseClient('cross'), 'Sound', 'BackGround', 'Menu_BGM.ogg'), path.join(OUT, 'Menu_BGM.ogg'));
 found.push('Menu_BGM.ogg');
 console.log(`cross bgm: ${found.join(', ')} -> ${OUT}`);

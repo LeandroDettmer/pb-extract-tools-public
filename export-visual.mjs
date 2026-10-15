@@ -28,10 +28,12 @@
 import { assetPath, clientPath, baseClient } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
-import zlib from 'node:zlib';
+
 import { fileURLToPath } from 'node:url';
 import { scanI3R2 } from './i3r2/i3r2.mjs';
 import { collectMeshes, meshIndices } from './i3r2/scene.mjs';
+// decodeI3IB and encodePNG: shared with the model exporters (i3r2/skin-glb.mjs), same bytes
+import { decodeI3IB, encodePNG } from './i3r2/skin-glb.mjs';
 
 
 // ---- I3IB textures ------------------------------------------------------------------------
@@ -56,59 +58,6 @@ function readI3IB(d, o, end = d.length) {
     if (![3, 4].includes(bpp)) return { w, h, format, kind: 'unsupported', srcPath, data };
   }
   return { w, h, format, kind, bpp, mips, srcPath, data, off: o };
-}
-
-const c565 = (c) => [((c >> 11) & 31) * 255 / 31, ((c >> 5) & 63) * 255 / 63, (c & 31) * 255 / 31];
-
-function decodeI3IB(d, t) {
-  const { w, h } = t;
-  const out = Buffer.alloc(w * h * 4);
-  if (t.kind === 'raw') {
-    for (let i = 0; i < w * h; i++) {
-      const s = t.data + i * t.bpp;
-      out[i * 4] = d[s + 2]; out[i * 4 + 1] = d[s + 1]; out[i * 4 + 2] = d[s];
-      out[i * 4 + 3] = t.bpp === 4 ? d[s + 3] : 255;
-    }
-    return out;
-  }
-  const bw = Math.max(1, (w + 3) >> 2), bh = Math.max(1, (h + 3) >> 2);
-  const bsz = t.kind === 'dxt1' ? 8 : 16;
-  const pal = new Array(4), alpha = new Array(16), av = new Array(8);
-  for (let by = 0; by < bh; by++) for (let bx = 0; bx < bw; bx++) {
-    let b = t.data + (by * bw + bx) * bsz;
-    if (t.kind === 'dxt3') {
-      for (let i = 0; i < 16; i++) alpha[i] = ((d[b + (i >> 1)] >> ((i & 1) * 4)) & 15) * 17;
-      b += 8;
-    } else if (t.kind === 'dxt5') {
-      const a0 = d[b], a1 = d[b + 1];
-      av[0] = a0; av[1] = a1;
-      if (a0 > a1) for (let i = 1; i < 7; i++) av[i + 1] = ((7 - i) * a0 + i * a1) / 7;
-      else { for (let i = 1; i < 5; i++) av[i + 1] = ((5 - i) * a0 + i * a1) / 5; av[6] = 0; av[7] = 255; }
-      let bits = 0n;
-      for (let i = 0; i < 6; i++) bits |= BigInt(d[b + 2 + i]) << BigInt(8 * i);
-      for (let i = 0; i < 16; i++) alpha[i] = av[Number((bits >> BigInt(3 * i)) & 7n)];
-      b += 8;
-    }
-    const c0 = d.readUInt16LE(b), c1 = d.readUInt16LE(b + 2);
-    const p0 = c565(c0), p1 = c565(c1);
-    pal[0] = [...p0, 255]; pal[1] = [...p1, 255];
-    if (c0 > c1 || t.kind !== 'dxt1') {
-      pal[2] = [0, 1, 2].map((k) => (2 * p0[k] + p1[k]) / 3).concat(255);
-      pal[3] = [0, 1, 2].map((k) => (p0[k] + 2 * p1[k]) / 3).concat(255);
-    } else {
-      pal[2] = [0, 1, 2].map((k) => (p0[k] + p1[k]) / 2).concat(255);
-      pal[3] = [0, 0, 0, 0];
-    }
-    const idx = d.readUInt32LE(b + 4);
-    for (let i = 0; i < 16; i++) {
-      const x = bx * 4 + (i & 3), y = by * 4 + (i >> 2);
-      if (x >= w || y >= h) continue;
-      const c = pal[(idx >>> (2 * i)) & 3], o = (y * w + x) * 4;
-      out[o] = c[0]; out[o + 1] = c[1]; out[o + 2] = c[2];
-      out[o + 3] = t.kind === 'dxt1' ? c[3] : alpha[i];
-    }
-  }
-  return out;
 }
 
 // hasAlpha (min alpha of mip 0 < 250) without decoding colours: same answer as decodeI3IB, ~100x faster.
@@ -163,37 +112,6 @@ export function ddsOf(d, t, hasAlpha) {
   h.writeUInt32LE(32, 76); h.writeUInt32LE(0x4 | (hasAlpha ? 0x1 : 0), 80); h.write(fcc, 84, 'latin1');
   h.writeUInt32LE(0x401008, 108);
   return Buffer.concat([h, d.subarray(t.data, t.data + total)]);
-}
-
-// ---- PNG (zlib from node, own CRC) --------------------------------------------------------
-const CRC_TABLE = new Uint32Array(256).map((_, n) => {
-  let c = n;
-  for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
-  return c >>> 0;
-});
-function crc32(buf) {
-  let c = 0xffffffff;
-  for (let i = 0; i < buf.length; i++) c = CRC_TABLE[(c ^ buf[i]) & 0xff] ^ (c >>> 8);
-  return (c ^ 0xffffffff) >>> 0;
-}
-function pngChunk(type, data) {
-  const len = Buffer.alloc(4); len.writeUInt32BE(data.length);
-  const td = Buffer.concat([Buffer.from(type, 'latin1'), data]);
-  const crc = Buffer.alloc(4); crc.writeUInt32BE(crc32(td));
-  return Buffer.concat([len, td, crc]);
-}
-function encodePNG(rgba, w, h, withAlpha) {
-  const ch = withAlpha ? 4 : 3, row = w * ch + 1;
-  const raw = Buffer.alloc(row * h);
-  for (let y = 0; y < h; y++) {
-    raw[y * row] = 0;
-    for (let x = 0; x < w; x++) for (let k = 0; k < ch; k++) raw[y * row + 1 + x * ch + k] = rgba[(y * w + x) * 4 + k];
-  }
-  const ihdr = Buffer.alloc(13);
-  ihdr.writeUInt32BE(w, 0); ihdr.writeUInt32BE(h, 4);
-  ihdr[8] = 8; ihdr[9] = withAlpha ? 6 : 2; ihdr[10] = 0; ihdr[11] = 0; ihdr[12] = 0;
-  return Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), pngChunk('IHDR', ihdr),
-    pngChunk('IDAT', zlib.deflateSync(raw, { level: 9 })), pngChunk('IEND', Buffer.alloc(0))]);
 }
 
 // ---- texture library ------------------------------------------------------------------------

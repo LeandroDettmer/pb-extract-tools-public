@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
+import { fail } from '../lib/paths.mjs';
 
 // ---- I3IB textures ------------------------------------------------------------------------
 export function readI3IB(d, o, end = d.length) {
@@ -29,7 +30,13 @@ export function readI3IB(d, o, end = d.length) {
   return { w, h, format, kind, bpp, mips, srcPath, data, off: o };
 }
 
-const c565 = (c) => [((c >> 11) & 31) * 255 / 31, ((c >> 5) & 63) * 255 / 63, (c & 31) * 255 / 31];
+// Palette (4 x RGBA), block alpha and the 16 alpha values live in these typed arrays: no allocation per 4x4 block.
+// Same float math as the first version, so the decoded bytes do not change.
+const PAL = new Float64Array(16), ALPHA = new Float64Array(16), AV = new Float64Array(8);
+// 565 colour -> PAL[o..o+2], alpha 255 at PAL[o+3]
+function c565Into(c, o) {
+  PAL[o] = ((c >> 11) & 31) * 255 / 31; PAL[o + 1] = ((c >> 5) & 63) * 255 / 63; PAL[o + 2] = (c & 31) * 255 / 31; PAL[o + 3] = 255;
+}
 
 export function decodeI3IB(d, t) {
   const { w, h } = t;
@@ -44,58 +51,60 @@ export function decodeI3IB(d, t) {
   }
   const bw = Math.max(1, (w + 3) >> 2), bh = Math.max(1, (h + 3) >> 2);
   const bsz = t.kind === 'dxt1' ? 8 : 16;
-  const pal = new Array(4), alpha = new Array(16), av = new Array(8);
   for (let by = 0; by < bh; by++) for (let bx = 0; bx < bw; bx++) {
     let b = t.data + (by * bw + bx) * bsz;
     if (t.kind === 'dxt3') {
-      for (let i = 0; i < 16; i++) alpha[i] = ((d[b + (i >> 1)] >> ((i & 1) * 4)) & 15) * 17;
+      for (let i = 0; i < 16; i++) ALPHA[i] = ((d[b + (i >> 1)] >> ((i & 1) * 4)) & 15) * 17;
       b += 8;
     } else if (t.kind === 'dxt5') {
       const a0 = d[b], a1 = d[b + 1];
-      av[0] = a0; av[1] = a1;
-      if (a0 > a1) for (let i = 1; i < 7; i++) av[i + 1] = ((7 - i) * a0 + i * a1) / 7;
-      else { for (let i = 1; i < 5; i++) av[i + 1] = ((5 - i) * a0 + i * a1) / 5; av[6] = 0; av[7] = 255; }
-      let bits = 0n;
-      for (let i = 0; i < 6; i++) bits |= BigInt(d[b + 2 + i]) << BigInt(8 * i);
-      for (let i = 0; i < 16; i++) alpha[i] = av[Number((bits >> BigInt(3 * i)) & 7n)];
+      AV[0] = a0; AV[1] = a1;
+      if (a0 > a1) for (let i = 1; i < 7; i++) AV[i + 1] = ((7 - i) * a0 + i * a1) / 7;
+      else { for (let i = 1; i < 5; i++) AV[i + 1] = ((5 - i) * a0 + i * a1) / 5; AV[6] = 0; AV[7] = 255; }
+      // 16 three-bit indices = 48 bits: a double holds that exactly (below 2^53), so no BigInt per texel
+      let bits = 0;
+      for (let i = 0; i < 6; i++) bits += d[b + 2 + i] * 2 ** (8 * i);
+      for (let i = 0; i < 16; i++) ALPHA[i] = AV[Math.floor(bits / 2 ** (3 * i)) & 7];
       b += 8;
     }
     const c0 = d.readUInt16LE(b), c1 = d.readUInt16LE(b + 2);
-    const p0 = c565(c0), p1 = c565(c1);
-    pal[0] = [...p0, 255]; pal[1] = [...p1, 255];
+    c565Into(c0, 0); c565Into(c1, 4);
     if (c0 > c1 || t.kind !== 'dxt1') {
-      pal[2] = [0, 1, 2].map((k) => (2 * p0[k] + p1[k]) / 3).concat(255);
-      pal[3] = [0, 1, 2].map((k) => (p0[k] + 2 * p1[k]) / 3).concat(255);
+      for (let k = 0; k < 3; k++) {
+        PAL[8 + k] = (2 * PAL[k] + PAL[4 + k]) / 3;
+        PAL[12 + k] = (PAL[k] + 2 * PAL[4 + k]) / 3;
+      }
+      PAL[11] = 255; PAL[15] = 255;
     } else {
-      pal[2] = [0, 1, 2].map((k) => (p0[k] + p1[k]) / 2).concat(255);
-      pal[3] = [0, 0, 0, 0];
+      for (let k = 0; k < 3; k++) PAL[8 + k] = (PAL[k] + PAL[4 + k]) / 2;
+      PAL[11] = 255; PAL[12] = 0; PAL[13] = 0; PAL[14] = 0; PAL[15] = 0;
     }
     const idx = d.readUInt32LE(b + 4);
     for (let i = 0; i < 16; i++) {
       const x = bx * 4 + (i & 3), y = by * 4 + (i >> 2);
       if (x >= w || y >= h) continue;
-      const c = pal[(idx >>> (2 * i)) & 3], o = (y * w + x) * 4;
-      out[o] = c[0]; out[o + 1] = c[1]; out[o + 2] = c[2];
-      out[o + 3] = t.kind === 'dxt1' ? c[3] : alpha[i];
+      const c = ((idx >>> (2 * i)) & 3) * 4, o = (y * w + x) * 4;
+      out[o] = PAL[c]; out[o + 1] = PAL[c + 1]; out[o + 2] = PAL[c + 2];
+      out[o + 3] = t.kind === 'dxt1' ? PAL[c + 3] : ALPHA[i];
     }
   }
   return out;
 }
 
-const CRC_TABLE = new Uint32Array(256).map((_, n) => {
-  let c = n;
-  for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
-  return c >>> 0;
-});
-function crc32(buf) {
-  let c = 0xffffffff;
-  for (let i = 0; i < buf.length; i++) c = CRC_TABLE[(c ^ buf[i]) & 0xff] ^ (c >>> 8);
-  return (c ^ 0xffffffff) >>> 0;
+// zlib level of the IDAT stream. 9 = the default, the bytes every earlier run wrote. PB_PNG_LEVEL=0-8 is faster for 6 and
+// gives other, slightly bigger bytes: a sha of the PNGs then differs from the default.
+export const PNG_LEVEL = pngLevel();
+function pngLevel() {
+  const v = process.env.PB_PNG_LEVEL;
+  if (v === undefined || v === '') return 9;
+  const n = Number(v);
+  if (!Number.isInteger(n) || n < 0 || n > 9) fail(`PB_PNG_LEVEL must be an integer 0-9, got "${v}"`);
+  return n;
 }
 function pngChunk(type, data) {
   const len = Buffer.alloc(4); len.writeUInt32BE(data.length);
   const td = Buffer.concat([Buffer.from(type, 'latin1'), data]);
-  const crc = Buffer.alloc(4); crc.writeUInt32BE(crc32(td));
+  const crc = Buffer.alloc(4); crc.writeUInt32BE(zlib.crc32(td)); // node >= 22.2: same CRC-32 as the table version it replaces
   return Buffer.concat([len, td, crc]);
 }
 export function encodePNG(rgba, w, h, withAlpha) {
@@ -103,13 +112,14 @@ export function encodePNG(rgba, w, h, withAlpha) {
   const raw = Buffer.alloc(row * h);
   for (let y = 0; y < h; y++) {
     raw[y * row] = 0;
-    for (let x = 0; x < w; x++) for (let k = 0; k < ch; k++) raw[y * row + 1 + x * ch + k] = rgba[(y * w + x) * 4 + k];
+    if (withAlpha) raw.set(rgba.subarray(y * w * 4, (y + 1) * w * 4), y * row + 1); // RGBA row is already the PNG row
+    else for (let x = 0; x < w; x++) for (let k = 0; k < ch; k++) raw[y * row + 1 + x * ch + k] = rgba[(y * w + x) * 4 + k];
   }
   const ihdr = Buffer.alloc(13);
   ihdr.writeUInt32BE(w, 0); ihdr.writeUInt32BE(h, 4);
   ihdr[8] = 8; ihdr[9] = withAlpha ? 6 : 2;
   return Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), pngChunk('IHDR', ihdr),
-    pngChunk('IDAT', zlib.deflateSync(raw, { level: 9 })), pngChunk('IEND', Buffer.alloc(0))]);
+    pngChunk('IDAT', zlib.deflateSync(raw, { level: PNG_LEVEL })), pngChunk('IEND', Buffer.alloc(0))]);
 }
 
 export const normPath = (p) => p.replace(/\\/g, '/').toLowerCase();

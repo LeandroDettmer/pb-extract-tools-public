@@ -22,14 +22,14 @@
 // 0x60a950 reads both (src/weapons/penetration.ts). The pack is looked up by collision.json `source` in Clients/<client>/Pack
 // and kept only when its shape list matches collision.json shapes[] (same order / NXS part split as export-collision.mjs).
 
-import { assetPath, sourcePath } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPathOpt } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parsePack, readI3R2Header } from './i3pack/unpack.mjs';
 
-// export-collision.mjs reads the Cross Pack (the only map client)
-const PACK_DIRS = [sourcePath('PBCross/Pack')].filter(Boolean);
+// export-collision.mjs reads the base client Pack (Cross by default). Folder missing: clientPathOpt gives null, the list is empty
+const PACK_DIRS = [clientPathOpt(baseClient('cross'), 'Pack')].filter(Boolean);
 const argv = process.argv.slice(2);
 const rootAt = argv.indexOf('--maps-root');
 const MAPS_ROOT = rootAt >= 0 ? path.resolve(argv.splice(rootAt, 2)[1]) : assetPath('maps');

@@ -21,15 +21,15 @@
 //    what usf::GetItemName 0x809670 shows): type = id / 100000000 (0x80a360: 1-9 weapon, 10-11 character / part); weapon class = id % 1000000 / 1000,
 //    number = id % 1000 (0x808f20); part kind = id % 100000000 / 1000000, number (pef _Type) = id % 1000
 //    (CharaInfoDataBase 0x69fbc0: 2 head, 3 beret, 4 / 5 the lists at +0x80 / +0x8c).
-import { assetPath, extractedPath, generatedPath, serverPath, webPath } from './lib/paths.mjs';
+import { assetPath, generatedPath, pefDir, serverPath, webPath } from './lib/paths.mjs';
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { readStringTable } from "./ui-export/ui-strings.mjs";
 
-const quest = JSON.parse(readFileSync(extractedPath('pef-cross', 'br', 'Quest.json'), "utf8")).Quest;
+const quest = JSON.parse(readFileSync(pefDir('br', 'Quest.json'), "utf8")).Quest;
 const MQF_DIR = serverPath('runtime', 'Data', 'Missions');
-const equipPef = JSON.parse(readFileSync(extractedPath('pef-cross', 'br', 'Equipment.json'), "utf8")).Equipment;
+const equipPef = JSON.parse(readFileSync(pefDir('br', 'Equipment.json'), "utf8")).Equipment;
 const clientItems = JSON.parse(readFileSync(assetPath('ui', 'strings', 'items.pt-BR.json'), "utf8"));
 const equipIndex = JSON.parse(readFileSync(assetPath('equip', 'index.json'), "utf8"));
 const serverNames = JSON.parse(readFileSync(webPath("src/lobby/state/data/itemNames.json"), "utf8")).names;

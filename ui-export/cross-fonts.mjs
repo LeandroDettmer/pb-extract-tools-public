@@ -14,7 +14,7 @@
 // Every other text uses the default font "Arial" (0x4ada40, set by 0x69e830 -> SetDefaultFont 0x4ada60; i3Gui:
 // i3Language::GetDefaultFontName(1252) = "Arial", i3BaseDx_Cli 0x10019ad9): a Windows system font, not a client file.
 import fs from 'node:fs';
-import { assetPath, clientPath, rel } from '../lib/paths.mjs';
+import { assetPath, baseClient, clientPath, rel } from '../lib/paths.mjs';
 
 const FILES = [{ file: 'Gunplay.ttf', face: 'Gunplay' }];
 
@@ -38,7 +38,7 @@ function familyName(buf) {
 const out = assetPath('ui', 'fonts');
 fs.mkdirSync(out, { recursive: true });
 for (const { file, face } of FILES) {
-  const src = clientPath('cross', 'Font', file), buf = fs.readFileSync(src), fam = familyName(buf);
+  const src = clientPath(baseClient('cross'), 'Font', file), buf = fs.readFileSync(src), fam = familyName(buf);
   if (fam !== face) throw new Error(`${file}: family "${fam}", expected "${face}"`);
   fs.writeFileSync(`${out}/${file}`, buf);
   console.log(`${rel(src)} -> ${rel(`${out}/${file}`)} (${buf.length} B, face ${fam})`);

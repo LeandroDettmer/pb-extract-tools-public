@@ -4,12 +4,12 @@
 // DesignationValue effect values), system_titles (requirements the server-ts handleTitleChange checks): --server
 // old/runtime/db-init/022_migration_system_titles_20260725.sql (private layout) or db/init/001_init.sql (public layout). Tree: PBCross UI_Project_Profile Designation_Tree_Slot<N>; the Cross exe
 // links slot N to the DesignationSet whose _Type-set index is N (profile.ts nodeTitle), so TREE_NODES needs no layout file.
-import { TOOLS, extractedPath, generatedPath, oldServerPathOpt, dbInitPath } from './lib/paths.mjs';
+import { TOOLS, generatedPath, oldServerPathOpt, dbInitPath, pefDir } from './lib/paths.mjs';
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-const pef = JSON.parse(readFileSync(extractedPath('pef-cross', 'br', 'DesignationValue.json'), "utf8"));
+const pef = JSON.parse(readFileSync(pefDir('br', 'DesignationValue.json'), "utf8"));
 const migration = oldServerPathOpt("runtime", "db-init", "022_migration_system_titles_20260725.sql");
 const sql = readFileSync(migration && existsSync(migration) ? migration : dbInitPath("001_init.sql"), "utf8");
 // 022: INSERT tuples. 001 (pg_dump): tab-separated COPY rows, turned into the same "(a, b, ...)" tuples

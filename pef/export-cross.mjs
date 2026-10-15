@@ -19,15 +19,18 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parsePack, decodeContent } from '../i3pack/unpack.mjs';
 import { parsePef, resolveNation } from './extract-config.mjs';
-import { assetPath, clientPath, extractedPath, serverPathOpt } from '../lib/paths.mjs';
+import { assetPath, baseClient, clientPath, pefDir, serverPathOpt } from '../lib/paths.mjs';
 
 const args = process.argv.slice(2);
 const ni = args.indexOf('--nation');
 const NATION = ni >= 0 ? +args.splice(ni, 2)[1] : 1;
 const dryRun = args.includes('--dry-run');
-const PACK = args.find(a => !a.startsWith('--')) || clientPath('cross', 'Pack', 'Script.i3Pack');
-const OUT = extractedPath('pef-cross', 'br');
-const CONFIG_OUT = assetPath('cross', 'config');
+// the client whose Script.i3Pack is read and whose pef-<key> / out/<key> folders are written. cross by default; [INFERIDO] other clients use the same Config/*.pef reader
+const KEY = baseClient('cross');
+// skip the value of --client <key> (it is not a pack path)
+const PACK = args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--client') || clientPath(KEY, 'Pack', 'Script.i3Pack');
+const OUT = pefDir('br');
+const CONFIG_OUT = assetPath(KEY, 'config');
 const CHARA_HEALTH = serverPathOpt('runtime', 'Data', 'Match', 'CharaHealth.xml');
 
 /** Config/*.pef of the Cross Script pack: { name, json } (json = nation-resolved, the same tree as pef2017/br). */

@@ -14,14 +14,14 @@
 // Counts: ConfigEx.pef `CustomClanMarkContentCount` / `CustomClanMarkFrameCount` (i3RegArray, slot 1 = Brazil):
 //   content 81 (nations with the 3rd filled page: 181), frame 27. Palettes: exe VA 0xb2cc20 (user, 11 x RGBA),
 //   0xb2cc4c (layer 0, shape), 0xb2cc78 (layer 1, back). Values read from PointBlank.exe Cross .rdata (file = VA - 0x401600).
-import { assetPath, clientPath, rel } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPath, rel } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readI3IB, decodeI3IB, encodePNG } from './i3r2/skin-glb.mjs';
 
 const OUT = assetPath('ui', 'clanmark');
-const EXE = clientPath('cross', 'PointBlank.exe');
+const EXE = clientPath(baseClient('cross'), 'PointBlank.exe');
 
 const CONTENT_ORDER = ['Medium_Filled_01', 'Medium_Filled_02', 'Medium_Filled_03', 'Medium_Outline_01', 'Medium_Outline_02', 'Medium_Outline_03',
   'Small_Filled_01', 'Small_Filled_02', 'Small_Filled_03', 'Small_Outline_01', 'Small_Outline_02', 'Small_Outline_03'];
@@ -58,8 +58,8 @@ function palettes() {
 }
 
 fs.mkdirSync(OUT, { recursive: true });
-const contents = texturesOf(clientPath('cross', 'Pack', 'Chara_ClanMarkContents.i3Pack'));
-const frames = texturesOf(clientPath('cross', 'Pack', 'Chara_ClanMarkFrames.i3Pack'));
+const contents = texturesOf(clientPath(baseClient('cross'), 'Pack', 'Chara_ClanMarkContents.i3Pack'));
+const frames = texturesOf(clientPath(baseClient('cross'), 'Pack', 'Chara_ClanMarkFrames.i3Pack'));
 if (contents.length !== CONTENT_ORDER.length || frames.length !== FRAME_ORDER.length) {
   throw new Error(`block count: contents ${contents.length}, frames ${frames.length}`);
 }

@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 // Batch export of every playable map of PBCross (Clients/PBCross/Pack, the only map client) + maps/index.json.
 //
-//   node web-poc/tools/export-maps-2017.mjs [Map ...] [--index-only] [--client cross]
+//   node web-poc/tools/export-maps-2017.mjs [Map ...] [--index-only] [--client cross] [--jobs N]
+//
+// Maps run N at a time (--jobs N, else PB_JOBS, else min(4, cores)): one child process per map (--one <Map>), since
+// each map writes only its own folder. Output is the same for any N.
 //
 // A map is "playable" when both <Map>.i3Pack (render scene) and <Map>_Col.i3Pack exist.
 // For each one: export-visual.mjs (visual.glb + tex/ + lightmaps) and export-collision.mjs
@@ -19,17 +22,20 @@
 // (String.i3Pack -> Stage_Brazil.txt, IIA2-ciphered UTF-16LE: the key is recovered
 // from the zero high bytes of the ASCII text, see loadStageNames).
 
-import { assetPath, clientPath } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPath } from './lib/paths.mjs';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { exportVisual, checkGLB } from './export-visual.mjs';
 import { parsePack } from './i3pack/unpack.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const PACK = clientPath('cross', 'Pack');
+const SELF = fileURLToPath(import.meta.url);
+const PACK = clientPath(baseClient('cross'), 'Pack');
 const MAPS = assetPath('maps');
+const DEFAULT_JOBS = Math.min(4, os.availableParallelism());
 
 // pack name -> server room map id. M = Matches.xml, S = MapStructure.xml (comment names),
 // U = 2017 Stage.pef StageUID. Matches.xml lists the Dino Escape maps as 53 "Port Akaba",
@@ -84,6 +90,33 @@ function exportMap(m) {
   console.log(`${m} -> ${dir}: tris=${s.tris} textures=${s.textures} lightmapped=${s.lightmapped} keyedSkipped=${s.skipped.keyedGeometries} missingTex=${s.skipped.missingTextures.length}`);
 }
 
+// One child process (--one <Map>) per map, `jobs` at a time. Resolves to the count of maps that failed. A child's output is
+// printed whole when it ends, so lines of different maps do not mix.
+function exportPool(maps, jobs) {
+  return new Promise((resolve) => {
+    let next = 0, active = 0, bad = 0;
+    const pump = () => {
+      while (active < jobs && next < maps.length) {
+        const child = spawn(process.execPath, [SELF, '--one', maps[next++]], { stdio: ['ignore', 'pipe', 'pipe'] });
+        let out = '', err = '';
+        child.stdout.on('data', (d) => { out += d; });
+        child.stderr.on('data', (d) => { err += d; });
+        child.on('error', (e) => { err += `${e.message}\n`; });
+        child.on('close', (code) => {
+          process.stdout.write(out);
+          if (err) process.stderr.write(err);
+          if (code !== 0) bad++;
+          active--;
+          pump();
+        });
+        active++;
+      }
+      if (active === 0 && next >= maps.length) resolve(bad);
+    };
+    pump();
+  });
+}
+
 // ---- checks + index ---------------------------------------------------------------------------
 const r2 = (v) => v.map((x) => +x.toFixed(2));
 function checkDir(dir) {
@@ -132,14 +165,29 @@ function buildIndex(names) {
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
   const flag = (k) => { const i = args.indexOf(k); if (i >= 0) args.splice(i, 1); return i >= 0; };
+  const opt = (k) => { const i = args.indexOf(k); return i >= 0 ? args.splice(i, 2)[1] : undefined; };
   const ci = args.indexOf('--client'); // Cross is the only map client: any other key is refused
   if (ci >= 0) { if (args[ci + 1] !== 'cross') { console.error('maps: --client must be cross'); process.exit(2); } args.splice(ci, 2); }
   const indexOnly = flag('--index-only');
+  const oneMap = opt('--one'); // the child of exportPool: this map only, in this process
+  if (oneMap) {
+    try { exportMap(oneMap); } catch (e) { console.error(`${oneMap}: ERROR ${e.message.split('\n')[0]}`); process.exitCode = 1; }
+  } else {
+    const jobs = Number(opt('--jobs') ?? process.env.PB_JOBS ?? DEFAULT_JOBS);
+    if (!Number.isInteger(jobs) || jobs < 1) { console.error('maps: --jobs needs a whole number >= 1'); process.exit(2); }
+    process.exitCode = await buildMaps(args, indexOnly, jobs);
+  }
+}
+
+// Exports the maps (all, or the named ones) with `jobs` at a time, then the index and its checks. Resolves to the exit code.
+async function buildMaps(args, indexOnly, jobs) {
   const all = listMaps();
   const maps = args.length ? all.filter((m) => args.some((a) => a.toLowerCase() === m.toLowerCase())) : all;
   let bad = 0;
-  if (!indexOnly) for (const m of maps) {
-    try { exportMap(m); } catch (e) { bad++; console.error(`${m}: ERROR ${e.message.split('\n')[0]}`); }
+  if (!indexOnly) {
+    const t0 = Date.now();
+    bad += await exportPool(maps, jobs);
+    console.log(`maps: ${maps.length} exported, ${jobs} at a time, ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   }
   const names = loadStageNames();
   const index = buildIndex(names);
@@ -150,5 +198,5 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     console.log(`${warn ? 'FAIL' : 'ok  '} ${e.id.padEnd(18)} mapId=${String(e.mapId).padEnd(4)} ${e.name.padEnd(22)} tris=${String(e.tris).padEnd(7)} respawns=${e.respawns} (${e.teams.red}r/${e.teams.blue}b, ${e.respawnSource}) inside=${e.check.respawnsInside} colInVis=${e.check.collisionInsideVisual} dMin=${e.check.dMin} dMax=${e.check.dMax}`);
   }
   console.log(`index.json: ${index.length} maps (source cross), ${bad} problem(s)`);
-  process.exitCode = bad ? 1 : 0;
+  return bad ? 1 : 0;
 }

@@ -60,7 +60,7 @@
 // China, ...; the arrays carry 18/19 elements for 15 nlf lines); `nationDiff` lists the fields where Brazil differs from
 // _Default_. A ShopItem whose Brazil _GroupIndex is 0 is not sold there: no web id.
 // Cells with less than 2 % opaque pixels go to `missing` (transparent = no picture in the client either).
-import { assetPath, clientPath, rel } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPath, rel } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -68,10 +68,11 @@ import { parsePack, decodeContent } from './i3pack/unpack.mjs';
 import { readI3IB, decodeI3IB, encodePNG } from './i3r2/skin-glb.mjs';
 import { parsePef, toJSON } from './pef/pef2json.mjs';
 
-const CLIENT = clientPath('cross');
+const KEY = baseClient('cross');
+const CLIENT = clientPath(KEY);
 const PACKS = path.join(CLIENT, 'Pack');
-const OUT = assetPath('ui', 'cross', 'icons');
-const SHEET = (name) => `cross/icons/${name}.png`;
+const OUT = assetPath('ui', KEY, 'icons');
+const SHEET = (name) => `${KEY}/icons/${name}.png`;
 
 // ---- inputs ----------------------------------------------------------------------------------------------------
 /** pack file name -> Buffer, files of every node (all PFN2 with index here; pack paths may carry "D:/svn/...") */
@@ -275,8 +276,8 @@ for (const [id, name] of Object.entries(WEB.goods)) {
 // the catalog (cross/weapons/weapons.json, written by export-weapons) names the pef block of every server id: a server id
 // the rules above left without a cell (Cheytac 105071 = pef Cheytac_M200_TH_1year) takes the cell of its own block,
 // the same one the model and the audit use. Only fills ids the join above left out.
-if (fs.existsSync(assetPath('cross', 'weapons', 'weapons.json'))) {
-  for (const w of JSON.parse(fs.readFileSync(assetPath('cross', 'weapons', 'weapons.json'), 'utf8')).weapons) {
+if (fs.existsSync(assetPath(KEY, 'weapons', 'weapons.json'))) {
+  for (const w of JSON.parse(fs.readFileSync(assetPath(KEY, 'weapons', 'weapons.json'), 'utf8')).weapons) {
     const r = byName.weapon[/^pef-cross:[^/]+\/(.+)$/.exec(w.pb?.src ?? '')?.[1]];
     if (r) put(icons, w.id, { ...r, match: 'catalog' }, 'weapon');
   }

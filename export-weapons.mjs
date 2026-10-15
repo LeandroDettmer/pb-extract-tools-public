@@ -19,7 +19,7 @@
 //    File names inside the pack are encrypted (see tools/i3pack/unpack.mjs RISK), so the role of each
 //    clip is guessed: fire = first clip 0.6-4s with a sharp attack (<25ms) and high RMS; reload = the
 //    remaining short clips in pack order; explosion (throw packs) = longest clip.
-import { assetPath, baseClient, clientPath, extractedPath, generatedPath, rel, serverPath } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPath, generatedPath, pefDir, rel, serverPath } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { convertWavs } from './wav-to-ogg.mjs';
@@ -27,8 +27,8 @@ import { carve, decodeContent, parsePack } from './i3pack/unpack.mjs';
 
 const XML = serverPath('runtime', 'Data', 'Match', 'ItemStatistics.xml'); // server/binary/Debug was removed by the reorganisation (d593df83)
 const PACK_DIR = clientPath(baseClient('br3123'), 'Pack');
-const SFX_PACK_DIR = clientPath(baseClient('cross'), 'Pack'); // sounds: PBCross packs only (no 3.123 clip)
-const OUT = assetPath('cross', 'weapons'); // new subfolder: public/assets/weapons/weapons.json stays the 3.123 output
+const SFX_PACK_DIR = clientPath('cross', 'Pack'); // sounds: PBCross packs only (no 3.123 clip)
+const OUT = assetPath(baseClient('cross'), 'weapons'); // new subfolder: public/assets/weapons/weapons.json stays the 3.123 output
 const args = process.argv.slice(2);
 
 const CLASS_NAMES = {
@@ -53,8 +53,8 @@ const SLOT_NAMES = { 1: 'primary', 2: 'secondary', 3: 'melee', 4: 'explosive', 5
 // ItemStatistics.xml stays the source of the top-level damage/range/ammo because the server validates hits against it;
 // fireDelay comes from the pef (the XML rounds it to 2 decimals). Every weapon in the output gets a `pb` block (pef units:
 // angles in degrees, MoveNormal_* in %, times in s) and an `xmlDiff` listing the fields where the XML and the pef disagree.
-const PEF_CROSS_WEAPON = extractedPath('pef-cross', 'br', 'Weapon.json'); // tools/pef/export-cross.mjs
-const PEF_CROSS_CHARA = extractedPath('pef-cross', 'br', 'Character.json');
+const PEF_CROSS_WEAPON = pefDir('br', 'Weapon.json'); // tools/pef/export-cross.mjs
+const PEF_CROSS_CHARA = pefDir('br', 'Character.json');
 /** Cross default soldier: SWAT_Male has the 2017 SWAT_Male values (HP 100, DamageRate Head 35) [INFERIDO: same model]. */
 const DEFAULT_CHARA = 'SWAT_Male';
 /** Dual-knife alias, [INFERIDO]: Cross Kunai 301107 has no OriginalWeaponID, so its base is named here (dualKnifeAlias reads pb.base). */

@@ -91,9 +91,10 @@ function exportEpic() {
 }
 
 function exportCross() {
-  const CLIENT = clientPath('cross');
+  const KEY = baseClient('cross');
+  const CLIENT = clientPath(KEY);
   const PACKS = path.join(CLIENT, 'Pack');
-  const OUT = assetPath('ui', 'cross');
+  const OUT = assetPath('ui', KEY);
   fs.mkdirSync(path.join(OUT, 'atlas'), { recursive: true });
   // Gui texture path -> key ("gui/main/ui_source01.i3i"); pack paths may carry "D:/PointBlank_Resource/BrazilQA/".
   const key = (p) => { const s = p.replace(/\\/g, '/').toLowerCase(), i = s.search(/(^|\/)gui\//); return i < 0 ? s : s.slice(s[i] === '/' ? i + 1 : i); };

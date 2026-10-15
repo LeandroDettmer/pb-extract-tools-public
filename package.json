@@ -10,7 +10,8 @@
   },
   "scripts": {
     "pbx": "node pbx.mjs",
-    "doctor": "node pbx.mjs doctor"
+    "doctor": "node pbx.mjs doctor",
+    "menu": "node pbx.mjs menu"
   },
   "engines": {
     "node": ">=22.7"

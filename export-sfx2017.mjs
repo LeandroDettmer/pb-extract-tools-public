@@ -198,7 +198,7 @@ for (const ai of [...new Set(anim.sets.map((s) => s.ai))].sort()) {
   for (const v of Object.values(keep)) for (const [, w] of v.ev) used.add(w);
 }
 // Weapon names come from the Cross catalog (pef-cross, W6): its pb.fireSound / pb.swapSound are the Cross pef's clip names
-const weapons = JSON.parse(fs.readFileSync(assetPath('cross', 'weapons', 'weapons.json'), 'utf8')).weapons;
+const weapons = JSON.parse(fs.readFileSync(assetPath(baseClient('cross'), 'weapons', 'weapons.json'), 'utf8')).weapons;
 
 // ---- fire clips of packs whose file names are encrypted (Sound_Weapon_HandGun_Colt45: Colt/000.wav 001 002) -----------
 // The Colt45 (default pistol 202022, _FireSound WM_COLT_FIRE) had no named clip and HG fell back to a class pack that

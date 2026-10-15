@@ -17,7 +17,7 @@
 //          key = the .pef path). name and desc are PT-BR.
 //   Equipment/Character/ShopItem have names too but their itemId formula is unverified -> not emitted.
 
-import { clientPath, rel } from '../lib/paths.mjs';
+import { baseClient, clientPath, rel } from '../lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -25,7 +25,7 @@ import { OUT, writeJSON } from './lib.mjs';
 import { parsePack, decodeContent } from '../i3pack/unpack.mjs';
 import { readCrossPefs } from '../pef/export-cross.mjs';
 
-const SRC = clientPath('cross', 'Script', 'uiLuaString', 'Brazil', 'String_Brazil.lua');
+const SRC = clientPath(baseClient('cross'), 'Script', 'uiLuaString', 'Brazil', 'String_Brazil.lua'); // [INFERIDO] Brazil locale: Cross data, other clients may lack it
 
 // STBL_IDX_KEY / STR_TBL_KEY / STR_... = "text with \" \\ \n escapes"   (one assignment per logical entry; values may span
 // balanced {col:...} tags but never real newlines in the .lua source itself)
@@ -57,7 +57,7 @@ export function exportStrings() {
   return { file, count: Object.keys(strings).length, dupes, source: SRC };
 }
 
-const CROSS_PACK = clientPath('cross', 'Pack');
+const CROSS_PACK = clientPath(baseClient('cross'), 'Pack');
 const BS = '\\';
 
 export function readStringTable(name) {

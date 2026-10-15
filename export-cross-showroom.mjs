@@ -23,7 +23,7 @@
 //   lighting.json               render/pbLighting.ts format, from Stage.pef key Stage/Lobby read by _InitLight 0x509370.
 //   Gunshowcaseroom_Ref.dds     the reflect map Create 0x50810d binds to the showroom (lighting.json envRef).
 
-import { assetPath, clientPath } from './lib/paths.mjs';
+import { assetPath, baseClient, clientPath } from './lib/paths.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -32,8 +32,8 @@ import { readI3R2 } from './i3r2/i3r2.mjs';
 import { collectMeshes, meshIndices, readNode, mul } from './i3r2/scene.mjs';
 import { GLB, checkGLB, readI3IB, decodeI3IB, encodePNG, stem } from './i3r2/skin-glb.mjs';
 
-const PACK = clientPath('cross', 'Pack', 'UI_Showroom.i3Pack');
-const OUT = assetPath('ui', 'cross', 'showroom');
+const PACK = clientPath(baseClient('cross'), 'Pack', 'UI_Showroom.i3Pack');
+const OUT = assetPath('ui', baseClient('cross'), 'showroom');
 
 /** pack file order = alphabetical order of the names the exe / scene reference */
 const NAMES = [
